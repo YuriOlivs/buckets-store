@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 import UserRepository from './user.repository';
 import UserCreateDTO from './dto/UserCreateDTO';
 import UserEntity from './user.entity';
+import UserMapper from './user.mapper';
 
 @Controller('/users')
 export default class UserController {
@@ -10,6 +11,9 @@ export default class UserController {
 
    @Post()
    createUser(@Body() body: UserCreateDTO) {
+      const id = uuid();
+      console.log(id);
+      
       const user = new UserEntity(
          uuid(),
          body.name,
@@ -25,6 +29,9 @@ export default class UserController {
 
    @Get()
    getUsers() {
-      return this.repository.getAllUsers();
+      const userEntities = this.repository.getAllUsers();
+      console.log(userEntities);
+      const users = userEntities.map(UserMapper.toDTO);
+      return users;
    }
 }

@@ -14,7 +14,7 @@ export default class UserEntity {
       password: string, 
       birthDate: Date
    ) {
-      this.id = this.id;
+      this.id = id;
       this.name = name;
       this.lastName = lastName;
       this.email = email;
