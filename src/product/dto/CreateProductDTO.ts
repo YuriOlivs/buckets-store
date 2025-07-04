@@ -1,4 +1,4 @@
-import { IsArray, IsNotEmpty, IsNumber, IsPositive, IsString, MaxLength, ValidateNested } from "class-validator";
+import { IsArray, IsNotEmpty, IsNumber, IsPositive, IsString, IsUUID, MaxLength, ValidateNested } from "class-validator";
 import ImageDTO from "./ImageDTO";
 import { Type } from "class-transformer";
 
@@ -23,6 +23,7 @@ export default class CreateProductDTO {
    price: number;
 
    @IsString()
+   @IsUUID()
    team: string;
 
    @IsArray()

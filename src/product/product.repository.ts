@@ -1,15 +1,16 @@
 import { Injectable } from "@nestjs/common";
+import CreateProductDTO from "./dto/CreateProductDTO";
 
 @Injectable()
 export default class ProductRepository {
-   private products: any[] = [];
+   private products: CreateProductDTO[] = [];
 
-   async saveProduct(product) {
+   saveProduct(product: CreateProductDTO): CreateProductDTO {
       this.products.push(product);
       return product;
    }
 
-   async getAllProducts() {
+   getAllProducts(): CreateProductDTO[] {
       return this.products;
    }
 }

@@ -7,13 +7,13 @@ export default class UserController {
    constructor(private repository: UserRepository) {}
 
    @Post()
-   async createUser(@Body() body: CreateUserDTO) {
-      await this.repository.saveUser(body);
+   createUser(@Body() body: CreateUserDTO) {
+      this.repository.saveUser(body);
       return { message: 'User created' };
    }
 
    @Get()
-   async getUsers() {
-      return await this.repository.getAllUsers();
+   getUsers() {
+      return this.repository.getAllUsers();
    }
 }
