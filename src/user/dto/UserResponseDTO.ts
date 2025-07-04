@@ -1,6 +1,8 @@
 export default class UserResponseDTO {
-   id: string;
-   name: string;
-   lastName: string;
-   email: string;
+   constructor(
+      readonly id: string,
+      readonly name: string,
+      readonly lastName: string,
+      readonly email: string,
+   ) {}
 }
