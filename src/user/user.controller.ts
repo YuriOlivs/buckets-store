@@ -1,13 +1,13 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import UserRepository from './user.repository';
-import CreateUserDTO from './dto/CreateUserDTO';
+import UserCreateDTO from './dto/UserCreateDTO';
 
 @Controller('/users')
 export default class UserController {
-   constructor(private repository: UserRepository) {}
+   constructor(private repository: UserRepository) { }
 
    @Post()
-   createUser(@Body() body: CreateUserDTO) {
+   createUser(@Body() body: UserCreateDTO) {
       this.repository.saveUser(body);
       return { message: 'User created' };
    }
