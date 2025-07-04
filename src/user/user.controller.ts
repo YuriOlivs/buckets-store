@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import UserRepository from './user.repository';
 import UserCreateDTO from './dto/UserCreateDTO';
 import UserEntity from './user.entity';
 import UserMapper from './user.mapper';
+import UserUpdateDTO from './dto/UserUpdateDTO';
 
 @Controller('/users')
 export default class UserController {
@@ -30,5 +31,11 @@ export default class UserController {
       console.log(userEntities);
       const users = userEntities.map(UserMapper.toDTO);
       return users;
+   }
+
+   @Put('/:id')
+   updateUser(@Param('id') id: string, @Body() body: UserUpdateDTO) {
+      const updatedUser = this.repository.updateUser(id, body);
+      return { message: 'User updated', payload: UserMapper.toDTO(updatedUser) };
    }
 }
