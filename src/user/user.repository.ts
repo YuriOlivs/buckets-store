@@ -1,21 +1,21 @@
 import { Injectable } from "@nestjs/common";
 import UserCreateDTO from "./dto/UserCreateDTO";
+import UserEntity from "./user.entity";
 
 @Injectable() //um provider em NestJS é qualquer classe que tenha esse decorator
 export default class UserRepository {
-   private users: UserCreateDTO[] = [];
+   private users: UserEntity[] = [];
 
-   saveUser(user: UserCreateDTO): UserCreateDTO {
+   saveUser(user: UserEntity) {
       this.users.push(user);
-      return user;
    }
 
-   getAllUsers(): UserCreateDTO[] {
+   getAllUsers(): UserEntity[] {
       return this.users;
    }
 
    getUserByEmail(email: string): boolean {
-      const user = this.users.find(user => user.email === email);
+      const user = this.users.find(user => user.getEmail === email);
       if (user) return true;
       return false;
    }
