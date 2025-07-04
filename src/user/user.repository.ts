@@ -6,8 +6,9 @@ import UserEntity from "./user.entity";
 export default class UserRepository {
    private users: UserEntity[] = [];
 
-   saveUser(user: UserEntity) {
+   saveUser(user: UserEntity): UserEntity {
       this.users.push(user);
+      return user;
    }
 
    getAllUsers(): UserEntity[] {

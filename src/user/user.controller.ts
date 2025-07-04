@@ -23,8 +23,8 @@ export default class UserController {
          body.birthDate
       );
 
-      this.repository.saveUser(user);
-      return { message: 'User created', payload: user.getId };
+      const userCreated = this.repository.saveUser(user);
+      return { message: 'User created', payload: UserMapper.toDTO(userCreated) };
    }
 
    @Get()
