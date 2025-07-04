@@ -2,7 +2,7 @@ import { IsArray, IsNotEmpty, IsNumber, IsPositive, IsString, IsUUID, MaxLength,
 import ImageDTO from "./ImageDTO";
 import { Type } from "class-transformer";
 
-export default class CreateProductDTO {
+export default class ProductCreateDTO {
    @IsString()
    @IsNotEmpty()
    name: string;

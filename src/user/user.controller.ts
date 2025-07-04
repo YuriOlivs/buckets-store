@@ -10,10 +10,7 @@ export default class UserController {
    constructor(private repository: UserRepository) { }
 
    @Post()
-   createUser(@Body() body: UserCreateDTO) {
-      const id = uuid();
-      console.log(id);
-      
+   createUser(@Body() body: UserCreateDTO) {    
       const user = new UserEntity(
          uuid(),
          body.name,
