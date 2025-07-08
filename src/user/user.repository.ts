@@ -14,7 +14,7 @@ export default class UserRepository {
       return this.users;
    }
 
-   updatedUser(id: string, userData: Partial<UserEntity>): UserEntity {
+   updateUser(id: string, userData: Partial<UserEntity>): UserEntity {
       const user = this.users.find(user => user.getId === id);
 
       if(!user) throw new Error('User not found');
@@ -37,5 +37,12 @@ export default class UserRepository {
       const user = this.users.find(user => user.getEmail === email);
       if (user) return true;
       return false;
+   }
+
+   removeUser(id: string) {
+      const user = this.users.find(user => user.getId === id);
+      if(!user) throw new Error('User not found');
+      this.users = this.users.filter(user => user.getId !== id);
+      return user;
    }
 }
