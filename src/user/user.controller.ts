@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import UserRepository from './user.repository';
 import UserCreateDTO from './dto/UserCreateDTO';
@@ -34,8 +34,14 @@ export default class UserController {
    }
 
    @Put('/:id')
-   updateUser(@Param('id') id: string, @Body() body: UserUpdateDTO) {
+   updateUser(@Param('id') id: string, @Body() body: Partial<UserEntity>) {
       const updatedUser = this.repository.updateUser(id, body);
       return { message: 'User updated', payload: UserMapper.toDTO(updatedUser) };
+   }
+
+   @Delete('/:id')
+   removeUser(@Param('id') id: string) {
+      this.repository.removeUser(id);
+      return { message: 'User removed', payload: {} };
    }
 }
