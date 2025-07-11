@@ -10,7 +10,7 @@ export default class ProductMapper {
          product.getCategory,
          product.getSubcategory,
          product.getPrice,
-         product.getTeam,
+         product.getTeamId,
          product.getImages
       )
    }

@@ -30,7 +30,7 @@ export default class ProductRepository {
       if (productData.getCategory) product.setCategory(productData.getCategory);
       if (productData.getSubcategory) product.setSubcategory(productData.getSubcategory);
       if (productData.getPrice) product.setPrice(productData.getPrice);
-      if (productData.getTeam) product.setTeam(productData.getTeam);
+      if (productData.getTeamId) product.setTeamId(productData.getTeamId);
       if (productData.getImages) product.setImages(productData.getImages);
 
       return product;
