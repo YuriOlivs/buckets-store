@@ -1,48 +1,32 @@
-import { Injectable } from "@nestjs/common";
-import UserEntity from "./user.entity";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import UserEntity from './user.entity';
 
-@Injectable() //um provider em NestJS é qualquer classe que tenha esse decorator
+@Injectable()
 export default class UserRepository {
-   private users: UserEntity[] = [];
+  constructor(
+    @InjectRepository(UserEntity)
+    private readonly repository: Repository<UserEntity>,
+  ) {}
 
-   saveUser(user: UserEntity): UserEntity {
-      this.users.push(user);
-      return user;
-   }
+  async getAll(): Promise<UserEntity[]> {
+    return this.repository.find();
+  }
 
-   getAllUsers(): UserEntity[] {
-      return this.users;
-   }
+  async getById(id: string): Promise<UserEntity | null> {
+    return await this.repository.findOne({ where: { id: id } });
+  }
 
-   updateUser(id: string, userData: Partial<UserEntity>): UserEntity {
-      const user = this.users.find(user => user.getId === id);
+  async getByEmail(email: string): Promise<UserEntity | null> {
+    return await this.repository.findOne({ where: { email } });;
+  }
 
-      if(!user) throw new Error('User not found');
-      if(userData.getEmail) {
-         if(this.getUserByEmail(userData.getEmail)) {
-            throw new Error('Email already in use');
-         }
-      }
+  async save(user: UserEntity): Promise<UserEntity> {
+    return this.repository.save(user);
+  }
 
-      if (userData.getName) user.setName(userData.getName);
-      if (userData.getLastName) user.setLastName(userData.getLastName);
-      if (userData.getEmail) user.setEmail(userData.getEmail);
-      if (userData.getPassword) user.setPassword(userData.getPassword);
-      if (userData.getBirthDate) user.setBirthDate(userData.getBirthDate);
-
-      return user;
-   }
-
-   getUserByEmail(email: string): boolean {
-      const user = this.users.find(user => user.getEmail === email);
-      if (user) return true;
-      return false;
-   }
-
-   removeUser(id: string) {
-      const user = this.users.find(user => user.getId === id);
-      if(!user) throw new Error('User not found');
-      this.users = this.users.filter(user => user.getId !== id);
-      return user;
-   }
+  async remove(user: UserEntity): Promise<UserEntity> {
+    return await this.repository.remove(user);
+  }
 }
