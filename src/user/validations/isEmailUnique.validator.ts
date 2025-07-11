@@ -8,7 +8,7 @@ export class IsEmailUniqueValidator implements ValidatorConstraintInterface {
    constructor(private repository: UserRepository) {}
 
    validate(value: any): Promise<boolean> | boolean{
-      const userFound = this.repository.getUserByEmail(value);
+      const userFound = this.repository.getByEmail(value);
       return !userFound;
    }
 }

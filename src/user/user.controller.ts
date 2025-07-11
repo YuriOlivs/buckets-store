@@ -1,17 +1,16 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
-import UserRepository from './user.repository';
 import UserCreateDTO from './dto/UserCreate.dto';
 import UserEntity from './user.entity';
 import UserMapper from './user.mapper';
-import UserUpdateDTO from './dto/UserUpdate.dto';
+import UserService from './user.service';
 
 @Controller('/users')
 export default class UserController {
-   constructor(private repository: UserRepository) { }
+   constructor(private service: UserService) { }
 
    @Post()
-   createUser(@Body() body: UserCreateDTO) {    
+   async createUser(@Body() body: UserCreateDTO) {    
       const user = new UserEntity(
          uuid(),
          body.name,
@@ -21,27 +20,28 @@ export default class UserController {
          body.birthDate
       );
 
-      const userCreated = this.repository.saveUser(user);
+      const userCreated = await this.service.createUser(user);
       return { message: 'User created', payload: UserMapper.toDTO(userCreated) };
    }
 
    @Get()
-   getUsers() {
-      const userEntities = this.repository.getAllUsers();
-      console.log(userEntities);
+   async getUsers() {
+      const userEntities = await this.service.getAllUsers();
       const users = userEntities.map(UserMapper.toDTO);
-      return users;
+
+      return { message: 'Users found', payload: users };
    }
 
    @Put('/:id')
-   updateUser(@Param('id') id: string, @Body() body: Partial<UserEntity>) {
-      const updatedUser = this.repository.updateUser(id, body);
+   async updateUser(@Param('id') id: string, @Body() body: Partial<UserEntity>) {
+      const updatedUser = await this.service.updateUser(id, body);
+
       return { message: 'User updated', payload: UserMapper.toDTO(updatedUser) };
    }
 
    @Delete('/:id')
-   removeUser(@Param('id') id: string) {
-      this.repository.removeUser(id);
+   async removeUser(@Param('id') id: string) {
+      await this.service.deleteUser(id);
       return { message: 'User removed', payload: {} };
    }
 }
