@@ -1,4 +1,4 @@
-import ImageDTO from "./ImageDTO";
+import ImageDTO from "./Image.dto";
 
 export default class ProductResponseDTO {
    constructor(
@@ -10,5 +10,5 @@ export default class ProductResponseDTO {
       readonly price: number,
       readonly team: string,
       readonly images: ImageDTO[]
-   ) {}
+   ) { }
 }

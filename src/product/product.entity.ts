@@ -1,4 +1,4 @@
-import ImageDTO from "./dto/ImageDTO";
+import ImageDTO from "./dto/Image.dto";
 
 export default class ProductEntity {
    private id: string;

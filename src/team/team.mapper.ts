@@ -1,4 +1,4 @@
-import TeamResponseDTO from "./dto/TeamResponseDTO";
+import TeamResponseDTO from "./dto/TeamResponse.dto";
 import TeamEntity from "./team.entity";
 
 export default class TeamMapper {

@@ -1,5 +1,5 @@
 import { IsArray, IsNotEmpty, IsNumber, IsPositive, IsString, IsUUID, MaxLength, ValidateNested } from "class-validator";
-import ImageDTO from "./ImageDTO";
+import ImageDTO from "./Image.dto";
 import { Type } from "class-transformer";
 
 export default class ProductCreateDTO {

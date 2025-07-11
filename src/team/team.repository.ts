@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import TeamCreateDTO from "./dto/TeamCreateDTO";
+import TeamCreateDTO from "./dto/TeamCreate.dto";
 import TeamEntity from "./team.entity";
 
 @Injectable()
@@ -17,7 +17,7 @@ export class TeamRepository {
 
    getTeamById(id: string): TeamEntity {
       const team = this.teams.find(team => team.getId === id);
-      if(!team) throw new Error('Team not found');
+      if (!team) throw new Error('Team not found');
       return team;
    }
 
@@ -29,17 +29,17 @@ export class TeamRepository {
 
    updateTeam(id: string, teamData: Partial<TeamEntity>): TeamEntity {
       const team = this.teams.find(team => team.getId === id);
-      if(!team) throw new Error('Team not found');
+      if (!team) throw new Error('Team not found');
 
-      if(teamData.getName) team.setName(teamData.getName);
-      if(teamData.getCity) team.setCity(teamData.getCity);
+      if (teamData.getName) team.setName(teamData.getName);
+      if (teamData.getCity) team.setCity(teamData.getCity);
 
       return team;
    }
 
    removeTeam(id: string) {
       const team = this.teams.find(team => team.getId === id);
-      if(!team) throw new Error('Team not found');
+      if (!team) throw new Error('Team not found');
       this.teams = this.teams.filter(team => team.getId !== id);
       return team;
    }

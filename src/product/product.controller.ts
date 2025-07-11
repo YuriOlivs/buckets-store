@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post } from "@nestjs/common";
 import { v4 as uuid } from 'uuid';
 import ProductRepository from "./product.repository";
-import ProductCreateDTO from "./dto/ProductCreateDTO";
+import ProductCreateDTO from "./dto/ProductCreate.dto";
 import ProductEntity from "./product.entity";
 import ProductMapper from "./product.mapper";
 

@@ -1,10 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import UserRepository from './user.repository';
-import UserCreateDTO from './dto/UserCreateDTO';
+import UserCreateDTO from './dto/UserCreate.dto';
 import UserEntity from './user.entity';
 import UserMapper from './user.mapper';
-import UserUpdateDTO from './dto/UserUpdateDTO';
+import UserUpdateDTO from './dto/UserUpdate.dto';
 
 @Controller('/users')
 export default class UserController {
