@@ -3,31 +3,31 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedCol
 @Entity({ name: 'users' })
 export default class UserEntity {
   @PrimaryGeneratedColumn('uuid')
-  private id: string;
+  private _id: string;
 
   @Column({ name: 'name', length: 100, nullable: false })
-  private name: string;
+  private _name: string;
 
-  @Column({ name: 'lastName', length: 100, nullable: false })
-  private lastName: string;
+  @Column({ name: 'last_name', length: 100, nullable: false })
+  private _lastName: string;
 
   @Column({ name: 'email', length: 80, nullable: false })
-  private email: string;
+  private _email: string;
 
   @Column({ name: 'password', length: 255, nullable: false })
-  private password: string;
+  private _password: string;
 
-  @Column({ name: 'birthDate', nullable: false })
-  private birthDate: Date;
+  @Column({ name: 'birth_date', nullable: false })
+  private _birthDate: Date;
   
   @CreateDateColumn({ name: 'created_at' })
-  private createdAt: string;
+  private _createdAt: string;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  private updatedAt: string;
+  private _updatedAt: string;
 
   @DeleteDateColumn({ name: 'deleted_at' })
-  private deletedAt: string;
+  private _deletedAt: string;
 
   constructor(
     id: string,
@@ -37,59 +37,28 @@ export default class UserEntity {
     password: string,
     birthDate: Date,
   ) {
-    this.id = id;
-    this.name = name;
-    this.lastName = lastName;
-    this.email = email;
-    this.password = password;
-    this.birthDate = birthDate;
+    this._id = id;
+    this._name = name;
+    this._lastName = lastName;
+    this._email = email;
+    this._password = password;
+    this._birthDate = birthDate;
   }
 
-  get getId() {
-    return this.id;
-  }
-  get getName() {
-    return this.name;
-  }
-  get getLastName() {
-    return this.lastName;
-  }
-  get fullName() {
-    return `${this.name} ${this.lastName}`;
-  }
-  get getEmail() {
-    return this.email;
-  }
-  get getPassword() {
-    return this.password;
-  }
-  get getBirthDate() {
-    return this.birthDate;
-  }
-  get getCreatedAt() {
-    return this.createdAt;
-  }
-  get getUpdatedAt() {
-    return this.updatedAt;
-  }
-  get getDeletedAt() {
-    return this.deletedAt;
-  }
+  get id() {return this._id;}
+  get name() {return this._name;}
+  get lastName() {return this._lastName;}
+  get fullName() {return `${this._name} ${this._lastName}`;}
+  get email() {return this._email;}
+  get password() {return this._password;}
+  get birthDate() {return this._birthDate;}
+  get createdAt() {return this._createdAt;}
+  get updatedAt() {return this._updatedAt;}
+  get deletedAt() {return this._deletedAt;}
 
-  //setId(id: string) { this.id = id; }
-  setName(name: string) {
-    this.name = name;
-  }
-  setLastName(lastName: string) {
-    this.lastName = lastName;
-  }
-  setEmail(email: string) {
-    this.email = email;
-  }
-  setPassword(password: string) {
-    this.password = password;
-  }
-  setBirthDate(birthDate: Date) {
-    this.birthDate = birthDate;
-  }
+  setName(name: string) {this._name = name;}
+  setLastName(lastName: string) {this._lastName = lastName;}
+  setEmail(email: string) {this._email = email;}
+  setPassword(password: string) {this._password = password;}
+  setBirthDate(birthDate: Date) {this._birthDate = birthDate;}
 }
