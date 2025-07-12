@@ -1,4 +1,4 @@
-import ProductResponseDTO from "./dto/ProductResponseDTO";
+import ProductResponseDTO from "./dto/ProductResponse.dto";
 import ProductEntity from "./product.entity";
 
 export default class ProductMapper {
@@ -10,7 +10,7 @@ export default class ProductMapper {
          product.getCategory,
          product.getSubcategory,
          product.getPrice,
-         product.getTeam,
+         product.getTeamId,
          product.getImages
       )
    }

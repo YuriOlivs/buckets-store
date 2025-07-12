@@ -1,5 +1,5 @@
-import { IsArray, IsNotEmpty, IsNumber, IsPositive, IsString, IsUUID, MaxLength, ValidateNested } from "class-validator";
-import ImageDTO from "./ImageDTO";
+import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUUID, MaxLength, ValidateNested } from "class-validator";
+import ImageDTO from "./Image.dto";
 import { Type } from "class-transformer";
 
 export default class ProductCreateDTO {
@@ -15,7 +15,9 @@ export default class ProductCreateDTO {
    @IsNotEmpty()
    category: string;
 
+   @IsOptional()
    @IsString()
+   @IsNotEmpty()
    subcategory: string;
 
    @IsNumber()

@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post } from "@nestjs/common";
 import { v4 as uuid } from 'uuid';
 import ProductRepository from "./product.repository";
-import ProductCreateDTO from "./dto/ProductCreateDTO";
+import ProductCreateDTO from "./dto/ProductCreate.dto";
 import ProductEntity from "./product.entity";
 import ProductMapper from "./product.mapper";
 
@@ -11,6 +11,14 @@ export default class ProductController {
 
    @Post()
    createProduct(@Body() body: ProductCreateDTO) {
+      const images = body.images.map(image => {
+         return {
+            id: uuid(),
+            url: image.url,
+            desc: image.desc
+         }
+      })
+
       const product = new ProductEntity(
          uuid(),
          body.name,
@@ -19,7 +27,7 @@ export default class ProductController {
          body.subcategory,
          body.price,
          body.team,
-         body.images
+         images
       );
 
       const productCreated = this.repository.saveProduct(product);

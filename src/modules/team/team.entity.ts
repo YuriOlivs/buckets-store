@@ -1,7 +1,15 @@
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+
+@Entity({ name: 'teams' })
 export default class TeamEntity {
-   private id: string;
-   private name: string;
-   private city: string;
+   @PrimaryGeneratedColumn('uuid')
+   id: string;
+
+   @Column({ name: 'name', length: 100, nullable: false })
+   name: string;
+
+   @Column({ name: 'city', length: 100, nullable: false })
+   city: string;
 
    constructor(id: string, name: string, city: string) {
       this.id = id;
