@@ -4,36 +4,36 @@ import ImageEntity from "./product-image.entity";
 @Entity({ name: 'products' })
 export default class ProductEntity {
    @PrimaryGeneratedColumn('uuid')
-   private id: string;
+   id: string;
 
    @Column({ name: 'name', length: 100, nullable: false })
-   private name: string;
+   name: string;
 
    @Column({ name: 'description', length: 800, nullable: false })
-   private description: string;
+   description: string;
 
    @Column({ name: 'category', length: 100, nullable: false })
-   private category: string;
+   category: string;
 
    @Column({ name: 'subcategory', length: 100, nullable: true })
-   private subcategory: string;
+   subcategory: string;
 
    @Column({ name: 'price', nullable: false })
-   private price: number;
+   price: number;
 
    @Column({ name: 'team_id', nullable: false })
-   private teamId: string;
+   teamId: string;
 
-   private images: ImageEntity[];
+   images: ImageEntity[];
 
    @CreateDateColumn({ name: 'created_at' })
-   private createdAt: string;
+   createdAt: string;
 
    @UpdateDateColumn({ name: 'updated_at' })
-   private updatedAt: string;
+   updatedAt: string;
 
    @DeleteDateColumn({ name: 'deleted_at' })
-   private deletedAt: string;
+   deletedAt: string;
 
    constructor(
       id: string,

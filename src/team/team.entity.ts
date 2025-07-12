@@ -3,13 +3,13 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 @Entity({ name: 'teams' })
 export default class TeamEntity {
    @PrimaryGeneratedColumn('uuid')
-   private id: string;
+   id: string;
 
    @Column({ name: 'name', length: 100, nullable: false })
-   private name: string;
+   name: string;
 
    @Column({ name: 'city', length: 100, nullable: false })
-   private city: string;
+   city: string;
 
    constructor(id: string, name: string, city: string) {
       this.id = id;
