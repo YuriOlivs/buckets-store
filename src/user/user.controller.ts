@@ -4,6 +4,7 @@ import UserCreateDTO from './dto/UserCreate.dto';
 import UserEntity from './user.entity';
 import UserMapper from './user.mapper';
 import UserService from './user.service';
+import { STRINGS } from 'src/common/strings/global.strings';
 
 @Controller('/users')
 export default class UserController {
@@ -21,7 +22,7 @@ export default class UserController {
       );
 
       const userCreated = await this.service.createUser(user);
-      return { message: 'User created', payload: UserMapper.toDTO(userCreated) };
+      return { message: STRINGS.entityCreated('User'), payload: UserMapper.toDTO(userCreated) };
    }
 
    @Get()
@@ -29,19 +30,19 @@ export default class UserController {
       const userEntities = await this.service.getAllUsers();
       const users = userEntities.map(UserMapper.toDTO);
 
-      return { message: 'Users found', payload: users };
+      return { message: STRINGS.entityFound('Users'), payload: users };
    }
 
    @Put('/:id')
    async updateUser(@Param('id') id: string, @Body() body: Partial<UserEntity>) {
       const updatedUser = await this.service.updateUser(id, body);
 
-      return { message: 'User updated', payload: UserMapper.toDTO(updatedUser) };
+      return { message: STRINGS.entityUpdated('User'), payload: UserMapper.toDTO(updatedUser) };
    }
 
    @Delete('/:id')
    async removeUser(@Param('id') id: string) {
       await this.service.deleteUser(id);
-      return { message: 'User removed', payload: {} };
+      return { message: STRINGS.entityDeleted('User'), payload: {} };
    }
 }
