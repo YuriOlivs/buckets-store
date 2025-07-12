@@ -1,6 +1,7 @@
 import { registerDecorator, ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator";
 import UserRepository from "../user.repository";
 import { Injectable } from "@nestjs/common";
+import { STRINGS } from "src/common/strings/global.strings";
 
 @Injectable()
 @ValidatorConstraint({ async: true })
@@ -14,7 +15,7 @@ export class IsEmailUniqueValidator implements ValidatorConstraintInterface {
 }
 
 export const IsEmailUnique = (
-   validationOptions: ValidationOptions = { message: 'Email already exists' }
+   validationOptions: ValidationOptions = { message: STRINGS.alreadyExists('Email') }
 ) => {
    return (object: object, propertyName: string) => {
       registerDecorator({

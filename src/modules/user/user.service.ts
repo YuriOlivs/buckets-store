@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import UserRepository from "./user.repository";
 import UserEntity from "./user.entity";
+import { STRINGS } from "src/common/strings/global.strings";
 
 @Injectable()
 export default class UserService {
@@ -18,7 +19,7 @@ export default class UserService {
 
    async createUser(user: UserEntity): Promise<UserEntity> {
       const emailExists = await this.repo.getByEmail(user.email);
-      if (emailExists) throw new Error('Email already exists');
+      if (emailExists) throw new Error(STRINGS.alreadyExists('Email'));
 
       return await this.repo.save(user);
    }
@@ -29,7 +30,7 @@ export default class UserService {
 
       if (userData.email) {
          const emailExists = await this.repo.getByEmail(userData.email);
-         if (emailExists) throw new Error('Email already exists');
+         if (emailExists) throw new Error(STRINGS.alreadyExists('Email'));
 
          userFound.setEmail(userData.email);
       }
