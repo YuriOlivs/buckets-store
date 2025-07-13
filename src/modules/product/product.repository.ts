@@ -1,44 +1,31 @@
 import { Injectable } from "@nestjs/common";
 import ProductCreateDTO from "./dto/ProductCreate.dto";
 import ProductEntity from "./product.entity";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
 @Injectable()
 export default class ProductRepository {
-   private products: ProductEntity[] = [];
+   constructor(
+      @InjectRepository(ProductEntity) private readonly repository: Repository<ProductEntity>
+   ) {}
 
-   saveProduct(product: ProductEntity): ProductEntity {
-      this.products.push(product);
-      return product;
+   async save(product: ProductEntity): Promise<ProductEntity> {
+      return await this.repository.save(product);
    }
 
-   getAllProducts(): ProductEntity[] {
-      return this.products;
+   async getAll(): Promise<ProductEntity[]> {
+      return await this.repository.find();
    }
 
-   getProduct(id: string): ProductEntity {
-      const product = this.products.find(product => product.getId === id);
-      if (!product) throw new Error('Product not found');
-      return product;
+   async getById(id: string): Promise<ProductEntity> {
+      const productFound = await this.repository.findOne({ where: { id } });
+      if (!productFound) throw new Error('Product not found');
+
+      return productFound;
    }
 
-   updateProduct(id: string, productData: Partial<ProductEntity>): ProductEntity {
-      const product = this.products.find(product => product.getId === id);
-      if (!product) throw new Error('Product not found');
-
-      if (productData.getName) product.setName(productData.getName);
-      if (productData.getDescription) product.setDescription(productData.getDescription);
-      if (productData.getCategory) product.setCategory(productData.getCategory);
-      if (productData.getSubcategory) product.setSubcategory(productData.getSubcategory);
-      if (productData.getPrice) product.setPrice(productData.getPrice);
-      if (productData.getTeamId) product.setTeamId(productData.getTeamId);
-      if (productData.getImages) product.setImages(productData.getImages);
-
-      return product;
-   }
-
-   removeProduct(id: string) {
-      const product = this.products.find(product => product.getId === id);
-      if (!product) throw new Error('Product not found');
-      this.products = this.products.filter(product => product.getId !== id);
+   async remove(id: string) {
+      return await this.repository.delete({ id });
    }
 }
