@@ -1,5 +1,5 @@
-import ProductResponseDTO from "./dto/ProductResponse.dto";
-import ProductEntity from "./product.entity";
+import ProductResponseDTO from "./ProductResponse.dto";
+import ProductEntity from "../product.entity";
 
 export default class ProductMapper {
    static toDTO(product: ProductEntity): ProductResponseDTO {
