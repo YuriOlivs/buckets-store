@@ -36,7 +36,6 @@ export default class UserController {
    @Put('/:id')
    async updateUser(@Param('id') id: string, @Body() body: Partial<UserEntity>) {
       const updatedUser = await this.service.updateUser(id, body);
-
       return { message: STRINGS.entityUpdated('User'), payload: UserMapper.toDTO(updatedUser) };
    }
 

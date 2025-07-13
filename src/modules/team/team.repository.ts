@@ -1,46 +1,32 @@
 import { Injectable } from "@nestjs/common";
 import TeamCreateDTO from "./dto/TeamCreate.dto";
 import TeamEntity from "./team.entity";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class TeamRepository {
-   private teams: TeamEntity[] = [];
+   constructor(
+      @InjectRepository(TeamEntity) private readonly repository: Repository<TeamEntity>,
+   ) {}
 
-   saveTeam(team: TeamEntity): TeamEntity {
-      this.teams.push(team);
-      return team;
+   async save(team: TeamEntity): Promise<TeamEntity> {
+      return await this.repository.save(team);
    }
 
-   getAllTeams(): TeamEntity[] {
-      return this.teams;
+   async getAll(): Promise<TeamEntity[]> {
+      return await this.repository.find();
    }
 
-   getTeamById(id: string): TeamEntity {
-      const team = this.teams.find(team => team.getId === id);
-      if (!team) throw new Error('Team not found');
-      return team;
+   async getById(id: string): Promise<TeamEntity | null> {
+      return await this.repository.findOne({ where: { id } });
    }
 
-   getTeamByName(name: string): boolean {
-      const team = this.teams.find(team => team.getName === name);
-      if (team) return true;
-      return false;
+   async getByName(name: string): Promise<TeamEntity | null> {
+      return await this.repository.findOne({ where: { name } });
    }
 
-   updateTeam(id: string, teamData: Partial<TeamEntity>): TeamEntity {
-      const team = this.teams.find(team => team.getId === id);
-      if (!team) throw new Error('Team not found');
-
-      if (teamData.getName) team.setName(teamData.getName);
-      if (teamData.getCity) team.setCity(teamData.getCity);
-
-      return team;
-   }
-
-   removeTeam(id: string) {
-      const team = this.teams.find(team => team.getId === id);
-      if (!team) throw new Error('Team not found');
-      this.teams = this.teams.filter(team => team.getId !== id);
-      return team;
+   async remove(user: TeamEntity): Promise<TeamEntity> {
+      return await this.repository.remove(user);
    }
 }
