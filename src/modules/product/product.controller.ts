@@ -47,6 +47,12 @@ export default class ProductController {
       return ProductMapper.toDTO(product);
    }
 
+   @Get('/team/:teamId')
+   async getProductByTeam(@Param('teamId') teamId: string) {
+      const products = await this.service.getProductByTeam(teamId);
+      return products.map(ProductMapper.toDTO);
+   }
+
    @Put('/:id')
    async updateProduct(@Param('id') id: string, @Body() body: Partial<ProductEntity>) {
       const product = await this.service.updateProduct(id, body);

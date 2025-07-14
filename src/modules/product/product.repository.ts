@@ -25,6 +25,10 @@ export default class ProductRepository {
       return productFound;
    }
 
+   async getByTeam(id: string): Promise<ProductEntity[]> {
+      return await this.repository.find({ where: { teamId: id } });
+   }
+
    async remove(id: string) {
       return await this.repository.delete({ id });
    }
