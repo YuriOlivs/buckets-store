@@ -4,12 +4,12 @@ import ProductController from "./product.controller";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import ProductEntity from "./product.entity";
 import ProductService from "./product.service";
-import TeamService from "../team/team.service";
+import { TeamModule } from "../team/team.module";
 
 @Module({
    imports: [
       TypeOrmModule.forFeature([ProductEntity]),
-      TeamService
+      TeamModule
    ],
    controllers: [ProductController],
    providers: [
