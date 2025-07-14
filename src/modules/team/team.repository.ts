@@ -5,9 +5,10 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 @Injectable()
-export class TeamRepository {
+export default class TeamRepository {
    constructor(
-      @InjectRepository(TeamEntity) private readonly repository: Repository<TeamEntity>,
+      @InjectRepository(TeamEntity) 
+      private readonly repository: Repository<TeamEntity>,
    ) {}
 
    async save(team: TeamEntity): Promise<TeamEntity> {

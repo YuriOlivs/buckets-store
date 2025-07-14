@@ -1,6 +1,7 @@
+import { Injectable } from "@nestjs/common";
 import ProductEntity from "./product.entity";
 import ProductRepository from "./product.repository";
-
+@Injectable()
 export default class ProductService {
    constructor (private repo: ProductRepository) {}
 

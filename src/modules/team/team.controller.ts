@@ -8,7 +8,7 @@ import { STRINGS } from "src/common/strings/global.strings";
 
 @Controller("/teams")
 export default class TeamController {
-   constructor(private service: TeamService) { }
+   constructor(private service: TeamService) {}
 
    @Post()
    async createTeam(@Body() body: TeamCreateDTO) {

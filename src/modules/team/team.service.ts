@@ -1,7 +1,9 @@
 import { STRINGS } from "src/common/strings/global.strings";
 import TeamEntity from "./team.entity";
-import { TeamRepository } from "./team.repository";
+import TeamRepository from "./team.repository";
+import { Injectable } from "@nestjs/common";
 
+@Injectable()
 export default class TeamService {
    constructor (private repo: TeamRepository) {}
 
@@ -17,6 +19,7 @@ export default class TeamService {
    }
 
    async createTeam(team: TeamEntity): Promise<TeamEntity> {
+      console.log(this.repo);
       return await this.repo.save(team);
    }
 
