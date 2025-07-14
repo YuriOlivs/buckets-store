@@ -1,4 +1,4 @@
-import CreateImageDTO from "../../image/dto/CreateImage.dto";
+import ImageResponseDTO from "src/modules/image/dto/ImageResponse.dto";
 
 export default class ProductResponseDTO {
    constructor(
@@ -9,6 +9,6 @@ export default class ProductResponseDTO {
       readonly subcategory: string,
       readonly price: number,
       readonly team: string,
-      readonly images: CreateImageDTO[]
+      readonly images: ImageResponseDTO[]
    ) { }
 }
