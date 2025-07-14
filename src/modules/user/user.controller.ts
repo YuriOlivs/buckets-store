@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 import { v4 as uuid } from 'uuid';
 import UserCreateDTO from './dto/UserCreate.dto';
 import UserEntity from './user.entity';
-import UserMapper from './user.mapper';
+import UserMapper from './dto/user.mapper';
 import UserService from './user.service';
 import { STRINGS } from 'src/common/strings/global.strings';
 
@@ -11,7 +11,7 @@ export default class UserController {
    constructor(private service: UserService) { }
 
    @Post()
-   async createUser(@Body() body: UserCreateDTO) {    
+   async createUser(@Body() body: UserCreateDTO) {
       const user = new UserEntity(
          uuid(),
          body.name,
@@ -36,7 +36,6 @@ export default class UserController {
    @Put('/:id')
    async updateUser(@Param('id') id: string, @Body() body: Partial<UserEntity>) {
       const updatedUser = await this.service.updateUser(id, body);
-
       return { message: STRINGS.entityUpdated('User'), payload: UserMapper.toDTO(updatedUser) };
    }
 

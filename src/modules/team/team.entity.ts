@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'teams' })
 export default class TeamEntity {
@@ -11,6 +11,15 @@ export default class TeamEntity {
    @Column({ name: 'city', length: 100, nullable: false })
    city: string;
 
+   @CreateDateColumn({ name: 'created_at' })
+   createdAt: Date;
+
+   @UpdateDateColumn({ name: 'updated_at' })
+   updatedAt: Date;
+
+   @DeleteDateColumn({ name: 'deleted_at' })
+   deletedAt: Date;
+
    constructor(id: string, name: string, city: string) {
       this.id = id;
       this.name = name;
@@ -20,8 +29,10 @@ export default class TeamEntity {
    get getId() { return this.id; }
    get getName() { return this.name; }
    get getCity() { return this.city; }
+   get getCreatedAt() { return this.createdAt; }
+   get getUpdatedAt() { return this.updatedAt; }
+   get getDeletedAt() { return this.deletedAt; }
 
-   setId(id: string) { this.id = id; }
    setName(name: string) { this.name = name; }
    setCity(city: string) { this.city = city; }
 }

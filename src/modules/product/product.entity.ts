@@ -18,7 +18,7 @@ export default class ProductEntity {
    @Column({ name: 'subcategory', length: 100, nullable: true })
    subcategory: string;
 
-   @Column({ name: 'price', nullable: false })
+   @Column({ name: 'price', type: 'numeric', precision: 10, scale: 2, nullable: false })
    price: number;
 
    @Column({ name: 'team_id', nullable: false })

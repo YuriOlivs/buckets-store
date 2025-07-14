@@ -1,14 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { registerDecorator, ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator";
-import { TeamRepository } from "../team.repository";
+import TeamRepository from "../team.repository";
 
 @Injectable()
 @ValidatorConstraint({ async: true })
 export class isNameUniqueValidtor implements ValidatorConstraintInterface {
    constructor(private repository: TeamRepository) {}
 
-   validate(value: any): Promise<boolean> | boolean {
-       const teamFound: boolean = this.repository.getTeamByName(value);
+   async validate(value: any): Promise<boolean> {
+       const teamFound = await this.repository.getByName(value);
        return !teamFound;
    }
 }

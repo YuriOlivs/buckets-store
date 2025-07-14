@@ -1,7 +1,7 @@
-import UserResponseDTO from "./dto/UserResponse.dto";
+import UserResponseDTO from "./UserResponse.dto";
 
 export default class UserMapper {
-   static toDTO(user: any): UserResponseDTO  {
+   static toDTO(user: any): UserResponseDTO {
       return new UserResponseDTO(user.id, user.name, user.lastName, user.email);
    }
 }
