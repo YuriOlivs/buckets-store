@@ -13,7 +13,6 @@ export default class UserController {
    @Post()
    async createUser(@Body() body: UserCreateDTO) {
       const user = new UserEntity(
-         uuid(),
          body.name,
          body.lastName,
          body.email,

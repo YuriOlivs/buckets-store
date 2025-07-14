@@ -30,14 +30,12 @@ export default class UserEntity {
   deletedAt: string;
 
   constructor(
-    id: string,
     name: string,
     lastName: string,
     email: string,
     password: string,
     birthDate: Date,
   ) {
-    this.id = id;
     this.name = name;
     this.lastName = lastName;
     this.email = email;

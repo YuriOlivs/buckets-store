@@ -13,10 +13,9 @@ export default class ProductController {
 
    @Post()
    async createProduct(@Body() body: ProductCreateDTO) {
-      const images = body.images.map(image => new ImageEntity(uuid(), image.url, image.desc));
+      const images = body.images.map(image => new ImageEntity(image.url, image.desc));
 
       const product = new ProductEntity(
-         uuid(),
          body.name,
          body.description,
          body.category,

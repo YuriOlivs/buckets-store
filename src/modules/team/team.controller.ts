@@ -14,13 +14,11 @@ export default class TeamController {
    @Post()
    async createTeam(@Body() body: TeamCreateDTO) {
       const logo = new ImageEntity(
-         uuid(),
          body.logo.url,
          body.logo.desc
       );
 
       const team = new TeamEntity(
-         uuid(),
          body.name,
          body.city,
          logo

@@ -37,7 +37,6 @@ export default class ProductEntity {
    deletedAt: string;
 
    constructor(
-      id: string,
       name: string,
       description: string,
       category: string,
@@ -46,7 +45,6 @@ export default class ProductEntity {
       teamId: string,
       images: ImageEntity[]
    ) {
-      this.id = id;
       this.name = name;
       this.description = description;
       this.category = category;
@@ -68,7 +66,6 @@ export default class ProductEntity {
    get getUpdatedAt() { return this.updatedAt; }
    get getDeletedAt() { return this.deletedAt; }
 
-   setId(id: string) { this.id = id; }
    setName(name: string) { this.name = name; }
    setDescription(description: string) { this.description = description; }
    setCategory(category: string) { this.category = category; }
