@@ -7,8 +7,8 @@ import { TeamRepository } from "../team.repository";
 export class isNameUniqueValidtor implements ValidatorConstraintInterface {
    constructor(private repository: TeamRepository) {}
 
-   validate(value: any): Promise<boolean> | boolean {
-       const teamFound: boolean = this.repository.getTeamByName(value);
+   async validate(value: any): Promise<boolean> {
+       const teamFound = await this.repository.getByName(value);
        return !teamFound;
    }
 }
