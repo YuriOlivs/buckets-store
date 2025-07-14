@@ -9,32 +9,32 @@ export default class ProductService {
       private teamService: TeamService
    ) {}
 
-   async getAllProducts() {
+   async getAllProducts(): Promise<ProductEntity[]> {
       return await this.repo.getAll();
    }
 
-   async getProductById(id: string) {
+   async getProductById(id: string): Promise<ProductEntity> {
       const productFound = await this.repo.getById(id);
-      if (!productFound) throw new NotFoundException('Product not found');
+      if (!productFound) throw new NotFoundException('Product not found')
       
-      return await this.repo.getById(id);
+      return productFound;
    }
 
-   async getProductByTeam(id: string) {
+   async getProductByTeam(id: string): Promise<ProductEntity[]> {
       const teamFound = await this.teamService.getTeamById(id);
       if (!teamFound) throw new NotFoundException('Team not found');
 
       return await this.repo.getByTeam(id);
    }
 
-   async createProduct(product: ProductEntity) {
+   async createProduct(product: ProductEntity): Promise<ProductEntity> {
       const teamFound = await this.teamService.getTeamById(product.getTeamId);
       if (!teamFound) throw new NotFoundException('Team not found');
 
       return await this.repo.save(product);
    }
 
-   async updateProduct(id: string, productData: Partial<ProductEntity>) {
+   async updateProduct(id: string, productData: Partial<ProductEntity>): Promise<ProductEntity> {
       const productFound = await this.repo.getById(id);
       if (!productFound) throw new NotFoundException('Product not found');
 
