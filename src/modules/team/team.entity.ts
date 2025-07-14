@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import ImageEntity from "../image/image.entity";
 
 @Entity({ name: 'teams' })
@@ -12,6 +12,7 @@ export default class TeamEntity {
    @Column({ name: 'city', length: 100, nullable: false })
    city: string;
 
+   @OneToOne(() => ImageEntity, image => image.team)
    logo: ImageEntity;
 
    @CreateDateColumn({ name: 'created_at' })
