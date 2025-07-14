@@ -18,11 +18,8 @@ export default class ProductRepository {
       return await this.repository.find();
    }
 
-   async getById(id: string): Promise<ProductEntity> {
-      const productFound = await this.repository.findOne({ where: { id } });
-      if (!productFound) throw new Error('Product not found');
-
-      return productFound;
+   async getById(id: string): Promise<ProductEntity | null> {
+      return await this.repository.findOne({ where: { id } });
    }
 
    async getByTeam(id: string): Promise<ProductEntity[]> {

@@ -14,6 +14,9 @@ export default class ProductService {
    }
 
    async getProductById(id: string) {
+      const productFound = await this.repo.getById(id);
+      if (!productFound) throw new NotFoundException('Product not found');
+      
       return await this.repo.getById(id);
    }
 
