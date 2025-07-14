@@ -28,9 +28,7 @@ export default class UserController {
    @Get()
    async getUsers() {
       const userEntities = await this.service.getAllUsers();
-      const users = userEntities.map(UserMapper.toDTO);
-
-      return { message: STRINGS.entityFound('Users'), payload: users };
+      return userEntities.map(UserMapper.toDTO);
    }
 
    @Put('/:id')

@@ -25,7 +25,7 @@ export default class TeamController {
    @Get()
    async getAllTeams() {
       const teamEntites = await this.service.getAllTeams();
-      return { message: STRINGS.entityFound('Teams'), payload: teamEntites.map(TeamMapper.toDTO) };
+      return teamEntites.map(TeamMapper.toDTO);
    }
 
    @Put(':id')
