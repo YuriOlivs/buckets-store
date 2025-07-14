@@ -5,9 +5,13 @@ import { isNameUniqueValidtor } from "./validations/isNameUnique.validator";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import TeamEntity from "./team.entity";
 import TeamService from "./team.service";
+import { ImageModule } from "../image/image.module";
 
 @Module({
-   imports: [TypeOrmModule.forFeature([TeamEntity])],
+   imports: [
+      TypeOrmModule.forFeature([TeamEntity]),
+      ImageModule,
+   ],
    exports: [TeamService],
    controllers: [TeamController],
    providers: [

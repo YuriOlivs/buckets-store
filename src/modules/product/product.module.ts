@@ -5,11 +5,13 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import ProductEntity from "./product.entity";
 import ProductService from "./product.service";
 import { TeamModule } from "../team/team.module";
+import { ImageModule } from "../image/image.module";
 
 @Module({
    imports: [
       TypeOrmModule.forFeature([ProductEntity]),
-      TeamModule
+      TeamModule,
+      ImageModule
    ],
    controllers: [ProductController],
    providers: [

@@ -5,6 +5,7 @@ import TeamMapper from "./dto/team.mapper";
 import TeamEntity from "./team.entity";
 import TeamService from "./team.service";
 import { STRINGS } from "src/common/strings/global.strings";
+import ImageEntity from "../image/image.entity";
 
 @Controller("/teams")
 export default class TeamController {
@@ -12,10 +13,17 @@ export default class TeamController {
 
    @Post()
    async createTeam(@Body() body: TeamCreateDTO) {
+      const logo = new ImageEntity(
+         uuid(),
+         body.logo.url,
+         body.logo.desc
+      );
+
       const team = new TeamEntity(
          uuid(),
          body.name,
-         body.city
+         body.city,
+         logo
       );
 
       const teamCreated = await this.service.createTeam(team);

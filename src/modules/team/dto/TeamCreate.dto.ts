@@ -1,4 +1,6 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsNotEmpty, IsNotEmptyObject, IsString, ValidateNested } from "class-validator";
+import CreateImageDTO from "src/modules/image/dto/CreateImage.dto";
 
 export default class TeamCreateDTO {
    @IsString()
@@ -8,4 +10,9 @@ export default class TeamCreateDTO {
    @IsString()
    @IsNotEmpty()
    city: string;
+
+   @ValidateNested()
+   @IsNotEmptyObject()
+   @Type(() => CreateImageDTO)
+   logo: CreateImageDTO;
 }
