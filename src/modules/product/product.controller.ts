@@ -38,13 +38,19 @@ export default class ProductController {
    @Get()
    async getAllProducts() {
       const productEntities = await this.service.getAllProducts();
-      return { message: STRINGS.entityFound('Products'), payload: productEntities.map(ProductMapper.toDTO) };
+      return productEntities.map(ProductMapper.toDTO);
    }
 
    @Get('/:id')
    async getProductById(@Param('id') id: string) {
       const product = await this.service.getProductById(id);
-      return { message: STRINGS.entityFound('Product'), payload: ProductMapper.toDTO(product) };
+      return ProductMapper.toDTO(product);
+   }
+
+   @Get('/team/:teamId')
+   async getProductByTeam(@Param('teamId') teamId: string) {
+      const products = await this.service.getProductByTeam(teamId);
+      return products.map(ProductMapper.toDTO);
    }
 
    @Put('/:id')

@@ -17,6 +17,13 @@ export default class ProductService {
       return await this.repo.getById(id);
    }
 
+   async getProductByTeam(id: string) {
+      const teamFound = await this.teamService.getTeamById(id);
+      if (!teamFound) throw new Error('Team not found');
+
+      return await this.repo.getByTeam(id);
+   }
+
    async createProduct(product: ProductEntity) {
       return await this.repo.save(product);
    }
@@ -30,13 +37,13 @@ export default class ProductService {
       if (productData.getCategory) productFound.setCategory(productData.getCategory);
       if (productData.getSubcategory) productFound.setSubcategory(productData.getSubcategory);
       if (productData.getPrice) productFound.setPrice(productData.getPrice);
+      if (productData.getImages) productFound.setImages(productData.getImages);
       if (productData.getTeamId) {
          const teamFound = await this.teamService.getTeamById(productData.getTeamId);
          if (!teamFound) throw new Error('Team not found');
          
          productFound.setTeamId(productData.getTeamId);
       }
-      if (productData.getImages) productFound.setImages(productData.getImages);
 
       return await this.repo.save(productFound);
    }
