@@ -1,5 +1,5 @@
 import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUUID, MaxLength, ValidateNested } from "class-validator";
-import ImageDTO from "./Image.dto";
+import CreateImageDTO from "../../image/dto/CreateImage.dto";
 import { Type } from "class-transformer";
 
 export default class ProductCreateDTO {
@@ -30,6 +30,6 @@ export default class ProductCreateDTO {
 
    @IsArray()
    @ValidateNested()
-   @Type(() => ImageDTO)
-   images: ImageDTO[];
+   @Type(() => CreateImageDTO)
+   images: CreateImageDTO[];
 }

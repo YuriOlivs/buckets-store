@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import ImageEntity from "./product-image.entity";
+import ImageEntity from "../image/image.entity";
 
 @Entity({ name: 'products' })
 export default class ProductEntity {
