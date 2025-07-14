@@ -2,10 +2,15 @@ import { STRINGS } from "src/common/strings/global.strings";
 import TeamEntity from "./team.entity";
 import TeamRepository from "./team.repository";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import ImageService from "../image/image.service";
+import ImageEntity from "../image/image.entity";
 
 @Injectable()
 export default class TeamService {
-   constructor (private repo: TeamRepository) {}
+   constructor (
+      private repo: TeamRepository,
+      private imgService: ImageService
+   ) {}
 
    async getAllTeams(): Promise<TeamEntity[]> {
       return await this.repo.getAll();
@@ -21,6 +26,9 @@ export default class TeamService {
    async createTeam(team: TeamEntity): Promise<TeamEntity> {
       const nameExists = await this.repo.getByName(team.name);
       if (nameExists) throw new BadRequestException(STRINGS.alreadyExists('Name'));
+
+      const logo = await this.imgService.createImage(team.logo);
+      team.setLogo(logo as ImageEntity);
       
       return await this.repo.save(team);
    }
@@ -32,8 +40,12 @@ export default class TeamService {
       if(teamData.name) {
          const nameExists = await this.repo.getByName(teamData.name);
          if (nameExists) throw new BadRequestException(STRINGS.alreadyExists('Name'));
-
          if (teamData.name) teamFound.setName(teamData.name);
+      }
+
+      if(teamData.logo) {
+         const logo = await this.imgService.createImage(teamData.logo);
+         teamFound.setLogo(logo as ImageEntity);
       }
 
       if(teamData.city) teamFound.setCity(teamData.city);

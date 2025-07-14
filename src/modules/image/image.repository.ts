@@ -10,7 +10,10 @@ export default class ImageRepository {
       private readonly repository: Repository<ImageEntity>,
    ) {}
 
-   async save(image: ImageEntity): Promise<ImageEntity> {
+   async save(image: ImageEntity | ImageEntity[]): Promise<ImageEntity | ImageEntity[]> {
+      if (Array.isArray(image)) {
+         return await this.repository.save(image);
+      }
       return await this.repository.save(image);
    }
 
@@ -24,6 +27,10 @@ export default class ImageRepository {
 
    async getByTeam(id: string): Promise<ImageEntity | null> {
       return await this.repository.findOne({ where: { team: { id: id } } });
+   }
+
+   async getByProduct(id: string): Promise<ImageEntity[] | null> {
+      return await this.repository.find({ where: { product: { id: id } } });
    }
 
    async remove(image: ImageEntity): Promise<ImageEntity> {

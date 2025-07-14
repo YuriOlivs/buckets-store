@@ -6,7 +6,7 @@ import ImageEntity from "./image.entity";
 export default class ImageService {
    constructor(private repo: ImageRepository) {}
 
-   async createImage(image: ImageEntity): Promise<ImageEntity> {
+   async createImage(image: ImageEntity | ImageEntity[]): Promise<ImageEntity | ImageEntity[]> {
       return await this.repo.save(image);
    }
 
@@ -20,6 +20,10 @@ export default class ImageService {
 
    async getImageByTeam(id: string): Promise<ImageEntity | null> {
       return await this.repo.getByTeam(id);
+   }
+
+   async getImagesByProduct(id: string): Promise<ImageEntity[] | null> {
+      return await this.repo.getByProduct(id);
    }
 
    async deleteTeam(id: string): Promise<ImageEntity> {

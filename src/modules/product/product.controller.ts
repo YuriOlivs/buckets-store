@@ -5,6 +5,7 @@ import ProductEntity from "./product.entity";
 import ProductMapper from "./dto/product.mapper";
 import ProductService from "./product.service";
 import { STRINGS } from "src/common/strings/global.strings";
+import ImageEntity from "../image/image.entity";
 
 @Controller('/products')
 export default class ProductController {
@@ -12,13 +13,7 @@ export default class ProductController {
 
    @Post()
    async createProduct(@Body() body: ProductCreateDTO) {
-      const images = body.images.map(image => {
-         return {
-            id: uuid(),
-            url: image.url,
-            desc: image.desc
-         }
-      })
+      const images = body.images.map(image => new ImageEntity(uuid(), image.url, image.desc));
 
       const product = new ProductEntity(
          uuid(),
