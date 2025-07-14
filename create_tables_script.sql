@@ -1,62 +1,66 @@
-  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-  CREATE  TABLE  IF  NOT  EXISTS  public.usuarios
-  (
-  id uuid NOT NULL  DEFAULT uuid_generate_v4(),
-  nome character varying(100) COLLATE pg_catalog."default"  NOT NULL,
-  email character varying(70) COLLATE pg_catalog."default"  NOT NULL,
-  senha character varying(255) COLLATE pg_catalog."default"  NOT NULL,
-  created_at timestamp without time zone  NOT NULL  DEFAULT  now(),
-  updated_at timestamp without time zone  NOT NULL  DEFAULT  now(),
+-- USERS
+CREATE TABLE IF NOT EXISTS public.users (
+  id UUID NOT NULL DEFAULT uuid_generate_v4(),
+  name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
+  email VARCHAR(80) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  birth_date DATE NOT NULL,
+  created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
+  updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
+  deleted_at TIMESTAMP WITHOUT TIME ZONE,
+  CONSTRAINT pk_users PRIMARY KEY (id)
+);
+
+ALTER TABLE IF EXISTS public.users OWNER TO root;
+
+-- TEAMS
+CREATE TABLE IF NOT EXISTS public.teams (
+  id uuid NOT NULL DEFAULT uuid_generate_v4(),
+  name character varying(100) COLLATE pg_catalog."default" NOT NULL,
+  city character varying(100) COLLATE pg_catalog."default" NOT NULL,
+  created_at timestamp without time zone NOT NULL DEFAULT now(),
+  updated_at timestamp without time zone NOT NULL DEFAULT now(),
   deleted_at timestamp without time zone,
-  CONSTRAINT  "PK_d7281c63c176e152e4c531594a8"  PRIMARY KEY (id)
-  );
-  
-  ALTER  TABLE  IF  EXISTS  public.usuarios  OWNER  to  root;
+  CONSTRAINT PK_teams PRIMARY KEY (id)
+);
 
-  CREATE  TABLE  IF  NOT  EXISTS  public.produtos
-  (
-  id uuid NOT NULL  DEFAULT uuid_generate_v4(),
-  usuario_id character varying(100) COLLATE pg_catalog."default"  NOT NULL,
-  nome character varying(100) COLLATE pg_catalog."default"  NOT NULL,
-  valor integer  NOT NULL,
-  quantidade integer  NOT NULL,
-  descricao character varying(255) COLLATE pg_catalog."default"  NOT NULL,
-  categoria character varying(100) COLLATE pg_catalog."default"  NOT NULL,
-  created_at timestamp without time zone  NOT NULL  DEFAULT  now(),
-  updated_at timestamp without time zone  NOT NULL  DEFAULT  now(),
-  deleted_at timestamp without time zone,
-  CONSTRAINT  "PK_a5d976312809192261ed96174f3"  PRIMARY KEY (id)
-  );
-  
-  ALTER  TABLE  IF  EXISTS  public.produtos  OWNER  to  root;
+ALTER TABLE IF EXISTS public.teams OWNER TO root;
 
-  CREATE  TABLE  IF  NOT  EXISTS  public.produto_caracteristicas
-  (
-  id uuid NOT NULL  DEFAULT uuid_generate_v4(),
-  nome character varying(100) COLLATE pg_catalog."default"  NOT NULL,
-  descricao character varying(255) COLLATE pg_catalog."default"  NOT NULL,
-  "produtoId" uuid,
-  CONSTRAINT  "PK_132816ff55e30a6bf554c9e2545"  PRIMARY KEY (id),
-  CONSTRAINT  "FK_67339e59ab4b3ed091cf318f426"  FOREIGN KEY ("produtoId")
-  REFERENCES  public.produtos (id) MATCH SIMPLE
-  ON  UPDATE CASCADE
-  ON DELETE CASCADE
-  );
-  
-  ALTER  TABLE  IF  EXISTS  public.produto_caracteristicas  OWNER  to  root;
+-- PRODUCTS
+CREATE TABLE IF NOT EXISTS public.products (
+  id UUID NOT NULL DEFAULT uuid_generate_v4(),
+  name VARCHAR(100) NOT NULL,
+  description VARCHAR(800) NOT NULL,
+  category VARCHAR(100) NOT NULL,
+  subcategory VARCHAR(100),
+  price NUMERIC NOT NULL,
+  team_id UUID NOT NULL,
+  created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
+  updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
+  deleted_at TIMESTAMP WITHOUT TIME ZONE,
+  CONSTRAINT pk_products PRIMARY KEY (id),
+  CONSTRAINT fk_products_team FOREIGN KEY (team_id)
+    REFERENCES public.teams (id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
 
-  CREATE  TABLE  IF  NOT  EXISTS  public.produto_imagens
-  (
-  id uuid NOT NULL  DEFAULT uuid_generate_v4(),
-  url  character varying(100) COLLATE pg_catalog."default"  NOT NULL,
-  descricao character varying(100) COLLATE pg_catalog."default"  NOT NULL,
-  "produtoId" uuid,
-  CONSTRAINT  "PK_d1cf326e8d58dbc469bd7fe2f32"  PRIMARY KEY (id),
-  CONSTRAINT  "FK_eb1531605709dd94ec67b2141d0"  FOREIGN KEY ("produtoId")
-  REFERENCES  public.produtos (id) MATCH SIMPLE
-  ON  UPDATE CASCADE
-  ON DELETE CASCADE
-  );
-  
-  ALTER  TABLE  IF  EXISTS  public.produto_imagens  OWNER  to  root;
+ALTER TABLE IF EXISTS public.products OWNER TO root;
+
+-- IMAGES
+CREATE TABLE IF NOT EXISTS public.product_images (
+  id UUID NOT NULL DEFAULT uuid_generate_v4(),
+  url VARCHAR(255) NOT NULL,
+  description VARCHAR(255),
+  product_id UUID NOT NULL,
+  CONSTRAINT pk_product_images PRIMARY KEY (id),
+  CONSTRAINT fk_product_images_product FOREIGN KEY (product_id)
+    REFERENCES public.products (id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+ALTER TABLE IF EXISTS public.product_images OWNER TO root;
