@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS public.products (
   description VARCHAR(800) NOT NULL,
   category VARCHAR(100) NOT NULL,
   subcategory VARCHAR(100),
-  price NUMERIC NOT NULL,
+  price NUMERIC(10, 2) NOT NULL,
   team_id UUID NOT NULL,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
