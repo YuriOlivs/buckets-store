@@ -1,9 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import ProductEntity from "./product.entity";
 import ProductRepository from "./product.repository";
+import TeamService from "../team/team.service";
 @Injectable()
 export default class ProductService {
-   constructor (private repo: ProductRepository) {}
+   constructor (
+      private repo: ProductRepository,
+      private teamService: TeamService
+   ) {}
 
    async getAllProducts() {
       return await this.repo.getAll();
@@ -26,7 +30,12 @@ export default class ProductService {
       if (productData.getCategory) productFound.setCategory(productData.getCategory);
       if (productData.getSubcategory) productFound.setSubcategory(productData.getSubcategory);
       if (productData.getPrice) productFound.setPrice(productData.getPrice);
-      if (productData.getTeamId) productFound.setTeamId(productData.getTeamId);
+      if (productData.getTeamId) {
+         const teamFound = await this.teamService.getTeamById(productData.getTeamId);
+         if (!teamFound) throw new Error('Team not found');
+         
+         productFound.setTeamId(productData.getTeamId);
+      }
       if (productData.getImages) productFound.setImages(productData.getImages);
 
       return await this.repo.save(productFound);
