@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
-import { v4 as uuid } from 'uuid';
 import ProductCreateDTO from "./dto/ProductCreate.dto";
 import ProductEntity from "./product.entity";
 import ProductMapper from "./dto/product.mapper";

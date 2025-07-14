@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
-import { v4 as uuid } from 'uuid';
 import TeamCreateDTO from "./dto/TeamCreate.dto";
 import TeamMapper from "./dto/team.mapper";
 import TeamEntity from "./team.entity";
