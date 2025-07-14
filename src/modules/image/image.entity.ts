@@ -10,4 +10,10 @@ export default class ImageEntity {
 
    @Column({ name: 'desc', length: 100, nullable: false })
    desc: string;
+
+   constructor(id: string, url: string, desc: string) {
+      this.id = id;
+      this.url = url;
+      this.desc = desc;
+   }
 }
