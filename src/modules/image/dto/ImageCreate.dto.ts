@@ -1,6 +1,6 @@
 import { IsString, IsUrl } from "class-validator";
 
-export default class CreateImageDTO {
+export default class ImageCreateDTO {
    @IsUrl()
    url: string;
 
