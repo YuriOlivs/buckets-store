@@ -14,7 +14,7 @@ export default class ImageService {
          const existing = await this.repo.getByUrl(img.url);
 
          if (existing) {
-            if (img.desc != existing.desc) existing.desc = img.desc;
+            if (img.description != existing.description) existing.description = img.description;
             finalResults.push(existing);
          } else {
             const saved = await this.repo.save(img);
