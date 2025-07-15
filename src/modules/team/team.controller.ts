@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
-import { v4 as uuid } from 'uuid';
 import TeamCreateDTO from "./dto/TeamCreate.dto";
 import TeamMapper from "./dto/team.mapper";
 import TeamEntity from "./team.entity";
@@ -14,13 +13,11 @@ export default class TeamController {
    @Post()
    async createTeam(@Body() body: TeamCreateDTO) {
       const logo = new ImageEntity(
-         uuid(),
          body.logo.url,
          body.logo.desc
       );
 
       const team = new TeamEntity(
-         uuid(),
          body.name,
          body.city,
          logo

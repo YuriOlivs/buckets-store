@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
-import { v4 as uuid } from 'uuid';
 import ProductCreateDTO from "./dto/ProductCreate.dto";
 import ProductEntity from "./product.entity";
 import ProductMapper from "./dto/product.mapper";
@@ -13,10 +12,9 @@ export default class ProductController {
 
    @Post()
    async createProduct(@Body() body: ProductCreateDTO) {
-      const images = body.images.map(image => new ImageEntity(uuid(), image.url, image.desc));
+      const images = body.images.map(image => new ImageEntity(image.url, image.desc));
 
       const product = new ProductEntity(
-         uuid(),
          body.name,
          body.description,
          body.category,

@@ -27,8 +27,14 @@ export default class TeamService {
       const nameExists = await this.repo.getByName(team.name);
       if (nameExists) throw new BadRequestException(STRINGS.alreadyExists('Name'));
 
-      const logo = await this.imgService.createImage(team.logo);
-      team.setLogo(logo as ImageEntity);
+      const urlExists = await this.imgService.getImageByUrl(team.logo.url);
+      if (urlExists) {
+         if(team.logo.description != urlExists.description) urlExists.description = team.logo.description;
+         team.setLogo(urlExists);
+      } else {
+         const logo = await this.imgService.createImage(team.logo);
+         team.setLogo(logo as ImageEntity);
+      }
       
       return await this.repo.save(team);
    }
@@ -44,8 +50,14 @@ export default class TeamService {
       }
 
       if(teamData.logo) {
-         const logo = await this.imgService.createImage(teamData.logo);
-         teamFound.setLogo(logo as ImageEntity);
+         const urlExists = await this.imgService.getImageByUrl(teamData.logo.url);
+         if (urlExists) {
+            if(teamData.logo.description != urlExists.description) urlExists.description = teamData.logo.description;
+            teamFound.setLogo(urlExists);
+         } else {
+            const logo = await this.imgService.createImage(teamData.logo);
+            teamFound.setLogo(logo as ImageEntity);
+         }
       }
 
       if(teamData.city) teamFound.setCity(teamData.city);

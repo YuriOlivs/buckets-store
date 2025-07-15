@@ -24,8 +24,7 @@ export default class TeamEntity {
    @DeleteDateColumn({ name: 'deleted_at' })
    deletedAt: Date;
 
-   constructor(id: string, name: string, city: string, logo: ImageEntity) {
-      this.id = id;
+   constructor(name: string, city: string, logo: ImageEntity) {
       this.name = name;
       this.city = city;
       this.logo = logo;

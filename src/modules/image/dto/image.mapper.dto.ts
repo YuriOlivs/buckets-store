@@ -6,7 +6,7 @@ export default class ImageMapper {
       return new ImageResponseDTO(
          image.id, 
          image.url, 
-         image.desc
+         image.description
       );
    }
 }

@@ -11,7 +11,7 @@ export default class ImageEntity {
    url: string;
 
    @Column({ name: 'desc', length: 255, nullable: false })
-   desc: string;
+   description: string;
 
    @ManyToOne(() => ProductEntity, product => product.images)
    product: ProductEntity | null
@@ -20,15 +20,13 @@ export default class ImageEntity {
    team: TeamEntity | null
 
    constructor(
-      id: string,
       url: string, 
-      desc: string,
+      description: string,
       product?: ProductEntity,
       team?: TeamEntity
    ) {
-      this.id = id;
       this.url = url;
-      this.desc = desc;
+      this.description = description;
       this.product = product || null;
       this.team = team || null;
    }

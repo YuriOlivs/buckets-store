@@ -51,8 +51,17 @@ export default class ProductService {
       if (!teamFound) throw new NotFoundException('Team not found');
 
       for (const image of product.getImages) {
-         const img = await this.imgService.createImage(image);
-         images.push(img as ImageEntity);
+         let img: ImageEntity;
+         const urlExists = await this.imgService.getImageByUrl(image.url);
+         if(urlExists) {
+            if(image.description != urlExists.description) urlExists.description = image.description;
+            img = urlExists;
+         }
+         else {
+            img = await this.imgService.createImage(image) as ImageEntity;
+         }
+
+         images.push(img);
       }
       product.setImages(images);
 
