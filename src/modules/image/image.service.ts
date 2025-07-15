@@ -7,7 +7,22 @@ export default class ImageService {
    constructor(private repo: ImageRepository) {}
 
    async createImage(image: ImageEntity | ImageEntity[]): Promise<ImageEntity | ImageEntity[]> {
-      return await this.repo.save(image);
+      const images = Array.isArray(image) ? image : [image];
+      const finalResults: ImageEntity[] = [];
+
+      for (const img of images) {
+         const existing = await this.repo.getByUrl(img.url);
+
+         if (existing) {
+            if (img.desc != existing.desc) existing.desc = img.desc;
+            finalResults.push(existing);
+         } else {
+            const saved = await this.repo.save(img);
+            finalResults.push(saved as ImageEntity);
+         }
+      }
+
+      return Array.isArray(image) ? finalResults : finalResults[0];
    }
 
    async getImageById(id: string): Promise<ImageEntity | null> {
