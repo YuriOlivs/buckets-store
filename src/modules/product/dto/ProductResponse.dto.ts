@@ -7,6 +7,7 @@ export default class ProductResponseDTO {
       readonly description: string,
       readonly category: string,
       readonly subcategory: string,
+      readonly quantityAvailable: number,
       readonly price: number,
       readonly team: string,
       readonly images: ImageResponseDTO[]

@@ -24,6 +24,10 @@ export default class ProductCreateDTO {
    @IsPositive()
    price: number;
 
+   @IsNumber()
+   @IsPositive()
+   quantityAvailable: number;
+
    @IsString()
    @IsUUID()
    team: string;
