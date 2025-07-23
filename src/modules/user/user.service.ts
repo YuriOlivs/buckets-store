@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from "@nestjs/comm
 import UserRepository from "./user.repository";
 import UserEntity from "./user.entity";
 import { STRINGS } from "src/common/strings/global.strings";
+import UserCreateDTO from "./dto/UserCreate.dto";
 
 @Injectable()
 export default class UserService {
@@ -17,7 +18,15 @@ export default class UserService {
       return userFound;
    }
 
-   async createUser(user: UserEntity): Promise<UserEntity> {
+   async createUser(dto: UserCreateDTO): Promise<UserEntity> {
+      const user = new UserEntity(
+         dto.name,
+         dto.lastName,
+         dto.email,
+         dto.password,
+         dto.birthDate
+      );
+
       const emailExists = await this.repo.getByEmail(user.email);
       if (emailExists) throw new BadRequestException(STRINGS.alreadyExists('Email'));
 

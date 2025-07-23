@@ -12,18 +12,7 @@ export default class TeamController {
 
    @Post()
    async createTeam(@Body() body: TeamCreateDTO) {
-      const logo = new ImageEntity(
-         body.logo.url,
-         body.logo.desc
-      );
-
-      const team = new TeamEntity(
-         body.name,
-         body.city,
-         logo
-      );
-
-      const teamCreated = await this.service.createTeam(team);
+      const teamCreated = await this.service.createTeam(body);
       return { message: STRINGS.entityCreated('Team'), payload: TeamMapper.toDTO(teamCreated) };
    }
 

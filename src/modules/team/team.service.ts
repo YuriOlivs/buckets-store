@@ -4,6 +4,7 @@ import TeamRepository from "./team.repository";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import ImageService from "../image/image.service";
 import ImageEntity from "../image/image.entity";
+import TeamCreateDTO from "./dto/TeamCreate.dto";
 
 @Injectable()
 export default class TeamService {
@@ -23,7 +24,10 @@ export default class TeamService {
       return teamFound;
    }
 
-   async createTeam(team: TeamEntity): Promise<TeamEntity> {
+   async createTeam(dto: TeamCreateDTO): Promise<TeamEntity> {
+      const logo = new ImageEntity(dto.logo.url, dto.logo.desc)
+      const team = new TeamEntity(dto.name, dto.city, logo);
+
       const nameExists = await this.repo.getByName(team.name);
       if (nameExists) throw new BadRequestException(STRINGS.alreadyExists('Name'));
 

@@ -4,6 +4,7 @@ import ProductRepository from "./product.repository";
 import TeamService from "../team/team.service";
 import ImageService from "../image/image.service";
 import ImageEntity from "../image/image.entity";
+import ProductCreateDTO from "./dto/ProductCreate.dto";
 @Injectable()
 export default class ProductService {
    constructor (
@@ -45,8 +46,19 @@ export default class ProductService {
       return products;      
    }
 
-   async createProduct(product: ProductEntity): Promise<ProductEntity> {
+   async createProduct(dto: ProductCreateDTO): Promise<ProductEntity> {
       const images: ImageEntity[] = [];
+      const productImages = dto.images.map(image => new ImageEntity(image.url, image.desc));
+      const product = new ProductEntity(
+         dto.name,
+         dto.description,
+         dto.category,
+         dto.subcategory,
+         dto.price,
+         dto.team,
+         productImages
+      );
+
       const teamFound = await this.teamService.getTeamById(product.getTeamId);
       if (!teamFound) throw new NotFoundException('Team not found');
 
