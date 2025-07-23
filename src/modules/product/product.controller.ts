@@ -12,19 +12,7 @@ export default class ProductController {
 
    @Post()
    async createProduct(@Body() body: ProductCreateDTO) {
-      const images = body.images.map(image => new ImageEntity(image.url, image.desc));
-
-      const product = new ProductEntity(
-         body.name,
-         body.description,
-         body.category,
-         body.subcategory,
-         body.price,
-         body.team,
-         images
-      );
-
-      const productCreated = await this.service.createProduct(product);
+      const productCreated = await this.service.createProduct(body);
       return { message: STRINGS.entityCreated('Product'), payload: ProductMapper.toDTO(productCreated) }
    }
 

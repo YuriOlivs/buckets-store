@@ -11,15 +11,7 @@ export default class UserController {
 
    @Post()
    async createUser(@Body() body: UserCreateDTO) {
-      const user = new UserEntity(
-         body.name,
-         body.lastName,
-         body.email,
-         body.password,
-         body.birthDate
-      );
-
-      const userCreated = await this.service.createUser(user);
+      const userCreated = await this.service.createUser(body);
       return { message: STRINGS.entityCreated('User'), payload: UserMapper.toDTO(userCreated) };
    }
 

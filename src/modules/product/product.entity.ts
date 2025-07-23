@@ -21,6 +21,9 @@ export default class ProductEntity {
    @Column({ name: 'price', type: 'numeric', precision: 10, scale: 2, nullable: false })
    price: number;
 
+   @Column({ name: 'quantity_available', type: 'int', nullable: false })
+   quantityAvailable: number;
+
    @Column({ name: 'team_id', nullable: false })
    teamId: string;
 
@@ -43,7 +46,8 @@ export default class ProductEntity {
       subcategory: string,
       price: number,
       teamId: string,
-      images: ImageEntity[]
+      images: ImageEntity[],
+      quantityAvailable?: number
    ) {
       this.name = name;
       this.description = description;
@@ -52,6 +56,7 @@ export default class ProductEntity {
       this.price = price;
       this.teamId = teamId;
       this.images = images;
+      this.quantityAvailable = quantityAvailable || 0;
    }
 
    get getId() { return this.id; }
@@ -60,6 +65,7 @@ export default class ProductEntity {
    get getCategory() { return this.category; }
    get getSubcategory() { return this.subcategory; }
    get getPrice() { return this.price; }
+   get getQuantityAvailable() { return this.quantityAvailable; }
    get getTeamId() { return this.teamId; }
    get getImages() { return this.images; }
    get getCreatedAt() { return this.createdAt; }
@@ -71,6 +77,7 @@ export default class ProductEntity {
    setCategory(category: string) { this.category = category; }
    setSubcategory(subcategory: string) { this.subcategory = subcategory; }
    setPrice(price: number) { this.price = price; }
+   setQuantityAvailable(quantityAvailable: number) { this.quantityAvailable = quantityAvailable; }
    setTeamId(teamId: string) { this.teamId = teamId; }
    setImages(images: ImageEntity[]) { this.images = images; }
 }

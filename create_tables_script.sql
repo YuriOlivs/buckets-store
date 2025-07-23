@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS public.products (
   category VARCHAR(100) NOT NULL,
   subcategory VARCHAR(100),
   price NUMERIC(10, 2) NOT NULL,
+  quantity_available INTEGER NOT NULL DEFAULT 0,
   team_id UUID,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
