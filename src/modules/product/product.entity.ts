@@ -1,5 +1,7 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import ImageEntity from "../image/image.entity";
+import { ProductCategory } from "./enum/productCategory.enum";
+import { ProductSubcategory } from "./enum/productSubcategory.enum";
 
 @Entity({ name: 'products' })
 export default class ProductEntity {
@@ -12,11 +14,11 @@ export default class ProductEntity {
    @Column({ name: 'description', length: 800, nullable: false })
    description: string;
 
-   @Column({ name: 'category', length: 100, nullable: false })
-   category: string;
+   @Column({ name: 'category', enum: ProductCategory, nullable: false })
+   category: ProductCategory;
 
-   @Column({ name: 'subcategory', length: 100, nullable: true })
-   subcategory: string;
+   @Column({ name: 'subcategory', enum: ProductSubcategory, nullable: true })
+   subcategory: ProductSubcategory;
 
    @Column({ name: 'price', type: 'numeric', precision: 10, scale: 2, nullable: false })
    price: number;
@@ -42,8 +44,8 @@ export default class ProductEntity {
    constructor(
       name: string,
       description: string,
-      category: string,
-      subcategory: string,
+      category: ProductCategory,
+      subcategory: ProductSubcategory,
       price: number,
       teamId: string,
       images: ImageEntity[],
@@ -74,8 +76,8 @@ export default class ProductEntity {
 
    setName(name: string) { this.name = name; }
    setDescription(description: string) { this.description = description; }
-   setCategory(category: string) { this.category = category; }
-   setSubcategory(subcategory: string) { this.subcategory = subcategory; }
+   setCategory(category: ProductCategory) { this.category = category; }
+   setSubcategory(subcategory: ProductSubcategory) { this.subcategory = subcategory; }
    setPrice(price: number) { this.price = price; }
    setQuantityAvailable(quantityAvailable: number) { this.quantityAvailable = quantityAvailable; }
    setTeamId(teamId: string) { this.teamId = teamId; }
