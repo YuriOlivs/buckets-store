@@ -4,7 +4,7 @@ import { OrderStatusUpdateDTO } from './dto/OrderStatusUpdate.dto';
 
 @Injectable()
 export class OrderStatusService {
-  create(OrderStatusCreateDTO: OrderStatusCreateDTO) {
+  save(OrderStatusCreateDTO: OrderStatusCreateDTO) {
     return 'This action adds a new orderStatus';
   }
 
