@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import ImageEntity from "../image/image.entity";
+import ProductEntity from "../product/product.entity";
 
 @Entity({ name: 'teams' })
 export default class TeamEntity {
@@ -14,6 +15,9 @@ export default class TeamEntity {
 
    @OneToOne(() => ImageEntity, image => image.team)
    logo: ImageEntity;
+
+   @OneToMany(() => ProductEntity, product => product.team)
+   products: ProductEntity[];
 
    @CreateDateColumn({ name: 'created_at' })
    createdAt: Date;

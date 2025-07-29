@@ -1,7 +1,9 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import ImageEntity from "../image/image.entity";
 import { ProductCategory } from "./enum/productCategory.enum";
 import { ProductSubcategory } from "./enum/productSubcategory.enum";
+import TeamEntity from "../team/team.entity";
+import { OrderItemEntity } from "../order-item/order-item.entity";
 
 @Entity({ name: 'products' })
 export default class ProductEntity {
@@ -26,11 +28,15 @@ export default class ProductEntity {
    @Column({ name: 'quantity_available', type: 'int', nullable: false })
    quantityAvailable: number;
 
-   @Column({ name: 'team_id', nullable: false })
-   teamId: string;
+   @ManyToOne(() => TeamEntity, team => team.products)
+   @JoinColumn({ name: 'team_id' })
+   team: TeamEntity;
 
    @OneToMany(() => ImageEntity, image => image.product)
    images: ImageEntity[];
+
+   @OneToMany(() => OrderItemEntity, orderItem => orderItem.product)
+   orderItems: OrderItemEntity[];
 
    @CreateDateColumn({ name: 'created_at' })
    createdAt: string;
@@ -47,7 +53,7 @@ export default class ProductEntity {
       category: ProductCategory,
       subcategory: ProductSubcategory,
       price: number,
-      teamId: string,
+      team: TeamEntity,
       images: ImageEntity[],
       quantityAvailable?: number
    ) {
@@ -56,7 +62,7 @@ export default class ProductEntity {
       this.category = category;
       this.subcategory = subcategory;
       this.price = price;
-      this.teamId = teamId;
+      this.team = team;
       this.images = images;
       this.quantityAvailable = quantityAvailable || 0;
    }
@@ -68,7 +74,7 @@ export default class ProductEntity {
    get getSubcategory() { return this.subcategory; }
    get getPrice() { return this.price; }
    get getQuantityAvailable() { return this.quantityAvailable; }
-   get getTeamId() { return this.teamId; }
+   get getTeamId() { return this.team; }
    get getImages() { return this.images; }
    get getCreatedAt() { return this.createdAt; }
    get getUpdatedAt() { return this.updatedAt; }
@@ -80,6 +86,6 @@ export default class ProductEntity {
    setSubcategory(subcategory: ProductSubcategory) { this.subcategory = subcategory; }
    setPrice(price: number) { this.price = price; }
    setQuantityAvailable(quantityAvailable: number) { this.quantityAvailable = quantityAvailable; }
-   setTeamId(teamId: string) { this.teamId = teamId; }
+   setTeamId(team: TeamEntity) { this.team = team; }
    setImages(images: ImageEntity[]) { this.images = images; }
 }
