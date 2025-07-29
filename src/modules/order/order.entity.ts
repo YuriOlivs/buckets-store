@@ -30,7 +30,10 @@ export class OrderEntity {
    @DeleteDateColumn({ name: 'deleted_at' })
    deletedAt: Date;
 
-   constructor(totalValue: number, user: UserEntity) {
+   constructor(
+      totalValue: number, 
+      user: UserEntity,
+   ) {
       this.totalValue = totalValue;
       this.user = user;
    }
