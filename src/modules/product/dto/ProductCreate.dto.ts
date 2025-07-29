@@ -1,6 +1,8 @@
-import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUUID, MaxLength, ValidateNested } from "class-validator";
+import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUUID, MaxLength, ValidateNested } from "class-validator";
 import ImageCreateDTO from "../../image/dto/ImageCreate.dto";
 import { Type } from "class-transformer";
+import { ProductCategory } from "../enum/productCategory.enum";
+import { ProductSubcategory } from "../enum/productSubcategory.enum";
 
 export default class ProductCreateDTO {
    @IsString()
@@ -11,13 +13,11 @@ export default class ProductCreateDTO {
    @MaxLength(800)
    description: string;
 
-   @IsString()
-   @IsNotEmpty()
+   @IsEnum(ProductCategory)
    category: string;
 
    @IsOptional()
-   @IsString()
-   @IsNotEmpty()
+   @IsEnum(ProductSubcategory)
    subcategory: string;
 
    @IsNumber()
