@@ -8,6 +8,7 @@ import { TeamModule } from './modules/team/team.module';
 import { ImageModule } from './modules/image/image.module';
 import { OrderModule } from './modules/order/order.module';
 import { OrderItemModule } from './modules/order-item/order-item.module';
+import { OrderStatusModule } from './modules/order-status/order-status.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { OrderItemModule } from './modules/order-item/order-item.module';
       inject: [PostgresConfigService]
     }),
     OrderModule,
-    OrderItemModule
+    OrderItemModule,
+    OrderStatusModule
   ],
 })
 export class AppModule { }
