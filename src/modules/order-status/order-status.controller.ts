@@ -9,26 +9,26 @@ export class OrderStatusController {
 
   @Post()
   create(@Body() OrderStatusCreateDTO: OrderStatusCreateDTO) {
-    return this.orderStatusService.create(OrderStatusCreateDTO);
+    return this.orderStatusService.createOrderStatus(OrderStatusCreateDTO);
   }
 
   @Get()
   findAll() {
-    return this.orderStatusService.findAll();
+    return this.orderStatusService.findAllOrderStatus();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.orderStatusService.findOne(+id);
+    return this.orderStatusService.findOrderStatusById(+id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() OrderStatusUpdateDTO: OrderStatusUpdateDTO) {
-    return this.orderStatusService.update(+id, OrderStatusUpdateDTO);
+    return this.orderStatusService.updateOrderStatus(+id, OrderStatusUpdateDTO);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.orderStatusService.remove(+id);
+    return this.orderStatusService.removeOrderStatus(+id);
   }
 }
