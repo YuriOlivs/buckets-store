@@ -14,11 +14,11 @@ export default class ProductCreateDTO {
    description: string;
 
    @IsEnum(ProductCategory)
-   category: string;
+   category: ProductCategory;
 
    @IsOptional()
    @IsEnum(ProductSubcategory)
-   subcategory: string;
+   subcategory: ProductSubcategory;
 
    @IsNumber()
    @IsPositive()

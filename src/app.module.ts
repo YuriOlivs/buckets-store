@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TeamModule } from './modules/team/team.module';
 import { ImageModule } from './modules/image/image.module';
 import { OrderModule } from './modules/order/order.module';
+import { OrderItemModule } from './modules/order-item/order-item.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { OrderModule } from './modules/order/order.module';
       useClass: PostgresConfigService,
       inject: [PostgresConfigService]
     }),
-    OrderModule
+    OrderModule,
+    OrderItemModule
   ],
 })
 export class AppModule { }
