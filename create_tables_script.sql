@@ -55,6 +55,79 @@ CREATE TABLE IF NOT EXISTS public.images (
   CONSTRAINT pk_images PRIMARY KEY (id)
 );
 
+-- ORDERS
+CREATE TABLE IF NOT EXISTS public.orders (
+  id UUID NOT NULL DEFAULT uuid_generate_v4(),
+  user_id UUID NOT NULL,
+  total_value NUMERIC(10, 2) NOT NULL,
+  created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
+  updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
+  deleted_at TIMESTAMP WITHOUT TIME ZONE,
+
+  CONSTRAINT pk_orders PRIMARY KEY (id)
+);
+
+ALTER TABLE IF EXISTS public.orders OWNER TO root;
+
+-- ORDER ITEMS
+CREATE TABLE IF NOT EXISTS public.order_items (
+  id UUID NOT NULL DEFAULT uuid_generate_v4(),
+  order_id UUID NOT NULL,
+  product_id UUID NOT NULL,
+  quantity INTEGER NOT NULL CHECK (quantity > 0),
+  sale_price NUMERIC(10, 2) NOT NULL,
+  created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
+  updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
+  deleted_at TIMESTAMP WITHOUT TIME ZONE,
+
+  CONSTRAINT pk_order_items PRIMARY KEY (id)
+);
+
+ALTER TABLE IF EXISTS public.order_items OWNER TO root;
+
+-- ORDER STATUS
+CREATE TABLE IF NOT EXISTS public.order_status (
+  id UUID NOT NULL DEFAULT uuid_generate_v4(),
+  order_id UUID NOT NULL,
+  status_text VARCHAR(255) NOT NULL,
+  status_date TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
+  created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
+  updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
+  deleted_at TIMESTAMP WITHOUT TIME ZONE,
+
+  CONSTRAINT pk_order_status PRIMARY KEY (id)
+);
+
+ALTER TABLE IF EXISTS public.order_status OWNER TO root;
+
+-- FK: orders.user_id → users.id
+ALTER TABLE public.orders
+  ADD CONSTRAINT fk_orders_user FOREIGN KEY (user_id)
+  REFERENCES public.users(id)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE;
+
+-- FK: order_items.order_id → orders.id
+ALTER TABLE public.order_items
+  ADD CONSTRAINT fk_order_items_order FOREIGN KEY (order_id)
+  REFERENCES public.orders(id)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE;
+
+-- FK: order_items.product_id → products.id
+ALTER TABLE public.order_items
+  ADD CONSTRAINT fk_order_items_product FOREIGN KEY (product_id)
+  REFERENCES public.products(id)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE;
+
+-- FK: order_status.order_id → orders.id
+ALTER TABLE public.order_status
+  ADD CONSTRAINT fk_order_status_order FOREIGN KEY (order_id)
+  REFERENCES public.orders(id)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE;
+
 -- FK: products.team_id → teams.id
 ALTER TABLE public.products
   ADD CONSTRAINT fk_products_team FOREIGN KEY (team_id)

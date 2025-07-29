@@ -6,7 +6,7 @@ import ImageResponseDTO from "src/modules/image/dto/ImageResponse.dto";
 export default class ProductMapper {
    static toDTO(product: ProductEntity): ProductResponseDTO {
       let images: ImageResponseDTO[] = [];
-      if(product.images) {
+      if (product.images) {
          images = product.images.map(image => ImageMapper.toDTO(image));
       }
 
@@ -18,7 +18,7 @@ export default class ProductMapper {
          product.getSubcategory,
          product.getPrice,
          product.getQuantityAvailable,
-         product.getTeamId,
+         product.getTeam,
          images
       )
    }
