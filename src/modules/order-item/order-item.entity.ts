@@ -1,13 +1,19 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { OrderEntity } from "../order/order.entity";
+import ProductEntity from "../product/product.entity";
 
 @Entity({ name: 'order_items' })
-export class OrderItem {
+export class OrderItemEntity {
    @PrimaryGeneratedColumn('uuid')
    id: string;
 
-   orderId: string;
+   @ManyToOne(() => OrderEntity, order => order.orderItems)
+   @JoinColumn({ name: 'order_id' })
+   order: string;
 
-   productId: string;
+   @ManyToOne(() => ProductEntity, product => product.orderItems)
+   @JoinColumn({ name: 'product_id' })
+   product: string;
 
    @Column({ name: 'quantity', type: 'int', nullable: false })
    quantity: number;
