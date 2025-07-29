@@ -23,4 +23,12 @@ export class OrderStatusEntity {
 
    @DeleteDateColumn({ name: "deleted_at" })
    deletedAt: Date;
+
+   constructor(
+      order: OrderEntity,
+      statusText: string,
+      statusDate: Date
+   ) {
+
+   }
 }
