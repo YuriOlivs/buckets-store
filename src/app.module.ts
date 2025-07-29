@@ -6,6 +6,7 @@ import { PostgresConfigService } from './config/postgres.config.service';
 import { ConfigModule } from '@nestjs/config';
 import { TeamModule } from './modules/team/team.module';
 import { ImageModule } from './modules/image/image.module';
+import { OrderModule } from './modules/order/order.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { ImageModule } from './modules/image/image.module';
     TypeOrmModule.forRootAsync({
       useClass: PostgresConfigService,
       inject: [PostgresConfigService]
-    })
+    }),
+    OrderModule
   ],
 })
 export class AppModule { }
