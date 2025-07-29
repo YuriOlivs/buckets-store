@@ -7,17 +7,17 @@ import ImageEntity from "../image/image.entity";
 import ProductCreateDTO from "./dto/ProductCreate.dto";
 @Injectable()
 export default class ProductService {
-   constructor (
+   constructor(
       private repo: ProductRepository,
       private teamService: TeamService,
       private imgService: ImageService
-   ) {}
+   ) { }
 
    async getAllProducts(): Promise<ProductEntity[]> {
       const products = await this.repo.getAll();
       products.map(async product => {
          const images = await this.imgService.getImagesByProduct(product.id);
-         if(images) product.setImages(images);
+         if (images) product.setImages(images);
       });
 
       return products;
@@ -28,8 +28,8 @@ export default class ProductService {
       if (!productFound) throw new NotFoundException('Product not found')
 
       const images = await this.imgService.getImagesByProduct(productFound.id);
-      if(images) productFound.setImages(images);
-      
+      if (images) productFound.setImages(images);
+
       return productFound;
    }
 
@@ -40,33 +40,34 @@ export default class ProductService {
       const products = await this.repo.getByTeam(id);
       products.map(async product => {
          const images = await this.imgService.getImagesByProduct(product.id);
-         if(images) product.setImages(images);
+         if (images) product.setImages(images);
       });
 
-      return products;      
+      return products;
    }
 
    async createProduct(dto: ProductCreateDTO): Promise<ProductEntity> {
       const images: ImageEntity[] = [];
       const productImages = dto.images.map(image => new ImageEntity(image.url, image.desc));
+
+      const teamFound = await this.teamService.getTeamById(dto.team);
+      if (!teamFound) throw new NotFoundException('Team not found');
+
       const product = new ProductEntity(
          dto.name,
          dto.description,
          dto.category,
          dto.subcategory,
          dto.price,
-         dto.team,
+         teamFound,
          productImages
       );
-
-      const teamFound = await this.teamService.getTeamById(product.getTeamId);
-      if (!teamFound) throw new NotFoundException('Team not found');
 
       for (const image of product.getImages) {
          let img: ImageEntity;
          const urlExists = await this.imgService.getImageByUrl(image.url);
-         if(urlExists) {
-            if(image.description != urlExists.description) urlExists.description = image.description;
+         if (urlExists) {
+            if (image.description != urlExists.description) urlExists.description = image.description;
             img = urlExists;
          }
          else {
@@ -89,11 +90,12 @@ export default class ProductService {
       if (productData.getCategory) productFound.setCategory(productData.getCategory);
       if (productData.getSubcategory) productFound.setSubcategory(productData.getSubcategory);
       if (productData.getPrice) productFound.setPrice(productData.getPrice);
-      if (productData.getTeamId) {
-         const teamFound = await this.teamService.getTeamById(productData.getTeamId);
+
+      if (productData.team) {
+         const teamFound = await this.teamService.getTeamById(productData.team.id);
          if (!teamFound) throw new NotFoundException('Team not found');
-         
-         productFound.setTeamId(productData.getTeamId);
+
+         productFound.setTeam(teamFound);
       }
 
       return await this.repo.save(productFound);
@@ -102,7 +104,7 @@ export default class ProductService {
    async deleteProduct(id: string) {
       const productFound = await this.repo.getById(id);
       if (!productFound) throw new NotFoundException('Product not found');
-      
+
       return await this.repo.remove(id);
    }
 }

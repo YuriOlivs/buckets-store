@@ -1,4 +1,5 @@
 import ImageResponseDTO from "src/modules/image/dto/ImageResponse.dto";
+import TeamEntity from "src/modules/team/team.entity";
 
 export default class ProductResponseDTO {
    constructor(
@@ -9,7 +10,7 @@ export default class ProductResponseDTO {
       readonly subcategory: string,
       readonly quantityAvailable: number,
       readonly price: number,
-      readonly team: string,
+      readonly team: TeamEntity,
       readonly images: ImageResponseDTO[]
    ) { }
 }
