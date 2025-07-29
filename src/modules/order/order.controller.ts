@@ -9,26 +9,26 @@ export default class OrderController {
 
   @Post()
   create(@Body() OrderCreateDTO: OrderCreateDTO) {
-    return this.orderService.create(OrderCreateDTO);
+    return this.orderService.createOrder(OrderCreateDTO);
   }
 
   @Get()
   findAll() {
-    return this.orderService.findAll();
+    return this.orderService.findAllOrders();
   }
 
-  @Get(':id')
+  @Get('/:id')
   findOne(@Param('id') id: string) {
-    return this.orderService.findOne(+id);
+    return this.orderService.findOrderById(id);
   }
 
-  @Patch(':id')
+  @Patch('/:id')
   update(@Param('id') id: string, @Body() OrderUpdateDTO: OrderUpdateDTO) {
-    return this.orderService.update(+id, OrderUpdateDTO);
+    return this.orderService.updateOrder(id, OrderUpdateDTO);
   }
 
-  @Delete(':id')
+  @Delete('/:id')
   remove(@Param('id') id: string) {
-    return this.orderService.remove(+id);
+    return this.orderService.removeOrder(id);
   }
 }
