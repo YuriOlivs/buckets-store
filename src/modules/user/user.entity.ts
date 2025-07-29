@@ -18,7 +18,7 @@ export default class UserEntity {
   @Column({ name: 'password', length: 255, nullable: false })
   password: string;
 
-  @OneToMany(() => OrderEntity, order => order.userId)
+  @OneToMany(() => OrderEntity, order => order.user)
   orders: OrderEntity[];
 
   @Column({ name: 'birth_date', nullable: false })
