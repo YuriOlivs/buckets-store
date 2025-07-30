@@ -15,10 +15,16 @@ export class OrderEntity {
    @JoinColumn({ name: 'user_id' })
    user: UserEntity;
 
-   @OneToOne(() => OrderStatusEntity, orderStatus => orderStatus.order)
+   @OneToOne(
+      () => OrderStatusEntity, orderStatus => orderStatus.order, 
+      { cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE', eager: true }
+   )
    orderStatus: OrderStatusEntity;
 
-   @OneToMany(() => OrderItemEntity, orderItem => orderItem.order)
+   @OneToMany(
+      () => OrderItemEntity, orderItem => orderItem.order,
+      { cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE', eager: true }
+   )
    orderItems: OrderItemEntity[];
 
    @CreateDateColumn({ name: 'created_at' })
@@ -33,8 +39,12 @@ export class OrderEntity {
    constructor(
       totalValue: number, 
       user: UserEntity,
+      orderItems: OrderItemEntity[],
+      orderStatus: OrderStatusEntity
    ) {
       this.totalValue = totalValue;
       this.user = user;
+      this.orderItems = orderItems;
+      this.orderStatus = orderStatus;
    }
 }
