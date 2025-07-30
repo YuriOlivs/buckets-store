@@ -1,12 +1,8 @@
-import { Type } from "class-transformer";
-import { IsNumber, IsOptional, IsPositive, IsUUID, ValidateNested } from "class-validator";
-import ProductIdDTO from "src/modules/product/dto/ProductId.dto";
-import ProductEntity from "src/modules/product/product.entity";
+import { IsNumber, IsOptional, IsPositive, IsUUID } from "class-validator";
 
 export default class OrderItemCreateDTO {
-   @ValidateNested()
-   @Type(() => ProductIdDTO)
-   product: ProductIdDTO;
+   @IsUUID()
+   product: string;
 
    @IsNumber()
    @IsPositive()
@@ -14,5 +10,5 @@ export default class OrderItemCreateDTO {
 
    @IsOptional()
    @IsUUID()
-   order: string
+   order: string;
 }
