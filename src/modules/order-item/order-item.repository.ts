@@ -10,7 +10,8 @@ export default class OrderItemRepository {
       private readonly repository: Repository<OrderItemEntity>,
    ) {}
 
-   async save(orderItem: OrderItemEntity): Promise<OrderItemEntity> {
+   async save(orderItem: OrderItemEntity | OrderItemEntity[]): Promise<OrderItemEntity | OrderItemEntity[]> {
+      if (Array.isArray(orderItem)) return await this.repository.save(orderItem);
       return await this.repository.save(orderItem);
    }
 

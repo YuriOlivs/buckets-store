@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import OrderItemCreateDTO from './dto/OrderItemCreate.dto';
 import OrderItemUpdateDTO from './dto/OrderItemUpdate.dto';
 import OrderItemRepository from './order-item.repository';
+import { OrderItemEntity } from './order-item.entity';
+import ProductOrderItemDTO from '../product/dto/ProductOrderItem.dto';
 
 @Injectable()
 export class OrderItemService {
@@ -9,23 +11,24 @@ export class OrderItemService {
     private repo: OrderItemRepository
   ) {}
 
-  createOrderItem(dto: OrderItemCreateDTO) {
-    return 'This action adds a new orderItem';
+  createOrderItem(dtos: ProductOrderItemDTO[], orderId: string) {
+    const orderItems = dtos.map(dto => new OrderItemEntity(orderId, dto.id, dto.quantity, dto.price));
+    return this.repo.save(orderItems);
   }
 
   findAllOrderItems() {
-    return `This action returns all orderItem`;
+    return this.repo.findAll();
   }
 
-  findOrderItemById(id: number) {
-    return `This action returns a #${id} orderItem`;
+  findOrderItemById(id: string) {
+    return this.repo.findById(id);
   }
 
-  updateOrderItem(id: number, dto: OrderItemUpdateDTO) {
+  updateOrderItem(id: string, dto: OrderItemUpdateDTO) {
     return `This action updates a #${id} orderItem`;
   }
 
-  removeOrderItem(id: number) {
+  removeOrderItem(id: string) {
     return `This action removes a #${id} orderItem`;
   }
 }
