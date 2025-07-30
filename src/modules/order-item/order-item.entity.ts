@@ -9,11 +9,11 @@ export class OrderItemEntity {
 
    @ManyToOne(() => OrderEntity, order => order.orderItems)
    @JoinColumn({ name: 'order_id' })
-   order: string;
+   order: OrderEntity;
 
    @ManyToOne(() => ProductEntity, product => product.orderItems)
    @JoinColumn({ name: 'product_id' })
-   product: string;
+   product: ProductEntity;
 
    @Column({ name: 'quantity', type: 'int', nullable: false })
    quantity: number;
@@ -31,14 +31,14 @@ export class OrderItemEntity {
    deletedAt: Date;
 
    constructor(
-      order: string,
-      product: string,
+      product: ProductEntity,
       quantity: number,
-      salePrice: number
+      salePrice: number,
+      order?: OrderEntity
    ) {
-      this.order = order;
       this.product = product;
       this.quantity = quantity;
       this.salePrice = salePrice;
+      if(order)this.order = order;
    }
 }

@@ -10,65 +10,70 @@ import UserService from '../user/user.service';
 import { OrderStatusService } from '../order-status/order-status.service';
 import { OrderStatusEntity } from '../order-status/order-status.entity';
 import { OrderItemService } from '../order-item/order-item.service';
+import { StatusCodeEnum } from '../order-status/enum/statusCode.enum';
+import { StatusTextEnum } from '../order-status/enum/statusText.enum';
 
 @Injectable()
 export default class OrderService {
   constructor(
     private repo: OrderRepository,
     private productService: ProductService,
-    private userService: UserService,
-    private orderStatusService: OrderStatusService,
-    private orderItemService: OrderItemService
+    private userService: UserService
   ) {}
 
-  async createOrder(dto: OrderCreateDTO) {
-    // const products: ProductEntity[] = [];
-    // const orderItems: OrderItemEntity[] = [];
-    // let totalValue = 0;
-    
-    // const userFound = await this.userService.getUserById(dto.user);
-    // if(!userFound) throw new NotFoundException('User not found');
+  async createOrder(dto: OrderCreateDTO): Promise<OrderEntity> {
+    const orderItems: OrderItemEntity[] = [];
+    let totalValue: number = 0;
 
-    // dto.products.forEach(async item => {
-    //   const productFound = await this.productService.getProductById(item.product.id);
-    //   if(!productFound) throw new NotFoundException('Product not found');
+    const user = await this.userService.getUserById(dto.user);
+    if (!user) throw new NotFoundException('User not found');
 
-    //   const productValue = productFound.price * item.quantity;
-    //   totalValue += productValue;
+    for (const item of dto.products) {
+      const product = await this.productService.getProductById(item.product);
+      if (!product) throw new NotFoundException('Product not found');
 
-    //   products.push(productFound);
-    // });
+      const orderItem = new OrderItemEntity(
+        product, 
+        item.quantity, 
+        product.price
+      );
 
-    // //creating order
-    // const order = new OrderEntity(totalValue, userFound);
-    // const orderCreated = await this.repo.save(order);
+      totalValue += orderItem.salePrice;
+      orderItems.push(orderItem);
+    }
 
-    // if (!orderCreated) { throw new InternalServerErrorException('Error creating order'); }
+    const orderStatus = new OrderStatusEntity(
+      StatusCodeEnum.PENDING_PAYMENT, 
+      StatusTextEnum.PENDING_PAYMENT, 
+      new Date()
+    );
 
-    // //creating order status
-    // const orderStatus = new OrderStatusEntity(orderCreated, 'Waiting payment', new Date());
-    // const orderStatusCreated = await this.orderStatusService.save(orderStatus);
+    const order = new OrderEntity(
+      totalValue,
+      user,
+      orderItems,
+      orderStatus
+    );
 
-    // if (!orderStatusCreated) { throw new InternalServerErrorException('Error creating order status'); }
-
-    // //creating order item
-    
-    // return orderCreated;
+    return await this.repo.save(order);
   }
 
-  findAllOrders() {
-    return `This action returns all order`;
+  async findAllOrders(): Promise<OrderEntity[]> {
+    return await this.repo.findAll();
   }
 
-  findOrderById(id: string) {
-    return `This action returns a #${id} order`;
+  async findOrderById(id: string): Promise<OrderEntity | null> {
+    return await this.repo.findById(id);
   }
 
   updateOrder(id: string, OrderUpdateDTO: OrderUpdateDTO) {
     return `This action updates a #${id} order`;
   }
 
-  removeOrder(id: string) {
-    return `This action removes a #${id} order`;
+  async removeOrder(id: string) {
+    const orderFound = await this.repo.findById(id);
+    if (!orderFound) throw new NotFoundException('Order not found');
+    
+    return this.repo.remove(orderFound);
   }
 }

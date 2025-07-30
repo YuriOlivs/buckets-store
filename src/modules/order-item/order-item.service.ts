@@ -1,26 +1,47 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import OrderItemCreateDTO from './dto/OrderItemCreate.dto';
 import OrderItemUpdateDTO from './dto/OrderItemUpdate.dto';
+import OrderItemRepository from './order-item.repository';
+import { OrderItemEntity } from './order-item.entity';
+import ProductOrderItemDTO from '../product/dto/ProductOrderItem.dto';
+import ProductService from '../product/product.service';
+import OrderService from '../order/order.service';
 
 @Injectable()
 export class OrderItemService {
-  createOrderItem(dto: OrderItemCreateDTO) {
-    return 'This action adds a new orderItem';
+  constructor(
+    private repo: OrderItemRepository,
+    private productService: ProductService,
+    private orderService: OrderService
+  ) {}
+
+  async createOrderItem(dtos: OrderItemCreateDTO) {
+    const product = await this.productService.getProductById(dtos.product);
+    if(!product) throw new BadRequestException('Product not found');
+
+    const order = await this.orderService.findOrderById(dtos.order);
+    if(!order) throw new BadRequestException('Order not found');
+
+    const orderItem = new OrderItemEntity(product, dtos.quantity, product.price, order);
+    return await this.repo.save(orderItem);
   }
 
-  findAllOrderItems() {
-    return `This action returns all orderItem`;
+  async findAllOrderItems() {
+    return await this.repo.findAll();
   }
 
-  findOrderItemById(id: number) {
-    return `This action returns a #${id} orderItem`;
+  async findOrderItemById(id: string) {
+    return await this.repo.findById(id);
   }
 
-  updateOrderItem(id: number, dto: OrderItemUpdateDTO) {
+  async updateOrderItem(id: string, dto: OrderItemUpdateDTO) {
     return `This action updates a #${id} orderItem`;
   }
 
-  removeOrderItem(id: number) {
-    return `This action removes a #${id} orderItem`;
+  async removeOrderItem(id: string) {
+    const orderItemFound = await this.repo.findById(id);
+    if (!orderItemFound) throw new BadRequestException('OrderItem not found');
+
+    return await this.repo.remove(orderItemFound);
   }
 }

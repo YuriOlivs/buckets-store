@@ -19,16 +19,16 @@ export class OrderItemController {
 
   @Get('/:id')
   findOrderItemById(@Param('id') id: string) {
-    return this.orderItemService.findOrderItemById(+id);
+    return this.orderItemService.findOrderItemById(id);
   }
 
-  @Patch(':id')
+  @Patch('/:id')
   update(@Param('id') id: string, @Body() OrderItemUpdateDTO: OrderItemUpdateDTO) {
-    return this.orderItemService.updateOrderItem(+id, OrderItemUpdateDTO);
+    return this.orderItemService.updateOrderItem(id, OrderItemUpdateDTO);
   }
 
-  @Delete(':id')
+  @Delete('/:id')
   remove(@Param('id') id: string) {
-    return this.orderItemService.removeOrderItem(+id);
+    return this.orderItemService.removeOrderItem(id);
   }
 }

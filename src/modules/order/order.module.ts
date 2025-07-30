@@ -14,9 +14,8 @@ import { OrderStatusModule } from '../order-status/order-status.module';
     TypeOrmModule.forFeature([OrderEntity]),
     ProductModule,
     UserModule,
-    OrderItemModule,
-    OrderStatusModule
   ],
+  exports: [OrderService],
   controllers: [OrderController],
   providers: [OrderService, OrderRepository],
 })

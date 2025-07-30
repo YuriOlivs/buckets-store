@@ -12,23 +12,18 @@ export class OrderStatusController {
     return this.orderStatusService.createOrderStatus(OrderStatusCreateDTO);
   }
 
-  @Get()
-  findAll() {
-    return this.orderStatusService.findAllOrderStatus();
-  }
-
-  @Get(':id')
+  @Get('/:id')
   findOne(@Param('id') id: string) {
-    return this.orderStatusService.findOrderStatusById(+id);
+    return this.orderStatusService.findOrderStatusById(id);
   }
 
-  @Patch(':id')
+  @Patch('/:id')
   update(@Param('id') id: string, @Body() OrderStatusUpdateDTO: OrderStatusUpdateDTO) {
-    return this.orderStatusService.updateOrderStatus(+id, OrderStatusUpdateDTO);
+    return this.orderStatusService.updateOrderStatus(id, OrderStatusUpdateDTO);
   }
 
-  @Delete(':id')
+  @Delete('/:id')
   remove(@Param('id') id: string) {
-    return this.orderStatusService.removeOrderStatus(+id);
+    return this.orderStatusService.removeOrderStatus(id);
   }
 }
