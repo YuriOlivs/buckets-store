@@ -29,4 +29,16 @@ export class OrderItemEntity {
 
    @DeleteDateColumn({ name: 'deleted_at' })
    deletedAt: Date;
+
+   constructor(
+      order: string,
+      product: string,
+      quantity: number,
+      salePrice: number
+   ) {
+      this.order = order;
+      this.product = product;
+      this.quantity = quantity;
+      this.salePrice = salePrice;
+   }
 }

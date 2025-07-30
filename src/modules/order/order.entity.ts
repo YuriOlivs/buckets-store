@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import UserEntity from "../user/user.entity";
 import { OrderItemEntity } from "../order-item/order-item.entity";
+import { OrderStatusEntity } from "../order-status/order-status.entity";
 
 @Entity({ name: 'orders' })
 export class OrderEntity {
@@ -14,6 +15,9 @@ export class OrderEntity {
    @JoinColumn({ name: 'user_id' })
    user: UserEntity;
 
+   @OneToOne(() => OrderStatusEntity, orderStatus => orderStatus.order)
+   orderStatus: OrderStatusEntity;
+
    @OneToMany(() => OrderItemEntity, orderItem => orderItem.order)
    orderItems: OrderItemEntity[];
 
@@ -26,7 +30,10 @@ export class OrderEntity {
    @DeleteDateColumn({ name: 'deleted_at' })
    deletedAt: Date;
 
-   constructor(totalValue: number, user: UserEntity) {
+   constructor(
+      totalValue: number, 
+      user: UserEntity,
+   ) {
       this.totalValue = totalValue;
       this.user = user;
    }

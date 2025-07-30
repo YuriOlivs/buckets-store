@@ -13,6 +13,7 @@ import { ImageModule } from "../image/image.module";
       TeamModule,
       ImageModule
    ],
+   exports: [ProductService],
    controllers: [ProductController],
    providers: [
       ProductService, 
