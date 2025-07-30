@@ -30,14 +30,14 @@ export class OrderStatusEntity {
    deletedAt: Date;
 
    constructor(
-      order: OrderEntity,
       statusCode: StatusCodeEnum,
       statusText: StatusTextEnum,
-      statusDate: Date
+      statusDate: Date,
+      order?: OrderEntity,
    ) {
-      this.order = order;
       this.statusCode = statusCode;
       this.statusText = statusText;
       this.statusDate = statusDate;
+      if (order) this.order = order;
    }
 }

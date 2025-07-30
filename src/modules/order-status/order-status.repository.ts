@@ -22,7 +22,7 @@ export default class OrderStatusRepository {
       return await this.repository.findOne({ where: { id } });
    }
 
-   async remove(id: string) {
-      return await this.repository.delete({ id });
+   async remove(orderStatus: OrderStatusEntity) {
+      return await this.repository.delete(orderStatus);
    }
 }
