@@ -38,13 +38,6 @@ export class OrderStatusService {
     return await this.repo.findById(id);
   }
 
-  async updateOrderStatus(id: string, dto: OrderStatusUpdateDTO) {
-    const orderStatusFound = await this.repo.findById(id);
-    if (!orderStatusFound) throw new Error('OrderStatus not found');
-
-    return `This action updates a #${id} orderStatus`;
-  }
-
   async removeOrderStatus(id: string) {
     const orderStatusFound = await this.repo.findById(id);
     if (!orderStatusFound) throw new Error('OrderStatus not found');

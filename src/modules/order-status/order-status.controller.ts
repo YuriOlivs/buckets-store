@@ -17,11 +17,6 @@ export class OrderStatusController {
     return this.orderStatusService.findOrderStatusById(id);
   }
 
-  @Patch('/:id')
-  update(@Param('id') id: string, @Body() OrderStatusUpdateDTO: OrderStatusUpdateDTO) {
-    return this.orderStatusService.updateOrderStatus(id, OrderStatusUpdateDTO);
-  }
-
   @Delete('/:id')
   remove(@Param('id') id: string) {
     return this.orderStatusService.removeOrderStatus(id);
