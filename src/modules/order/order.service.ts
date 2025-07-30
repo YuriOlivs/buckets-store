@@ -47,7 +47,7 @@ export default class OrderService {
 
     // //creating order status
     // const orderStatus = new OrderStatusEntity(orderCreated, 'Waiting payment', new Date());
-    // const orderStatusCreated = await this.orderStatusService.save(orderStatus);
+    // const orderStatusCreated = await this.orderStatusService.createOrderStatus(orderStatus);
 
     // if (!orderStatusCreated) { throw new InternalServerErrorException('Error creating order status'); }
 
