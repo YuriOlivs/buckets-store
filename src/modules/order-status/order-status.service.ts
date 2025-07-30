@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { OrderStatusCreateDTO } from './dto/OrderStatusCreate.dto';
 import { OrderStatusUpdateDTO } from './dto/OrderStatusUpdate.dto';
+import OrderStatusRepository from './order-status.repository';
+import { OrderStatusEntity } from './order-status.entity';
 
 @Injectable()
 export class OrderStatusService {
-  createOrderStatus(OrderStatusCreateDTO: OrderStatusCreateDTO) {
+  constructor(private repo: OrderStatusRepository) {}
+
+  createOrderStatus(dto: OrderStatusCreateDTO) {
     return 'This action adds a new orderStatus';
   }
 
@@ -16,7 +20,7 @@ export class OrderStatusService {
     return `This action returns a #${id} orderStatus`;
   }
 
-  updateOrderStatus(id: number, OrderStatusUpdateDTO: OrderStatusUpdateDTO) {
+  updateOrderStatus(id: number, dto: OrderStatusUpdateDTO) {
     return `This action updates a #${id} orderStatus`;
   }
 
