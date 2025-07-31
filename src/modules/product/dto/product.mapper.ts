@@ -2,7 +2,6 @@ import ProductResponseDTO from "./ProductResponse.dto";
 import ProductEntity from "../product.entity";
 import ImageMapper from "src/modules/image/dto/image.mapper.dto";
 import ImageResponseDTO from "src/modules/image/dto/ImageResponse.dto";
-import ProductOrderItemDTO from "./ProductOrderItem.dto";
 
 export default class ProductMapper {
    static toDTO(product: ProductEntity): ProductResponseDTO {
@@ -22,9 +21,5 @@ export default class ProductMapper {
          product.getTeam,
          images
       )
-   }
-
-   static toOrderItem(product: ProductEntity, quantity: number): ProductOrderItemDTO {
-      return new ProductOrderItemDTO(product.getId, product.getPrice, quantity);
    }
 }

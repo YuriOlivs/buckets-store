@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { OrderEntity } from "../order/order.entity";
 import { StatusTextEnum } from "./enum/statusText.enum";
 import { StatusCodeEnum } from "./enum/statusCode.enum";
@@ -9,6 +9,7 @@ export class OrderStatusEntity {
    id: string;
 
    @OneToOne(() => OrderEntity, (order) => order.orderStatus)
+   @JoinColumn({ name: 'order_id' })
    order: OrderEntity;
 
    @Column({ name: "status_code", type: 'enum', enum: StatusCodeEnum, nullable: false })
