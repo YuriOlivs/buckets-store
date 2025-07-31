@@ -34,7 +34,7 @@ export default class OrderService {
         product.price
       );
 
-      totalValue += orderItem.salePrice;
+      totalValue += orderItem.salePrice * orderItem.quantity;
       orderItems.push(orderItem);
     }
 
