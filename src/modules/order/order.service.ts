@@ -61,7 +61,7 @@ export default class OrderService {
     return await this.repo.findOrdersByUser(id);
   }
 
-  async findOrderById(id: string): Promise<OrderEntity | null> {
+  async findOrderById(id: string): Promise<OrderEntity> {
     const order = await this.repo.findById(id);
     if (!order) throw new NotFoundException('Order not found');
 
