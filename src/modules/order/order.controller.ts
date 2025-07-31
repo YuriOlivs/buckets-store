@@ -23,6 +23,6 @@ export default class OrderController {
 
   @Delete('/:id')
   async remove(@Param('id') id: string) {
-    return await this.orderService.removeOrder(id);
+    return await this.orderService.cancelOrder(id);
   }
 }

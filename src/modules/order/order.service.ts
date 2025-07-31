@@ -65,7 +65,7 @@ export default class OrderService {
     return await this.repo.findById(id);
   }
 
-  async removeOrder(id: string) {
+  async cancelOrder(id: string) {
     const orderFound = await this.repo.findById(id);
     if (!orderFound) throw new NotFoundException('Order not found');
 
