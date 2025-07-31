@@ -54,8 +54,11 @@ export default class OrderService {
     return await this.repo.save(order);
   }
 
-  async findAllOrders(): Promise<OrderEntity[]> {
-    return await this.repo.findAll();
+  async findOrdersByUser(id: string): Promise<OrderEntity[]> {
+    const user = await this.userService.getUserById(id);
+    if (!user) throw new NotFoundException('User not found');
+    
+    return await this.repo.findOrdersByUser(id);
   }
 
   async findOrderById(id: string): Promise<OrderEntity | null> {
@@ -65,7 +68,15 @@ export default class OrderService {
   async removeOrder(id: string) {
     const orderFound = await this.repo.findById(id);
     if (!orderFound) throw new NotFoundException('Order not found');
+
+    const canceledStatus = new OrderStatusEntity(
+      StatusCodeEnum.CANCELED, 
+      StatusTextEnum.CANCELED, 
+      new Date()
+    );
     
-    return this.repo.remove(orderFound);
+    orderFound.orderStatus = canceledStatus;
+
+    return this.repo.save(orderFound);
   }
 }

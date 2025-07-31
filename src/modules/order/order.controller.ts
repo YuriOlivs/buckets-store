@@ -7,22 +7,22 @@ export default class OrderController {
   constructor(private readonly orderService: OrderService) { }
 
   @Post()
-  create(@Body() OrderCreateDTO: OrderCreateDTO) {
-    return this.orderService.createOrder(OrderCreateDTO);
-  }
-
-  @Get()
-  findAll() {
-    return this.orderService.findAllOrders();
+  async create(@Body() OrderCreateDTO: OrderCreateDTO) {
+    return await this.orderService.createOrder(OrderCreateDTO);
   }
 
   @Get('/:id')
-  findOne(@Param('id') id: string) {
-    return this.orderService.findOrderById(id);
+  async findOne(@Param('id') id: string) {
+    return await this.orderService.findOrderById(id);
+  }
+
+  @Get('/by-user/:id')
+  async findByUser(@Param('id') id: string) {
+    return await this.orderService.findOrdersByUser(id);
   }
 
   @Delete('/:id')
-  remove(@Param('id') id: string) {
-    return this.orderService.removeOrder(id);
+  async remove(@Param('id') id: string) {
+    return await this.orderService.removeOrder(id);
   }
 }
