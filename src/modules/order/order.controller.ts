@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import OrderService from './order.service';
 import { OrderCreateDTO } from './dto/OrderCreate.dto';
-import { OrderUpdateDTO } from './dto/OrderUpdate.dto';
 
 @Controller('order')
 export default class OrderController {
@@ -20,11 +19,6 @@ export default class OrderController {
   @Get('/:id')
   findOne(@Param('id') id: string) {
     return this.orderService.findOrderById(id);
-  }
-
-  @Patch('/:id')
-  update(@Param('id') id: string, @Body() OrderUpdateDTO: OrderUpdateDTO) {
-    return this.orderService.updateOrder(id, OrderUpdateDTO);
   }
 
   @Delete('/:id')

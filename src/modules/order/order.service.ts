@@ -1,15 +1,11 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { OrderCreateDTO } from './dto/OrderCreate.dto';
-import { OrderUpdateDTO } from './dto/OrderUpdate.dto';
-import ProductEntity from '../product/product.entity';
 import OrderRepository from './order.repository';
 import ProductService from '../product/product.service';
 import { OrderItemEntity } from '../order-item/order-item.entity';
 import { OrderEntity } from './order.entity';
 import UserService from '../user/user.service';
-import { OrderStatusService } from '../order-status/order-status.service';
 import { OrderStatusEntity } from '../order-status/order-status.entity';
-import { OrderItemService } from '../order-item/order-item.service';
 import { StatusCodeEnum } from '../order-status/enum/statusCode.enum';
 import { StatusTextEnum } from '../order-status/enum/statusText.enum';
 
@@ -64,10 +60,6 @@ export default class OrderService {
 
   async findOrderById(id: string): Promise<OrderEntity | null> {
     return await this.repo.findById(id);
-  }
-
-  updateOrder(id: string, OrderUpdateDTO: OrderUpdateDTO) {
-    return `This action updates a #${id} order`;
   }
 
   async removeOrder(id: string) {
