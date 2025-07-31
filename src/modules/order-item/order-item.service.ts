@@ -3,7 +3,6 @@ import OrderItemCreateDTO from './dto/OrderItemCreate.dto';
 import OrderItemUpdateDTO from './dto/OrderItemUpdate.dto';
 import OrderItemRepository from './order-item.repository';
 import { OrderItemEntity } from './order-item.entity';
-import ProductOrderItemDTO from '../product/dto/ProductOrderItem.dto';
 import ProductService from '../product/product.service';
 import OrderService from '../order/order.service';
 
