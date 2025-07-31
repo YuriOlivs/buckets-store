@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import OrderService from './order.service';
 import { OrderCreateDTO } from './dto/OrderCreate.dto';
 
-@Controller('order')
+@Controller('orders')
 export default class OrderController {
   constructor(private readonly orderService: OrderService) { }
 
@@ -12,7 +12,7 @@ export default class OrderController {
   }
 
   @Get('/:id')
-  async findOne(@Param('id') id: string) {
+  async findById(@Param('id') id: string) {
     return await this.orderService.findOrderById(id);
   }
 
