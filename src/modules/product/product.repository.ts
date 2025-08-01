@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import fuzzySearch from "src/common/utils/fuzzy-search.util";
 import ProductEntity from "./product.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Between, FindOptionsWhere, ILike, LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm";
 import ProductFilterDTO from "./dto/ProductFilter.dto";
+import rankedSearch from "src/common/utils/ranked-search.util";
 
 @Injectable()
 export default class ProductRepository {
@@ -33,7 +33,7 @@ export default class ProductRepository {
       const products =  await this.repository.find({ where });
 
       if(filters.name) {
-         return products.filter(product => fuzzySearch(product.name, filters.name));
+         return products.filter(product => rankedSearch(product.name, filters.name) > 0.85);
       }
 
       return products;
