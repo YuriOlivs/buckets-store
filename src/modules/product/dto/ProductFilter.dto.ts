@@ -1,6 +1,7 @@
-import { IsEnum, IsOptional, IsPositive, IsString, IsUUID, Max, Min } from "class-validator";
+import { IsEnum, IsNumber, IsOptional, IsPositive, IsString, IsUUID, Max, Min } from "class-validator";
 import { ProductCategory } from "../enum/productCategory.enum";
 import { ProductSubcategory } from "../enum/productSubcategory.enum";
+import { Type } from "class-transformer";
 
 export default class ProductFilterDTO {
    @IsOptional()
@@ -20,12 +21,15 @@ export default class ProductFilterDTO {
    team?: string;
 
    @IsOptional()
-   @IsPositive()
+   @Type(() => Number)   // <- garante que será convertido para number
+   @IsNumber()
    @Min(0)
    minPrice?: number;
 
    @IsOptional()
-   @IsPositive()
-   @Max(5000)
+   @Type(() => Number)   // <- mesma coisa aqui
+   @IsNumber()
+   @Min(0)
    maxPrice?: number;
-}
+
+} 

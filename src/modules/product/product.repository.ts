@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import ProductCreateDTO from "./dto/ProductCreate.dto";
+import fuzzySearch from "src/common/utils/fuzzy-search.util";
 import ProductEntity from "./product.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Between, FindOptionsWhere, ILike, LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm";

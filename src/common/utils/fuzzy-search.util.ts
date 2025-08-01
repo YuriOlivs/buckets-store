@@ -40,3 +40,5 @@ const fuzzySearch = (source: string, target: string) => {
 
    return matriz[rows -1][cols - 1] <= MAX_DISTANCE;
 }
+
+export default fuzzySearch;
