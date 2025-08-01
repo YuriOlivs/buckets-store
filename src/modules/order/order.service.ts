@@ -28,7 +28,7 @@ export default class OrderService {
       const product = await this.productService.getProductById(item.product);
       if (!product) throw new NotFoundException('Product not found');
 
-      if (!await this.productService.buyProduct(product)) {
+      if (!await this.productService.buyProduct(product, item.quantity)) {
         throw new BadRequestException('Product not available');
       }  
 

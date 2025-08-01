@@ -82,12 +82,12 @@ export default class ProductService {
       return await this.repo.save(product);
    }
 
-   async buyProduct(product: ProductEntity): Promise<boolean> {
+   async buyProduct(product: ProductEntity, quantity: number): Promise<boolean> {
       if(product.quantityAvailable <= 0) {
          return false;
       }
 
-      product.quantityAvailable -= 1;
+      product.quantityAvailable = product.quantityAvailable - quantity;
       await this.repo.save(product);
       return true;
    }
