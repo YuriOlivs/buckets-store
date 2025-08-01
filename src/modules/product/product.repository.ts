@@ -2,7 +2,8 @@ import { Injectable } from "@nestjs/common";
 import ProductCreateDTO from "./dto/ProductCreate.dto";
 import ProductEntity from "./product.entity";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Between, FindOptionsWhere, ILike, LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm";
+import ProductFilterDTO from "./dto/ProductFilter.dto";
 
 @Injectable()
 export default class ProductRepository {
@@ -14,8 +15,23 @@ export default class ProductRepository {
       return await this.repository.save(product);
    }
 
-   async getAll(): Promise<ProductEntity[]> {
-      return await this.repository.find();
+   async getAll(filters: ProductFilterDTO): Promise<ProductEntity[]> {
+       const where: FindOptionsWhere<ProductEntity> = {};
+       
+      if (filters.name) { where.name = ILike(`%${filters.name}%`); }
+      if (filters.category) {  where.category = filters.category; }
+      if (filters.subcategory) { where.subcategory = filters.subcategory; }
+      if (filters.team) { where.team = { id: filters.team }; }
+
+      if (filters.minPrice && filters.maxPrice) {
+         where.price = Between(filters.minPrice, filters.maxPrice);
+      } else if(filters.minPrice) {
+         where.price = MoreThanOrEqual(filters.minPrice);
+      } else if(filters.maxPrice) {
+         where.price = LessThanOrEqual(filters.maxPrice);
+      }
+
+      return await this.repository.find({ where });
    }
 
    async getById(id: string): Promise<ProductEntity | null> {
