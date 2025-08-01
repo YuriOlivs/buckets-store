@@ -16,9 +16,8 @@ export default class ProductRepository {
    }
 
    async getAll(filters: ProductFilterDTO): Promise<ProductEntity[]> {
-       const where: FindOptionsWhere<ProductEntity> = {};
+      const where: FindOptionsWhere<ProductEntity> = {};
        
-      if (filters.name) { where.name = ILike(`%${filters.name}%`); }
       if (filters.category) {  where.category = filters.category; }
       if (filters.subcategory) { where.subcategory = filters.subcategory; }
       if (filters.team) { where.team = { id: filters.team }; }
@@ -31,7 +30,13 @@ export default class ProductRepository {
          where.price = LessThanOrEqual(filters.maxPrice);
       }
 
-      return await this.repository.find({ where });
+      const products =  await this.repository.find({ where });
+
+      if(filters.name) {
+         return products.filter(product => fuzzySearch(product.name, filters.name));
+      }
+
+      return products;
    }
 
    async getById(id: string): Promise<ProductEntity | null> {
