@@ -28,6 +28,7 @@ export default class OrderController {
 
   @Delete('/:id')
   async remove(@Param('id') id: string) {
-    return await this.orderService.cancelOrder(id);
+    await this.orderService.cancelOrder(id);
+    return { message: STRINGS.entityDeleted('Order'), payload: {} };
   }
 }

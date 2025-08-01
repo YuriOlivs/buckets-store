@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { OrderCreateDTO } from './dto/OrderCreate.dto';
 import OrderRepository from './order.repository';
 import ProductService from '../product/product.service';
@@ -28,6 +28,10 @@ export default class OrderService {
       const product = await this.productService.getProductById(item.product);
       if (!product) throw new NotFoundException('Product not found');
 
+      if (!await this.productService.buyProduct(product)) {
+        throw new BadRequestException('Product not available');
+      }  
+
       const orderItem = new OrderItemEntity(
         product, 
         item.quantity, 
@@ -50,7 +54,6 @@ export default class OrderService {
       orderItems,
       orderStatus
     );
-
     return await this.repo.save(order);
   }
 
