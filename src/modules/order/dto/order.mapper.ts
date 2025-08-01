@@ -21,7 +21,7 @@ export default class OrderMapper {
 
       const order = new OrderResponseDTO(
          entity.id,
-         entity.totalValue,
+         Math.floor(entity.totalValue * 100) / 100,
          status,
          items
       );

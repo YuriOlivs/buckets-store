@@ -16,16 +16,19 @@ export default class OrderController {
 
   @Get('/:id')
   async findById(@Param('id') id: string) {
-    return await this.orderService.findOrderById(id);
+    const orderFound = await this.orderService.findOrderById(id);
+    return OrderMapper.toDTO(orderFound);
   }
 
   @Get('/by-user/:id')
   async findByUser(@Param('id') id: string) {
-    return await this.orderService.findOrdersByUser(id);
+    const ordersFound = await this.orderService.findOrdersByUser(id);
+    return ordersFound.map(order => OrderMapper.toDTO(order));
   }
 
   @Delete('/:id')
   async remove(@Param('id') id: string) {
-    return await this.orderService.cancelOrder(id);
+    await this.orderService.cancelOrder(id);
+    return { message: STRINGS.entityDeleted('Order'), payload: {} };
   }
 }

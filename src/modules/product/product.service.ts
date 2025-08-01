@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import ProductEntity from "./product.entity";
 import ProductRepository from "./product.repository";
 import TeamService from "../team/team.service";
@@ -60,7 +60,8 @@ export default class ProductService {
          dto.subcategory,
          dto.price,
          teamFound,
-         productImages
+         productImages,
+         dto.quantityAvailable,
       );
 
       for (const image of product.getImages) {
@@ -79,6 +80,16 @@ export default class ProductService {
       product.setImages(images);
 
       return await this.repo.save(product);
+   }
+
+   async buyProduct(product: ProductEntity, quantity: number): Promise<boolean> {
+      if(product.quantityAvailable <= 0) {
+         return false;
+      }
+
+      product.quantityAvailable = product.quantityAvailable - quantity;
+      await this.repo.save(product);
+      return true;
    }
 
    async updateProduct(id: string, productData: Partial<ProductEntity>): Promise<ProductEntity> {
