@@ -5,6 +5,7 @@ import TeamService from "../team/team.service";
 import ImageService from "../image/image.service";
 import ImageEntity from "../image/image.entity";
 import ProductCreateDTO from "./dto/ProductCreate.dto";
+import ProductFilterDTO from "./dto/ProductFilter.dto";
 @Injectable()
 export default class ProductService {
    constructor(
@@ -13,8 +14,9 @@ export default class ProductService {
       private imgService: ImageService
    ) { }
 
-   async getAllProducts(): Promise<ProductEntity[]> {
-      const products = await this.repo.getAll();
+   async getAllProducts(filters: ProductFilterDTO): Promise<ProductEntity[]> {
+      const products = await this.repo.getAll(filters);
+
       products.map(async product => {
          const images = await this.imgService.getImagesByProduct(product.id);
          if (images) product.setImages(images);

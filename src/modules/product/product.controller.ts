@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
 import ProductCreateDTO from "./dto/ProductCreate.dto";
 import ProductEntity from "./product.entity";
 import ProductMapper from "./dto/product.mapper";
 import ProductService from "./product.service";
 import { STRINGS } from "src/common/strings/global.strings";
 import ImageEntity from "../image/image.entity";
+import ProductFilterDTO from "./dto/ProductFilter.dto";
 
 @Controller('/products')
 export default class ProductController {
@@ -17,8 +18,8 @@ export default class ProductController {
    }
 
    @Get()
-   async getAllProducts() {
-      const productEntities = await this.service.getAllProducts();
+   async getAllProducts(@Query() filters: ProductFilterDTO) {
+      const productEntities = await this.service.getAllProducts(filters);
       return productEntities.map(ProductMapper.toDTO);
    }
 
