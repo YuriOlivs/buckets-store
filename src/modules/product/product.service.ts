@@ -60,7 +60,8 @@ export default class ProductService {
          dto.subcategory,
          dto.price,
          teamFound,
-         productImages
+         productImages,
+         dto.quantityAvailable,
       );
 
       for (const image of product.getImages) {
