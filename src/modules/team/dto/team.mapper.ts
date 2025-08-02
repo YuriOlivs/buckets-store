@@ -5,9 +5,9 @@ import ImageMapper from "src/modules/image/dto/image.mapper.dto";
 export default class TeamMapper {
    static toDTO(team: TeamEntity): TeamResponseDTO {
       return new TeamResponseDTO(
-         team.getId, 
-         `${team.getCity} ${team.getName}`,
-         ImageMapper.toDTO(team.getLogo)
+         team.id, 
+         `${team.city} ${team.name}`,
+         ImageMapper.toDTO(team.logo)
       );
    }
 }

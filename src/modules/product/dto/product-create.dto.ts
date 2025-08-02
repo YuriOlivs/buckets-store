@@ -1,5 +1,5 @@
 import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUUID, MaxLength, ValidateNested } from "class-validator";
-import ImageCreateDTO from "src/modules/image/dto/Image-create.dto";
+import ImageCreateDTO from "src/modules/image/dto/image-create.dto";
 import { Type } from "class-transformer";
 import { ProductCategory } from "../enum/product-category.enum";
 import { ProductSubcategory } from "../enum/product-subcategory.enum";
