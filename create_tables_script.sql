@@ -15,8 +15,6 @@ CREATE TABLE IF NOT EXISTS public.users (
   CONSTRAINT pk_users PRIMARY KEY (id)
 );
 
-
-
 -- ADDRESSES
 CREATE TABLE IF NOT EXISTS public.addresses (
   id UUID NOT NULL DEFAULT uuid_generate_v4(),

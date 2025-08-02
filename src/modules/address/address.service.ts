@@ -1,0 +1,55 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { AddressCreateDTO } from './dto/address-create.dto';
+import { AdressUpdateDTO } from './dto/address-update.dto';
+import AddressRepository from './address.repository';
+import { AddressEntity } from './address.entity';
+import UserService from '../user/user.service';
+
+@Injectable()
+export class AddressService {
+  constructor(
+    private repo: AddressRepository,
+    private userService: UserService
+  ) {}
+  async create(dto: AddressCreateDTO) {
+    const user = await this.userService.getUserById(dto.user);
+    if(!user) throw new NotFoundException('User not found');
+
+    const address = new AddressEntity(
+      dto.street,
+      dto.number,
+      dto.city,
+      dto.state,
+      dto.complement,
+      dto.neighborhood,
+      dto.postalCode,
+      dto.country,
+      user
+    );
+
+    return await this.repo.save(address);
+  }
+
+  async findByUser(id: string) {
+    return await this.repo.findByUser(id);
+  }
+
+  async findById(id: string) {
+    return await this.repo.findById(id);
+  }
+
+  async update(id: string, dto: AdressUpdateDTO) {
+    const address = await this.repo.findById(id);
+    if(!address) throw new NotFoundException('Address not found');
+
+    Object.assign(address, dto);
+    return await this.repo.save(address);
+  }
+
+  async remove(id: string) {
+    const address = await this.repo.findById(id);
+    if(!address) throw new NotFoundException('Address not found');
+
+    return await this.repo.remove(address);
+  }
+}

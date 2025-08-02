@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { OrderEntity } from '../order/order.entity';
+import { AddressEntity } from '../address/address.entity';
 
 @Entity({ name: 'users' })
 export default class UserEntity {
@@ -23,6 +24,9 @@ export default class UserEntity {
 
   @Column({ name: 'birth_date', nullable: false })
   birthDate: Date;
+
+  @OneToMany(() => AddressEntity, address => address.user)
+  addresses: AddressEntity[];
   
   @CreateDateColumn({ name: 'created_at' })
   createdAt: string;
