@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import OrderService from './order.service';
 import { OrderCreateDTO } from './dto/order-create.dto';
 import { STRINGS } from 'src/common/strings/global.strings';
 import OrderMapper from './dto/order.mapper';
+import { OrderStatusCreateDTO } from '../order-status/dto/order-status-create.dto';
 
 @Controller('orders')
 export default class OrderController {
@@ -12,6 +13,15 @@ export default class OrderController {
   async create(@Body() orderCreateDTO: OrderCreateDTO) {
     const orderCreated = await this.orderService.createOrder(orderCreateDTO);
     return { message: STRINGS.entityCreated('Order'), payload: OrderMapper.toDTO(orderCreated) };
+  }
+
+  @Put('/update-status/:id')
+  async updateStatus(
+    @Param('id') id: string, 
+    @Body() status: OrderStatusCreateDTO
+  ) {
+    const orderUpdated = await this.orderService.updateOrderStatus(id, status);
+    return { message: STRINGS.entityUpdated('Order'), payload: OrderMapper.toDTO(orderUpdated) };
   }
 
   @Get('/:id')
