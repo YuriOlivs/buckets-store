@@ -20,11 +20,11 @@ export default class ProductCreateDTO {
    @IsEnum(ProductSubcategory)
    subcategory: ProductSubcategory;
 
-   @IsNumber()
+   @IsNumber({ maxDecimalPlaces: 2, allowNaN: false, allowInfinity: false })
    @IsPositive()
    price: number;
 
-   @IsNumber()
+   @IsNumber({ maxDecimalPlaces: 0, allowNaN: false, allowInfinity: false })
    @IsPositive()
    quantityAvailable: number;
 
