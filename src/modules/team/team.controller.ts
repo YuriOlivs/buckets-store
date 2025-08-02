@@ -1,15 +1,15 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
-import TeamCreateDTO from "./dto/TeamCreate.dto";
+import TeamCreateDTO from "./dto/team-create.dto";
 import TeamMapper from "./dto/team.mapper";
 import TeamEntity from "./team.entity";
 import TeamService from "./team.service";
 import { STRINGS } from "src/common/strings/global.strings";
 import ImageEntity from "../image/image.entity";
-import TeamUpdateDTO from "./dto/TeamUpdate.dto";
+import TeamUpdateDTO from "./dto/team-update.dto";
 
 @Controller("/teams")
 export default class TeamController {
-   constructor(private service: TeamService) {}
+   constructor(private service: TeamService) { }
 
    @Post()
    async createTeam(@Body() body: TeamCreateDTO) {

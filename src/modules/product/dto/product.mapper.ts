@@ -1,8 +1,8 @@
-import ProductResponseDTO from "./ProductResponse.dto";
+import ProductResponseDTO from "./product-response.dto";
 import ProductEntity from "../product.entity";
 import ImageMapper from "src/modules/image/dto/image.mapper.dto";
-import ImageResponseDTO from "src/modules/image/dto/ImageResponse.dto";
-import { StockStatusEnum } from "../enum/stockStatus.enum";
+import ImageResponseDTO from "src/modules/image/dto/image-response.dto";
+import { StockStatusEnum } from "../enum/stock-status.enum";
 
 export default class ProductMapper {
    static toDTO(product: ProductEntity): ProductResponseDTO {
@@ -10,7 +10,7 @@ export default class ProductMapper {
       let images: ImageResponseDTO[] = [];
       if (product.images) {
          images = product.images.map(image => ImageMapper.toDTO(image));
-      } 
+      }
 
       if (product.quantityAvailable == 0) {
          stockStatus = StockStatusEnum.OUT_OF_STOCK;

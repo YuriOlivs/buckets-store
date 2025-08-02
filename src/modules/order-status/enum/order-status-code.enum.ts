@@ -1,4 +1,4 @@
-export enum StatusCodeEnum {
+export enum OrderStatusCodeEnum {
   PENDING_PAYMENT = 1,
   PAID = 2,
   INVOICED = 3,

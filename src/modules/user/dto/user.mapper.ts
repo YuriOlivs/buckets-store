@@ -1,5 +1,5 @@
 import UserEntity from "../user.entity";
-import UserResponseDTO from "./UserResponse.dto";
+import UserResponseDTO from "./user-response.dto";
 
 export default class UserMapper {
    static toDTO(user: UserEntity): UserResponseDTO {

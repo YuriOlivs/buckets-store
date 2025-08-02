@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import OrderItemCreateDTO from './dto/OrderItemCreate.dto';
-import OrderItemUpdateDTO from './dto/OrderItemUpdate.dto';
+import OrderItemCreateDTO from './dto/order-item-create.dto';
+import OrderItemUpdateDTO from './dto/order-item-update.dto';
 import OrderItemRepository from './order-item.repository';
 import { OrderItemEntity } from './order-item.entity';
 import ProductService from '../product/product.service';
@@ -12,14 +12,14 @@ export class OrderItemService {
     private repo: OrderItemRepository,
     private productService: ProductService,
     private orderService: OrderService
-  ) {}
+  ) { }
 
   async createOrderItem(dtos: OrderItemCreateDTO) {
     const product = await this.productService.getProductById(dtos.product);
-    if(!product) throw new BadRequestException('Product not found');
+    if (!product) throw new BadRequestException('Product not found');
 
     const order = await this.orderService.findOrderById(dtos.order);
-    if(!order) throw new BadRequestException('Order not found');
+    if (!order) throw new BadRequestException('Order not found');
 
     const orderItem = new OrderItemEntity(product, dtos.quantity, product.price, order);
     return await this.repo.save(orderItem);

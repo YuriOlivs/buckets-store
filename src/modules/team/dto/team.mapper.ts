@@ -1,4 +1,4 @@
-import TeamResponseDTO from "./TeamResponse.dto";
+import TeamResponseDTO from "./team-response.dto";
 import TeamEntity from "../team.entity";
 import ImageMapper from "src/modules/image/dto/image.mapper.dto";
 

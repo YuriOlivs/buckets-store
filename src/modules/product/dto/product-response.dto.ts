@@ -1,6 +1,6 @@
-import ImageResponseDTO from "src/modules/image/dto/ImageResponse.dto";
+import ImageResponseDTO from "src/modules/image/dto/image-response.dto";
 import TeamEntity from "src/modules/team/team.entity";
-import { StockStatusEnum } from "../enum/stockStatus.enum";
+import { StockStatusEnum } from "../enum/stock-status.enum";
 
 export default class ProductResponseDTO {
    constructor(

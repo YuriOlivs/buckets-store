@@ -1,6 +1,6 @@
 import { IsEnum, IsNumber, IsOptional, IsPositive, IsString, IsUUID, Max, Min } from "class-validator";
-import { ProductCategory } from "../enum/productCategory.enum";
-import { ProductSubcategory } from "../enum/productSubcategory.enum";
+import { ProductCategory } from "../enum/product-category.enum";
+import { ProductSubcategory } from "../enum/product-subcategory.enum";
 import { Type } from "class-transformer";
 
 export default class ProductFilterDTO {
