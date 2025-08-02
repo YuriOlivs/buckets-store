@@ -7,6 +7,7 @@ import ImageEntity from "../image/image.entity";
 import ProductCreateDTO from "./dto/ProductCreate.dto";
 import ProductFilterDTO from "./dto/ProductFilter.dto";
 import ProductUpdateDTO from "./dto/ProductUpdate.dto";
+
 @Injectable()
 export default class ProductService {
    constructor(
@@ -18,20 +19,20 @@ export default class ProductService {
    async getAllProducts(filters: ProductFilterDTO): Promise<ProductEntity[]> {
       const products = await this.repo.getAll(filters);
 
-      products.map(async product => {
+      for (const product of products) {
          const images = await this.imgService.getImagesByProduct(product.id);
-         if (images) product.setImages(images);
-      });
+         if (images) product.images = images;
+      }
 
       return products;
    }
 
    async getProductById(id: string): Promise<ProductEntity> {
       const productFound = await this.repo.getById(id);
-      if (!productFound) throw new NotFoundException('Product not found')
+      if (!productFound) throw new NotFoundException('Product not found');
 
       const images = await this.imgService.getImagesByProduct(productFound.id);
-      if (images) productFound.setImages(images);
+      if (images) productFound.images = images;
 
       return productFound;
    }
@@ -41,10 +42,11 @@ export default class ProductService {
       if (!teamFound) throw new NotFoundException('Team not found');
 
       const products = await this.repo.getByTeam(id);
-      products.map(async product => {
+
+      for (const product of products) {
          const images = await this.imgService.getImagesByProduct(product.id);
-         if (images) product.setImages(images);
-      });
+         if (images) product.images = images;
+      }
 
       return products;
    }
@@ -67,30 +69,32 @@ export default class ProductService {
          dto.quantityAvailable,
       );
 
-      for (const image of product.getImages) {
+      for (const image of product.images) {
          let img: ImageEntity;
          const urlExists = await this.imgService.getImageByUrl(image.url);
          if (urlExists) {
-            if (image.description != urlExists.description) urlExists.description = image.description;
+            if (image.description !== urlExists.description) {
+               urlExists.description = image.description;
+            }
             img = urlExists;
-         }
-         else {
+         } else {
             img = await this.imgService.createImage(image) as ImageEntity;
          }
 
          images.push(img);
       }
-      product.setImages(images);
+
+      product.images = images;
 
       return await this.repo.save(product);
    }
 
    async buyProduct(product: ProductEntity, quantity: number): Promise<boolean> {
-      if(product.quantityAvailable <= 0) {
+      if (product.quantityAvailable <= 0) {
          return false;
       }
 
-      product.quantityAvailable = product.quantityAvailable - quantity;
+      product.quantityAvailable -= quantity;
       await this.repo.save(product);
       return true;
    }
@@ -99,17 +103,17 @@ export default class ProductService {
       const productFound = await this.repo.getById(id);
       if (!productFound) throw new NotFoundException('Product not found');
 
-      if (productData.name) productFound.setName(productData.name);
-      if (productData.description) productFound.setDescription(productData.description);
-      if (productData.category) productFound.setCategory(productData.category);
-      if (productData.subcategory) productFound.setSubcategory(productData.subcategory);
-      if (productData.price) productFound.setPrice(productData.price);
+      if (productData.name) productFound.name = productData.name;
+      if (productData.description) productFound.description = productData.description;
+      if (productData.category) productFound.category = productData.category;
+      if (productData.subcategory) productFound.subcategory = productData.subcategory;
+      if (productData.price) productFound.price = productData.price;
 
       if (productData.team) {
          const teamFound = await this.teamService.getTeamById(productData.team);
          if (!teamFound) throw new NotFoundException('Team not found');
 
-         productFound.setTeam(teamFound);
+         productFound.team = teamFound;
       }
 
       return await this.repo.save(productFound);

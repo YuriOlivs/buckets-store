@@ -66,26 +66,4 @@ export default class ProductEntity {
       this.images = images;
       this.quantityAvailable = quantityAvailable || 0;
    }
-
-   get getId() { return this.id; }
-   get getName() { return this.name; }
-   get getDescription() { return this.description; }
-   get getCategory() { return this.category; }
-   get getSubcategory() { return this.subcategory; }
-   get getPrice() { return this.price; }
-   get getQuantityAvailable() { return this.quantityAvailable; }
-   get getTeam() { return this.team; }
-   get getImages() { return this.images; }
-   get getCreatedAt() { return this.createdAt; }
-   get getUpdatedAt() { return this.updatedAt; }
-   get getDeletedAt() { return this.deletedAt; }
-
-   setName(name: string) { this.name = name; }
-   setDescription(description: string) { this.description = description; }
-   setCategory(category: ProductCategory) { this.category = category; }
-   setSubcategory(subcategory: ProductSubcategory) { this.subcategory = subcategory; }
-   setPrice(price: number) { this.price = price; }
-   setQuantityAvailable(quantityAvailable: number) { this.quantityAvailable = quantityAvailable; }
-   setTeam(team: TeamEntity) { this.team = team; }
-   setImages(images: ImageEntity[]) { this.images = images; }
 }

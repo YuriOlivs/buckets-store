@@ -11,15 +11,15 @@ export default class ProductMapper {
       }
 
       return new ProductResponseDTO(
-         product.getId,
-         product.getName,
-         product.getDescription,
-         product.getCategory,
-         product.getSubcategory,
-         product.getQuantityAvailable,
-         product.getPrice,
-         product.getTeam,
+         product.id,
+         product.name,
+         product.description,
+         product.category,
+         product.subcategory,
+         product.quantityAvailable,
+         product.price,
+         product.team,
          images
-      )
+      );
    }
 }
