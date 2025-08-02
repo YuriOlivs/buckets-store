@@ -4,8 +4,8 @@ import TeamRepository from "./team.repository";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import ImageService from "../image/image.service";
 import ImageEntity from "../image/image.entity";
-import TeamCreateDTO from "./dto/TeamCreate.dto";
-import TeamUpdateDTO from "./dto/TeamUpdate.dto";
+import TeamCreateDTO from "./dto/team-create.dto";
+import TeamUpdateDTO from "./dto/team-update.dto";
 
 @Injectable()
 export default class TeamService {

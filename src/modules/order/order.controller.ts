@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import OrderService from './order.service';
-import { OrderCreateDTO } from './dto/OrderCreate.dto';
+import { OrderCreateDTO } from './dto/order-create.dto';
 import { STRINGS } from 'src/common/strings/global.strings';
 import OrderMapper from './dto/order.mapper';
 

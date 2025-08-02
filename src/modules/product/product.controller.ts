@@ -1,12 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
-import ProductCreateDTO from "./dto/ProductCreate.dto";
+import ProductCreateDTO from "./dto/product-create.dto";
 import ProductEntity from "./product.entity";
 import ProductMapper from "./dto/product.mapper";
 import ProductService from "./product.service";
 import { STRINGS } from "src/common/strings/global.strings";
 import ImageEntity from "../image/image.entity";
-import ProductFilterDTO from "./dto/ProductFilter.dto";
-import ProductUpdateDTO from "./dto/ProductUpdate.dto";
+import ProductFilterDTO from "./dto/product-filter.dto";
+import ProductUpdateDTO from "./dto/product-update.dto";
 
 @Controller('/products')
 export default class ProductController {

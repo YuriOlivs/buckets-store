@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from "@nestjs/comm
 import UserRepository from "./user.repository";
 import UserEntity from "./user.entity";
 import { STRINGS } from "src/common/strings/global.strings";
-import UserCreateDTO from "./dto/UserCreate.dto";
+import UserCreateDTO from "./dto/user-create.dto";
 
 @Injectable()
 export default class UserService {

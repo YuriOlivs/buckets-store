@@ -1,13 +1,13 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { OrderCreateDTO } from './dto/OrderCreate.dto';
+import { OrderCreateDTO } from './dto/order-create.dto';
 import OrderRepository from './order.repository';
 import ProductService from '../product/product.service';
 import { OrderItemEntity } from '../order-item/order-item.entity';
 import { OrderEntity } from './order.entity';
 import UserService from '../user/user.service';
 import { OrderStatusEntity } from '../order-status/order-status.entity';
-import { StatusCodeEnum } from '../order-status/enum/statusCode.enum';
-import { StatusTextEnum } from '../order-status/enum/statusText.enum';
+import { OrderStatusCodeEnum } from '../order-status/enum/order-status-code.enum';
+import { OrderStatusTextEnum } from '../order-status/enum/order-status-text.enum';
 
 @Injectable()
 export default class OrderService {
@@ -15,7 +15,7 @@ export default class OrderService {
     private repo: OrderRepository,
     private productService: ProductService,
     private userService: UserService
-  ) {}
+  ) { }
 
   async createOrder(dto: OrderCreateDTO): Promise<OrderEntity> {
     const orderItems: OrderItemEntity[] = [];
@@ -30,11 +30,11 @@ export default class OrderService {
 
       if (!await this.productService.buyProduct(product, item.quantity)) {
         throw new BadRequestException('Product not available');
-      }  
+      }
 
       const orderItem = new OrderItemEntity(
-        product, 
-        item.quantity, 
+        product,
+        item.quantity,
         product.price
       );
 
@@ -43,8 +43,8 @@ export default class OrderService {
     }
 
     const orderStatus = new OrderStatusEntity(
-      StatusCodeEnum.PENDING_PAYMENT, 
-      StatusTextEnum.PENDING_PAYMENT, 
+      OrderStatusCodeEnum.PENDING_PAYMENT,
+      OrderStatusTextEnum.PENDING_PAYMENT,
       new Date()
     );
 
@@ -60,7 +60,7 @@ export default class OrderService {
   async findOrdersByUser(id: string): Promise<OrderEntity[]> {
     const user = await this.userService.getUserById(id);
     if (!user) throw new NotFoundException('User not found');
-    
+
     return await this.repo.findOrdersByUser(id);
   }
 
@@ -76,11 +76,11 @@ export default class OrderService {
     if (!orderFound) throw new NotFoundException('Order not found');
 
     const canceledStatus = new OrderStatusEntity(
-      StatusCodeEnum.CANCELED, 
-      StatusTextEnum.CANCELED, 
+      OrderStatusCodeEnum.CANCELED,
+      OrderStatusTextEnum.CANCELED,
       new Date()
     );
-    
+
     orderFound.orderStatus = canceledStatus;
 
     return this.repo.save(orderFound);

@@ -1,5 +1,5 @@
 import { IsDateString, IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator";
-import { IsEmailUnique } from "../validations/isEmailUnique.validator";
+import { IsEmailUnique } from "../validations/is-email-unique.validator";
 
 export default class UserCreateDTO {
    @IsString()
@@ -20,7 +20,7 @@ export default class UserCreateDTO {
 
    @MinLength(8)
    password: string;
-   
+
    @IsDateString()
    birthDate: Date;
 }

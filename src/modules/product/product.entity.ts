@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import ImageEntity from "../image/image.entity";
-import { ProductCategory } from "./enum/productCategory.enum";
-import { ProductSubcategory } from "./enum/productSubcategory.enum";
+import { ProductCategory } from "./enum/product-category.enum";
+import { ProductSubcategory } from "./enum/product-subcategory.enum";
 import TeamEntity from "../team/team.entity";
 import { OrderItemEntity } from "../order-item/order-item.entity";
 

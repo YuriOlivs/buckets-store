@@ -1,9 +1,9 @@
-import ImageResponseDTO from "src/modules/image/dto/ImageResponse.dto";
+import ImageResponseDTO from "src/modules/image/dto/image-response.dto";
 
 export default class TeamResponseDTO {
-   constructor (
+   constructor(
       readonly id: string,
       readonly name: string,
       readonly logo: ImageResponseDTO
-   ) {}
+   ) { }
 }

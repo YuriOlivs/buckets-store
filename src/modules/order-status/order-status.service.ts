@@ -1,24 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { OrderStatusCreateDTO } from './dto/OrderStatusCreate.dto';
-import { OrderStatusUpdateDTO } from './dto/OrderStatusUpdate.dto';
+import { OrderStatusCreateDTO } from './dto/order-status-create.dto';
+import { OrderStatusUpdateDTO } from './dto/order-status-update.dto';
 import OrderStatusRepository from './order-status.repository';
 import { OrderStatusEntity } from './order-status.entity';
 import OrderService from '../order/order.service';
-import { StatusCodeEnum } from './enum/statusCode.enum';
-import { StatusTextEnum } from './enum/statusText.enum';
+import { OrderStatusCodeEnum } from './enum/order-status-code.enum';
+import { OrderStatusTextEnum } from './enum/order-status-text.enum';
 
 @Injectable()
 export class OrderStatusService {
   constructor(
     private repo: OrderStatusRepository,
     private orderService: OrderService
-  ) {}
+  ) { }
 
   async createOrderStatus(dto: OrderStatusCreateDTO): Promise<OrderStatusEntity> {
-    const statusCode = dto.statusCode ?? StatusCodeEnum.PENDING_PAYMENT;
-    const statusText = dto.statusText ?? StatusTextEnum.PENDING_PAYMENT;
+    const statusCode = dto.statusCode ?? OrderStatusCodeEnum.PENDING_PAYMENT;
+    const statusText = dto.statusText ?? OrderStatusTextEnum.PENDING_PAYMENT;
     const order = await this.orderService.findOrderById(dto.order);
-    if(!order) throw new Error('Order not found');
+    if (!order) throw new Error('Order not found');
 
     const orderStatus = new OrderStatusEntity(
       statusCode,
@@ -41,7 +41,7 @@ export class OrderStatusService {
   async removeOrderStatus(id: string) {
     const orderStatusFound = await this.repo.findById(id);
     if (!orderStatusFound) throw new Error('OrderStatus not found');
-    
+
     return this.repo.remove(orderStatusFound);
   }
 }

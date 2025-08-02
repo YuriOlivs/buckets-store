@@ -4,9 +4,9 @@ import ProductRepository from "./product.repository";
 import TeamService from "../team/team.service";
 import ImageService from "../image/image.service";
 import ImageEntity from "../image/image.entity";
-import ProductCreateDTO from "./dto/ProductCreate.dto";
-import ProductFilterDTO from "./dto/ProductFilter.dto";
-import ProductUpdateDTO from "./dto/ProductUpdate.dto";
+import ProductCreateDTO from "./dto/product-create.dto";
+import ProductFilterDTO from "./dto/product-filter.dto";
+import ProductUpdateDTO from "./dto/product-update.dto";
 
 @Injectable()
 export default class ProductService {

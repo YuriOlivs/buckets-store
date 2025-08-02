@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { OrderEntity } from "../order/order.entity";
-import { StatusTextEnum } from "./enum/statusText.enum";
-import { StatusCodeEnum } from "./enum/statusCode.enum";
+import { OrderStatusTextEnum } from "./enum/order-status-text.enum";
+import { OrderStatusCodeEnum } from "./enum/order-status-code.enum";
 
 @Entity({ name: "order_status" })
 export class OrderStatusEntity {
@@ -12,11 +12,11 @@ export class OrderStatusEntity {
    @JoinColumn({ name: 'order_id' })
    order: OrderEntity;
 
-   @Column({ name: "status_code", type: 'enum', enum: StatusCodeEnum, nullable: false })
-   statusCode: StatusCodeEnum;
+   @Column({ name: "status_code", type: 'enum', enum: OrderStatusCodeEnum, nullable: false })
+   statusCode: OrderStatusCodeEnum;
 
-   @Column({ name: "status_text", type: 'enum', enum: StatusTextEnum, nullable: false })
-   statusText: StatusTextEnum;
+   @Column({ name: "status_text", type: 'enum', enum: OrderStatusTextEnum, nullable: false })
+   statusText: OrderStatusTextEnum;
 
    @Column({ name: "status_date", nullable: false })
    statusDate: Date;
@@ -31,8 +31,8 @@ export class OrderStatusEntity {
    deletedAt: Date;
 
    constructor(
-      statusCode: StatusCodeEnum,
-      statusText: StatusTextEnum,
+      statusCode: OrderStatusCodeEnum,
+      statusText: OrderStatusTextEnum,
       statusDate: Date,
       order?: OrderEntity,
    ) {

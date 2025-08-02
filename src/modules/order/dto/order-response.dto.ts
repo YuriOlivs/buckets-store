@@ -1,5 +1,5 @@
-import OrderItemResponseDTO from "src/modules/order-item/dto/OrderItemResponse.dto";
-import OrderStatusResponseDTO from "src/modules/order-status/dto/OrderStatusResponse.dto";
+import OrderItemResponseDTO from "src/modules/order-item/dto/order-item-response.dto";
+import OrderStatusResponseDTO from "src/modules/order-status/dto/order-status-response.dto";
 
 export default class OrderResponseDTO {
    constructor(
@@ -7,5 +7,5 @@ export default class OrderResponseDTO {
       readonly totalValue: number,
       readonly status: OrderStatusResponseDTO,
       readonly items: OrderItemResponseDTO[],
-   ) {}
+   ) { }
 }

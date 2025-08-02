@@ -1,7 +1,7 @@
-import OrderStatusResponseDTO from "src/modules/order-status/dto/OrderStatusResponse.dto";
+import OrderStatusResponseDTO from "src/modules/order-status/dto/order-status-response.dto";
 import { OrderEntity } from "../order.entity";
-import OrderResponseDTO from "./OrderResponse.dto";
-import OrderItemResponseDTO from "src/modules/order-item/dto/OrderItemResponse.dto";
+import OrderResponseDTO from "./order-response.dto";
+import OrderItemResponseDTO from "src/modules/order-item/dto/order-item-response.dto";
 import ProductMapper from "src/modules/product/dto/product.mapper";
 
 export default class OrderMapper {
