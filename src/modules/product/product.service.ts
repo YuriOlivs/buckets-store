@@ -103,14 +103,11 @@ export default class ProductService {
       const productFound = await this.repo.getById(id);
       if (!productFound) throw new NotFoundException('Product not found');
 
-      if (productData.name) productFound.name = productData.name;
-      if (productData.description) productFound.description = productData.description;
-      if (productData.category) productFound.category = productData.category;
-      if (productData.subcategory) productFound.subcategory = productData.subcategory;
-      if (productData.price) productFound.price = productData.price;
+      const { team, ...rest } = productData;
+      Object.assign(productFound, rest);
 
-      if (productData.team) {
-         const teamFound = await this.teamService.getTeamById(productData.team);
+      if (team) {
+         const teamFound = await this.teamService.getTeamById(team);
          if (!teamFound) throw new NotFoundException('Team not found');
 
          productFound.team = teamFound;
