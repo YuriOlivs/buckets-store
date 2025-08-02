@@ -9,13 +9,18 @@ import { ImageModule } from './modules/image/image.module';
 import { OrderModule } from './modules/order/order.module';
 import { OrderItemModule } from './modules/order-item/order-item.module';
 import { OrderStatusModule } from './modules/order-status/order-status.module';
+import { APP_FILTER } from '@nestjs/core';
+import GlobalExceptionFilter from './common/filters/global-exception.filter';
 
 @Module({
   imports: [
-    UserModule, 
+    UserModule,
     ProductModule,
     TeamModule,
     ImageModule,
+    OrderModule,
+    OrderItemModule,
+    OrderStatusModule,
     ConfigModule.forRoot({
       isGlobal: true
     }),
@@ -23,9 +28,10 @@ import { OrderStatusModule } from './modules/order-status/order-status.module';
       useClass: PostgresConfigService,
       inject: [PostgresConfigService]
     }),
-    OrderModule,
-    OrderItemModule,
-    OrderStatusModule
   ],
+  providers: [{
+    provide: APP_FILTER,
+    useClass: GlobalExceptionFilter
+  }],
 })
 export class AppModule { }
