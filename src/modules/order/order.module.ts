@@ -8,12 +8,14 @@ import { ProductModule } from '../product/product.module';
 import { UserModule } from '../user/user.module';
 import { OrderItemModule } from '../order-item/order-item.module';
 import { OrderStatusModule } from '../order-status/order-status.module';
+import { AddressModule } from '../address/address.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([OrderEntity]),
     ProductModule,
     UserModule,
+    AddressModule
   ],
   exports: [OrderService],
   controllers: [OrderController],

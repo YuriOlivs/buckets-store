@@ -19,12 +19,12 @@ export class AddressController {
 
   @Get('/by-user/:id')
   async findByUser(@Param('id') id: string) {
-    const address = await this.addressService.findByUser(id);
+    return await this.addressService.findByUser(id);
   }
 
   @Get('/:id')
   async findById(@Param('id') id: string) {
-    const address = await this.addressService.findById(id);
+    return await this.addressService.findById(id);
   }
 
   @Patch('/:id')

@@ -1,7 +1,8 @@
-import { Column, CreateDateColumn, DeleteDateColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import UserEntity from "../user/user.entity";
 import { OrderEntity } from "../order/order.entity";
 
+@Entity({ name: 'addresses' })
 export class AddressEntity {
    @PrimaryGeneratedColumn('uuid')
    id: string;
