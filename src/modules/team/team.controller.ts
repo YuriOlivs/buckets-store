@@ -5,6 +5,7 @@ import TeamEntity from "./team.entity";
 import TeamService from "./team.service";
 import { STRINGS } from "src/common/strings/global.strings";
 import ImageEntity from "../image/image.entity";
+import TeamUpdateDTO from "./dto/TeamUpdate.dto";
 
 @Controller("/teams")
 export default class TeamController {
@@ -23,7 +24,7 @@ export default class TeamController {
    }
 
    @Put(':id')
-   async updateTeam(@Param('id') id: string, @Body() body: Partial<TeamEntity>) {
+   async updateTeam(@Param('id') id: string, @Body() body: TeamUpdateDTO) {
       const updatedTeam = await this.service.updateTeam(id, body);
       return { message: STRINGS.entityUpdated('Team'), payload: TeamMapper.toDTO(updatedTeam) };
    }

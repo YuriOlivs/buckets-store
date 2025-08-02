@@ -5,6 +5,7 @@ import { BadRequestException, Injectable, NotFoundException } from "@nestjs/comm
 import ImageService from "../image/image.service";
 import ImageEntity from "../image/image.entity";
 import TeamCreateDTO from "./dto/TeamCreate.dto";
+import TeamUpdateDTO from "./dto/TeamUpdate.dto";
 
 @Injectable()
 export default class TeamService {
@@ -43,7 +44,7 @@ export default class TeamService {
       return await this.repo.save(team);
    }
 
-   async updateTeam(id: string, teamData: Partial<TeamEntity>): Promise<TeamEntity> {
+   async updateTeam(id: string, teamData: TeamUpdateDTO): Promise<TeamEntity> {
       const teamFound = await this.repo.getById(id);
       if (!teamFound) throw new NotFoundException('Team not found');
 
@@ -56,10 +57,11 @@ export default class TeamService {
       if(teamData.logo) {
          const urlExists = await this.imgService.getImageByUrl(teamData.logo.url);
          if (urlExists) {
-            if(teamData.logo.description != urlExists.description) urlExists.description = teamData.logo.description;
+            if(teamData.logo.desc != urlExists.description) urlExists.description = teamData.logo.desc;
             teamFound.setLogo(urlExists);
          } else {
-            const logo = await this.imgService.createImage(teamData.logo);
+            const logoEntity = new ImageEntity(teamData.logo.url, teamData.logo.desc)
+            const logo = await this.imgService.createImage(logoEntity);
             teamFound.setLogo(logo as ImageEntity);
          }
       }

@@ -6,6 +6,7 @@ import ImageService from "../image/image.service";
 import ImageEntity from "../image/image.entity";
 import ProductCreateDTO from "./dto/ProductCreate.dto";
 import ProductFilterDTO from "./dto/ProductFilter.dto";
+import ProductUpdateDTO from "./dto/ProductUpdate.dto";
 @Injectable()
 export default class ProductService {
    constructor(
@@ -94,18 +95,18 @@ export default class ProductService {
       return true;
    }
 
-   async updateProduct(id: string, productData: Partial<ProductEntity>): Promise<ProductEntity> {
+   async updateProduct(id: string, productData: ProductUpdateDTO): Promise<ProductEntity> {
       const productFound = await this.repo.getById(id);
       if (!productFound) throw new NotFoundException('Product not found');
 
-      if (productData.getName) productFound.setName(productData.getName);
-      if (productData.getDescription) productFound.setDescription(productData.getDescription);
-      if (productData.getCategory) productFound.setCategory(productData.getCategory);
-      if (productData.getSubcategory) productFound.setSubcategory(productData.getSubcategory);
-      if (productData.getPrice) productFound.setPrice(productData.getPrice);
+      if (productData.name) productFound.setName(productData.name);
+      if (productData.description) productFound.setDescription(productData.description);
+      if (productData.category) productFound.setCategory(productData.category);
+      if (productData.subcategory) productFound.setSubcategory(productData.subcategory);
+      if (productData.price) productFound.setPrice(productData.price);
 
       if (productData.team) {
-         const teamFound = await this.teamService.getTeamById(productData.team.id);
+         const teamFound = await this.teamService.getTeamById(productData.team);
          if (!teamFound) throw new NotFoundException('Team not found');
 
          productFound.setTeam(teamFound);
