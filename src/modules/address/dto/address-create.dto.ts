@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsOptional, IsString, IsUUID, Max } from "class-validator";
+import { Type } from "class-transformer";
+import { IsNotEmpty, IsOptional, IsString, IsUUID, Max, ValidateNested } from "class-validator";
 
 export class AddressCreateDTO {
    @IsString()
@@ -44,4 +45,8 @@ export class AddressCreateDTO {
 
    @IsUUID()
    user: string;
+
+   @ValidateNested({ each: true })
+   @Type(() => AddressCreateDTO)
+   address: AddressCreateDTO;
 }

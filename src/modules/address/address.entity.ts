@@ -1,5 +1,6 @@
-import { Column, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import UserEntity from "../user/user.entity";
+import { OrderEntity } from "../order/order.entity";
 
 export class AddressEntity {
    @PrimaryGeneratedColumn('uuid')
@@ -31,6 +32,18 @@ export class AddressEntity {
 
    @ManyToOne(() => UserEntity, user => user.addresses)
    user: UserEntity;
+
+   @OneToMany(() => OrderEntity, order => order.address)
+   orders: OrderEntity[];
+
+   @CreateDateColumn({ name: 'created_at' })
+   createdAt: Date;
+
+   @UpdateDateColumn({ name: 'updated_at' })
+   updatedAt: Date;
+
+   @DeleteDateColumn({ name: 'deleted_at' })
+   deletedAt: Date;
 
    constructor(
       street: string,

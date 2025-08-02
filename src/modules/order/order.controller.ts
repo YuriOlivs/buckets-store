@@ -24,6 +24,15 @@ export default class OrderController {
     return { message: STRINGS.entityUpdated('Order'), payload: OrderMapper.toDTO(orderUpdated) };
   }
 
+  @Patch('/update-address/:id/:addressId')
+  async updateAddress(
+    @Param('id') id: string,
+    @Param('addressId') addressId: string
+  ) {
+    const orderUpdated = await this.orderService.updateOrderAddress(id, addressId);
+    return { message: STRINGS.entityUpdated('Order'), payload: OrderMapper.toDTO(orderUpdated) };
+  }
+
   @Get('/:id')
   async findById(@Param('id') id: string) {
     const orderFound = await this.orderService.findOrderById(id);
