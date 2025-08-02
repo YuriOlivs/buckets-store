@@ -8,6 +8,7 @@ import UserService from '../user/user.service';
 import { OrderStatusEntity } from '../order-status/order-status.entity';
 import { OrderStatusCodeEnum } from '../order-status/enum/order-status-code.enum';
 import { OrderStatusTextEnum } from '../order-status/enum/order-status-text.enum';
+import { OrderStatusCreateDTO } from '../order-status/dto/order-status-create.dto';
 
 @Injectable()
 export default class OrderService {
@@ -55,6 +56,21 @@ export default class OrderService {
       orderStatus
     );
     return await this.repo.save(order);
+  }
+
+  async updateOrderStatus(id: string, status: OrderStatusCreateDTO) {
+    const order = await this.repo.findById(id);
+    if (!order) throw new NotFoundException('Order not found');
+
+    const newStatus = new OrderStatusEntity(
+      status.statusCode,
+      status.statusText,
+      new Date(),
+      order
+    );
+
+    order.orderStatus = newStatus;
+    return this.repo.save(order);
   }
 
   async findOrdersByUser(id: string): Promise<OrderEntity[]> {
