@@ -15,7 +15,10 @@ export default class ProductController {
    @Post()
    async createProduct(@Body() body: ProductCreateDTO) {
       const productCreated = await this.service.createProduct(body);
-      return { message: STRINGS.entityCreated('Product'), payload: ProductMapper.toDTO(productCreated) }
+      return { 
+         message: STRINGS.entityCreated('Product'), 
+         payload: ProductMapper.toDTO(productCreated)
+      }
    }
 
    @Get()
@@ -39,12 +42,18 @@ export default class ProductController {
    @Put('/:id')
    async updateProduct(@Param('id') id: string, @Body() body: ProductUpdateDTO) {
       const product = await this.service.updateProduct(id, body);
-      return { message: STRINGS.entityUpdated('Product'), payload: ProductMapper.toDTO(product) };
+      return { 
+         message: STRINGS.entityUpdated('Product'), 
+         payload: ProductMapper.toDTO(product)
+      };
    }
 
    @Delete()
    async deleteProduct(@Param('id') id: string) {
       await this.service.deleteProduct(id);
-      return { message: STRINGS.entityDeleted('Product'), payload: {} };
+      return { 
+         message: STRINGS.entityDeleted('Product'), 
+         payload: {} 
+   };
    }
 }

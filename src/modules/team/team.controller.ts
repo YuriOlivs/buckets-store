@@ -14,7 +14,11 @@ export default class TeamController {
    @Post()
    async createTeam(@Body() body: TeamCreateDTO) {
       const teamCreated = await this.service.createTeam(body);
-      return { message: STRINGS.entityCreated('Team'), payload: TeamMapper.toDTO(teamCreated) };
+      return { 
+         message: STRINGS.entityCreated('Team'), 
+         payload: TeamMapper.toDTO(teamCreated) 
+         
+      };
    }
 
    @Get()
@@ -26,12 +30,19 @@ export default class TeamController {
    @Put(':id')
    async updateTeam(@Param('id') id: string, @Body() body: TeamUpdateDTO) {
       const updatedTeam = await this.service.updateTeam(id, body);
-      return { message: STRINGS.entityUpdated('Team'), payload: TeamMapper.toDTO(updatedTeam) };
+      return { 
+         message: STRINGS.entityUpdated('Team'), 
+         payload: TeamMapper.toDTO(updatedTeam) 
+         
+      };
    }
 
    @Delete()
    async deleteTeam(@Param('id') id: string) {
       await this.service.deleteTeam(id);
-      return { message: STRINGS.entityDeleted('Team'), payload: {} };
+      return { 
+         message: STRINGS.entityDeleted('Team'), 
+         payload: {} 
+   };
    }
 }

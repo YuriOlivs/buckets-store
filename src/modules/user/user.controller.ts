@@ -12,7 +12,10 @@ export default class UserController {
    @Post()
    async createUser(@Body() body: UserCreateDTO) {
       const userCreated = await this.service.createUser(body);
-      return { message: STRINGS.entityCreated('User'), payload: UserMapper.toDTO(userCreated) };
+      return { 
+         message: STRINGS.entityCreated('User'), 
+         payload: UserMapper.toDTO(userCreated) 
+      };
    }
 
    @Get()
@@ -24,12 +27,18 @@ export default class UserController {
    @Put('/:id')
    async updateUser(@Param('id') id: string, @Body() body: Partial<UserEntity>) {
       const updatedUser = await this.service.updateUser(id, body);
-      return { message: STRINGS.entityUpdated('User'), payload: UserMapper.toDTO(updatedUser) };
+      return { 
+         message: STRINGS.entityUpdated('User'), 
+         payload: UserMapper.toDTO(updatedUser) 
+      };
    }
 
    @Delete('/:id')
    async removeUser(@Param('id') id: string) {
       await this.service.deleteUser(id);
-      return { message: STRINGS.entityDeleted('User'), payload: {} };
+      return { 
+         message: STRINGS.entityDeleted('User'), 
+         payload: {} 
+      };
    }
 }
