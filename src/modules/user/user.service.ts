@@ -6,7 +6,7 @@ import UserCreateDTO from "./dto/UserCreate.dto";
 
 @Injectable()
 export default class UserService {
-   constructor(private repo: UserRepository) {}
+   constructor(private repo: UserRepository) { }
 
    async getAllUsers(): Promise<UserEntity[]> {
       return await this.repo.getAll();
@@ -37,25 +37,21 @@ export default class UserService {
       const userFound = await this.repo.getById(id);
       if (!userFound) throw new NotFoundException('User not found');
 
-      if (userData.email) {
+      if (userData.email && userData.email !== userFound.email) {
          const emailExists = await this.repo.getByEmail(userData.email);
          if (emailExists) throw new BadRequestException(STRINGS.alreadyExists('Email'));
-
-         userFound.setEmail(userData.email);
       }
 
-      if (userData.name) userFound.setName(userData.name);
-      if (userData.lastName) userFound.setLastName(userData.lastName);
-      if (userData.password) userFound.setPassword(userData.password);
-      if (userData.birthDate) userFound.setBirthDate(userData.birthDate);
+      Object.assign(userFound, userData);
 
       return await this.repo.save(userFound);
    }
 
+
    async deleteUser(id: string) {
       const userFound = await this.repo.getById(id);
       if (!userFound) throw new NotFoundException('User not found');
-      
+
       return await this.repo.remove(userFound);
    }
 }

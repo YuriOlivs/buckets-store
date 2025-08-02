@@ -46,21 +46,4 @@ export default class UserEntity {
     this.password = password;
     this.birthDate = birthDate;
   }
-
-  get getId() {return this.id;}
-  get getName() {return this.name;}
-  get getLastName() {return this.lastName;}
-  get getFullName() {return `${this.name} ${this.lastName}`;}
-  get getEmail() {return this.email;}
-  get getPassword() {return this.password;}
-  get getBirthDate() {return this.birthDate;}
-  get getCreatedAt() {return this.createdAt;}
-  get getUpdatedAt() {return this.updatedAt;}
-  get getDeletedAt() {return this.deletedAt;}
-
-  setName(name: string) {this.name = name;}
-  setLastName(lastName: string) {this.lastName = lastName;}
-  setEmail(email: string) {this.email = email;}
-  setPassword(password: string) {this.password = password;}
-  setBirthDate(birthDate: Date) {this.birthDate = birthDate;}
 }

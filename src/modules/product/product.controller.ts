@@ -6,6 +6,7 @@ import ProductService from "./product.service";
 import { STRINGS } from "src/common/strings/global.strings";
 import ImageEntity from "../image/image.entity";
 import ProductFilterDTO from "./dto/ProductFilter.dto";
+import ProductUpdateDTO from "./dto/ProductUpdate.dto";
 
 @Controller('/products')
 export default class ProductController {
@@ -36,7 +37,7 @@ export default class ProductController {
    }
 
    @Put('/:id')
-   async updateProduct(@Param('id') id: string, @Body() body: Partial<ProductEntity>) {
+   async updateProduct(@Param('id') id: string, @Body() body: ProductUpdateDTO) {
       const product = await this.service.updateProduct(id, body);
       return { message: STRINGS.entityUpdated('Product'), payload: ProductMapper.toDTO(product) };
    }

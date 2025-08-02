@@ -33,16 +33,4 @@ export default class TeamEntity {
       this.city = city;
       this.logo = logo;
    }
-
-   get getId() { return this.id; }
-   get getName() { return this.name; }
-   get getCity() { return this.city; }
-   get getLogo() { return this.logo; }
-   get getCreatedAt() { return this.createdAt; }
-   get getUpdatedAt() { return this.updatedAt; }
-   get getDeletedAt() { return this.deletedAt; }
-
-   setName(name: string) { this.name = name; }
-   setCity(city: string) { this.city = city; }
-   setLogo(logo: ImageEntity) { this.logo = logo; }
 }

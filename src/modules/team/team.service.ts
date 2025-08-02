@@ -5,13 +5,14 @@ import { BadRequestException, Injectable, NotFoundException } from "@nestjs/comm
 import ImageService from "../image/image.service";
 import ImageEntity from "../image/image.entity";
 import TeamCreateDTO from "./dto/TeamCreate.dto";
+import TeamUpdateDTO from "./dto/TeamUpdate.dto";
 
 @Injectable()
 export default class TeamService {
-   constructor (
+   constructor(
       private repo: TeamRepository,
       private imgService: ImageService
-   ) {}
+   ) { }
 
    async getAllTeams(): Promise<TeamEntity[]> {
       return await this.repo.getAll();
@@ -33,46 +34,52 @@ export default class TeamService {
 
       const urlExists = await this.imgService.getImageByUrl(team.logo.url);
       if (urlExists) {
-         if(team.logo.description != urlExists.description) urlExists.description = team.logo.description;
-         team.setLogo(urlExists);
+         if (team.logo.description != urlExists.description) urlExists.description = team.logo.description;
+         team.logo = urlExists;
       } else {
          const logo = await this.imgService.createImage(team.logo);
-         team.setLogo(logo as ImageEntity);
+         team.logo = logo as ImageEntity;
       }
-      
+
       return await this.repo.save(team);
    }
 
-   async updateTeam(id: string, teamData: Partial<TeamEntity>): Promise<TeamEntity> {
+   async updateTeam(id: string, teamData: TeamUpdateDTO): Promise<TeamEntity> {
       const teamFound = await this.repo.getById(id);
       if (!teamFound) throw new NotFoundException('Team not found');
 
-      if(teamData.name) {
-         const nameExists = await this.repo.getByName(teamData.name);
+      const { name, logo, ...rest } = teamData;
+
+      if (name) {
+         const nameExists = await this.repo.getByName(name);
          if (nameExists) throw new BadRequestException(STRINGS.alreadyExists('Name'));
-         if (teamData.name) teamFound.setName(teamData.name);
+         teamFound.name = name;
       }
 
-      if(teamData.logo) {
-         const urlExists = await this.imgService.getImageByUrl(teamData.logo.url);
+      if (logo) {
+         const urlExists = await this.imgService.getImageByUrl(logo.url);
          if (urlExists) {
-            if(teamData.logo.description != urlExists.description) urlExists.description = teamData.logo.description;
-            teamFound.setLogo(urlExists);
+            if (logo.desc !== urlExists.description) {
+               urlExists.description = logo.desc;
+            }
+            teamFound.logo = urlExists;
          } else {
-            const logo = await this.imgService.createImage(teamData.logo);
-            teamFound.setLogo(logo as ImageEntity);
+            const logoEntity = new ImageEntity(logo.url, logo.desc);
+            const logoSaved = await this.imgService.createImage(logoEntity);
+            teamFound.logo = logoSaved as ImageEntity;
          }
       }
 
-      if(teamData.city) teamFound.setCity(teamData.city);
+      Object.assign(teamFound, rest);
 
       return await this.repo.save(teamFound);
    }
 
+
    async deleteTeam(id: string) {
       const teamFound = await this.repo.getById(id);
       if (!teamFound) throw new NotFoundException('Team not found');
-      
+
       return await this.repo.remove(teamFound);
    }
 }
