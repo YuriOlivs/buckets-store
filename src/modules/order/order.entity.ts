@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToO
 import UserEntity from "../user/user.entity";
 import { OrderItemEntity } from "../order-item/order-item.entity";
 import { OrderStatusEntity } from "../order-status/order-status.entity";
+import { AddressEntity } from "../address/address.entity";
 
 @Entity({ name: 'orders' })
 export class OrderEntity {
@@ -14,6 +15,9 @@ export class OrderEntity {
    @ManyToOne(() => UserEntity, user => user.orders)
    @JoinColumn({ name: 'user_id' })
    user: UserEntity;
+
+   @ManyToOne(() => AddressEntity, address => address.orders, { eager: true })
+   address: AddressEntity;
 
    @OneToOne(
       () => OrderStatusEntity, orderStatus => orderStatus.order, 
@@ -40,11 +44,13 @@ export class OrderEntity {
       totalValue: number, 
       user: UserEntity,
       orderItems: OrderItemEntity[],
-      orderStatus: OrderStatusEntity
+      orderStatus: OrderStatusEntity,
+      address: AddressEntity
    ) {
       this.totalValue = totalValue;
       this.user = user;
       this.orderItems = orderItems;
       this.orderStatus = orderStatus;
+      this.address = address;
    }
 }

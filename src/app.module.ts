@@ -10,6 +10,7 @@ import { OrderModule } from './modules/order/order.module';
 import { OrderItemModule } from './modules/order-item/order-item.module';
 import { OrderStatusModule } from './modules/order-status/order-status.module';
 import { APP_FILTER } from '@nestjs/core';
+import { AddressModule } from './modules/address/address.module';
 import GlobalExceptionFilter from './common/filters/global-exception.filter';
 
 @Module({
@@ -28,6 +29,7 @@ import GlobalExceptionFilter from './common/filters/global-exception.filter';
       useClass: PostgresConfigService,
       inject: [PostgresConfigService]
     }),
+    AddressModule,
   ],
   providers: [{
     provide: APP_FILTER,

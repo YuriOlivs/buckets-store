@@ -9,13 +9,16 @@ import { OrderStatusEntity } from '../order-status/order-status.entity';
 import { OrderStatusCodeEnum } from '../order-status/enum/order-status-code.enum';
 import { OrderStatusTextEnum } from '../order-status/enum/order-status-text.enum';
 import { OrderStatusCreateDTO } from '../order-status/dto/order-status-create.dto';
+import { AddressEntity } from '../address/address.entity';
+import { AddressService } from '../address/address.service';
 
 @Injectable()
 export default class OrderService {
   constructor(
     private repo: OrderRepository,
     private productService: ProductService,
-    private userService: UserService
+    private userService: UserService,
+    private addressService: AddressService
   ) { }
 
   async createOrder(dto: OrderCreateDTO): Promise<OrderEntity> {
@@ -24,6 +27,9 @@ export default class OrderService {
 
     const user = await this.userService.getUserById(dto.user);
     if (!user) throw new NotFoundException('User not found');
+
+    const address = await this.addressService.findById(dto.address);
+    if (!address) throw new NotFoundException('Address not found');
 
     for (const item of dto.products) {
       const product = await this.productService.getProductById(item.product);
@@ -53,7 +59,8 @@ export default class OrderService {
       totalValue,
       user,
       orderItems,
-      orderStatus
+      orderStatus,
+      address
     );
     return await this.repo.save(order);
   }
@@ -70,6 +77,17 @@ export default class OrderService {
     );
 
     order.orderStatus = newStatus;
+    return this.repo.save(order);
+  }
+
+  async updateOrderAddress(id: string, addressId: string) {
+    const order = await this.repo.findById(id);
+    if (!order) throw new NotFoundException('Order not found');
+
+    const address = await this.addressService.findById(addressId);
+    if (!address) throw new NotFoundException('Address not found');
+
+    order.address = address;
     return this.repo.save(order);
   }
 
