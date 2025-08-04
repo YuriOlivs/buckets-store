@@ -15,7 +15,28 @@ CREATE TABLE IF NOT EXISTS public.users (
   CONSTRAINT pk_users PRIMARY KEY (id)
 );
 
-ALTER TABLE IF EXISTS public.users OWNER TO root;
+
+
+-- ADDRESSES
+CREATE TABLE IF NOT EXISTS public.addresses (
+  id UUID NOT NULL DEFAULT uuid_generate_v4(),
+  user_id UUID NOT NULL,
+  street VARCHAR(255) NOT NULL,
+  number VARCHAR(20) NOT NULL,
+  complement VARCHAR(100),
+  neighborhood VARCHAR(100) NOT NULL,
+  city VARCHAR(100) NOT NULL,
+  state VARCHAR(100) NOT NULL,
+  postal_code VARCHAR(20) NOT NULL,
+  country VARCHAR(100) NOT NULL DEFAULT 'Brasil',
+  created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
+  updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
+  deleted_at TIMESTAMP WITHOUT TIME ZONE,
+
+  CONSTRAINT pk_addresses PRIMARY KEY (id)
+);
+
+ALTER TABLE IF EXISTS public.addresses OWNER TO root;
 
 -- PRODUCTS
 CREATE TABLE IF NOT EXISTS public.products (
@@ -59,6 +80,7 @@ CREATE TABLE IF NOT EXISTS public.images (
 CREATE TABLE IF NOT EXISTS public.orders (
   id UUID NOT NULL DEFAULT uuid_generate_v4(),
   user_id UUID NOT NULL,
+  address_id UUID NOT NULL,
   total_value NUMERIC(10, 2) NOT NULL,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
@@ -99,6 +121,20 @@ CREATE TABLE IF NOT EXISTS public.order_status (
 );
 
 ALTER TABLE IF EXISTS public.order_status OWNER TO root;
+
+-- FK: addresses.user_id → users.id
+ALTER TABLE public.addresses
+  ADD CONSTRAINT fk_addresses_user FOREIGN KEY (user_id)
+  REFERENCES public.users(id)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE;
+
+-- FK: orders.address_id → addresses.id
+ALTER TABLE public.orders
+  ADD CONSTRAINT fk_orders_address FOREIGN KEY (address_id)
+  REFERENCES public.addresses(id)
+  ON UPDATE CASCADE
+  ON DELETE SET NULL;
 
 -- FK: orders.user_id → users.id
 ALTER TABLE public.orders
