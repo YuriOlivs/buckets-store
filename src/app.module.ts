@@ -12,6 +12,7 @@ import { OrderStatusModule } from './modules/order-status/order-status.module';
 import { APP_FILTER } from '@nestjs/core';
 import { AddressModule } from './modules/address/address.module';
 import GlobalExceptionFilter from './common/filters/global-exception.filter';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import GlobalExceptionFilter from './common/filters/global-exception.filter';
     OrderModule,
     OrderItemModule,
     OrderStatusModule,
+    CacheModule.register({ isGlobal: true, ttl: 10000 }),
     ConfigModule.forRoot({
       isGlobal: true
     }),
