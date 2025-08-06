@@ -27,6 +27,6 @@ export default class UserRepository {
   }
 
   async remove(user: UserEntity): Promise<UserEntity> {
-    return await this.repository.remove(user);
+    return await this.repository.softRemove(user);
   }
 }
