@@ -47,7 +47,7 @@ export default class ProductRepository {
       return await this.repository.find({ where: { team: { id } } });
    }
 
-   async remove(id: string) {
-      return await this.repository.delete({ id });
+   async remove(product: ProductEntity) {
+      return await this.repository.softRemove(product);
    }
 }

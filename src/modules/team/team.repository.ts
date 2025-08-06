@@ -34,6 +34,6 @@ export default class TeamRepository {
    }
 
    async remove(user: TeamEntity): Promise<TeamEntity> {
-      return await this.repository.remove(user);
+      return await this.repository.softRemove(user);
    }
 }

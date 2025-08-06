@@ -120,6 +120,6 @@ export default class ProductService {
       const productFound = await this.repo.getById(id);
       if (!productFound) throw new NotFoundException('Product not found');
 
-      return await this.repo.remove(id);
+      return await this.repo.remove(productFound);
    }
 }

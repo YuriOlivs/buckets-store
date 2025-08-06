@@ -1,31 +1,35 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from "@nestjs/common";
 import { HttpAdapterHost } from "@nestjs/core";
+import ErrorResponse from "../dto/error-response.dto";
 
 @Catch()
 export default class GlobalExceptionFilter implements ExceptionFilter {
-   constructor(private adapterHost: HttpAdapterHost) {}
+  constructor(private readonly adapterHost: HttpAdapterHost) {}
 
-   catch(exception: unknown, host: ArgumentsHost) {
-      console.log(exception);
-      const { httpAdapter } = this.adapterHost;
+  catch(exception: unknown, host: ArgumentsHost) {
+    const { httpAdapter } = this.adapterHost;
+    const ctx = host.switchToHttp();
+    const res = ctx.getResponse();
+    const req = ctx.getRequest();
+    const path = httpAdapter.getRequestUrl(req);
 
-      const context = host.switchToHttp();
-      const res = context.getResponse();
-      const req = context.getRequest();
+    let status: number;
+    let body: any;
 
-      const { status, body } = exception instanceof HttpException ?
-         {
-            status: exception.getStatus(),
-            body: exception.getResponse(),
-         } : {
-            status: HttpStatus.INTERNAL_SERVER_ERROR,
-            body: {
-               statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-               timestamp: new Date().toISOString(),
-               path: httpAdapter.getRequestUrl(req),
-            }
-         }
+    if (exception instanceof HttpException) {
+      status = exception.getStatus();
+      const response = exception.getResponse();
+      const message =
+        typeof response === 'string'
+          ? response
+          : (response as any).message || 'Unexpected error';
 
-      httpAdapter.reply(res, body, status);
-   }
+      body = new ErrorResponse(status, message, path);
+    } else {
+      status = HttpStatus.INTERNAL_SERVER_ERROR;
+      body = new ErrorResponse(status, 'Internal server error', path);
+    }
+
+    httpAdapter.reply(res, body, status);
+  }
 }

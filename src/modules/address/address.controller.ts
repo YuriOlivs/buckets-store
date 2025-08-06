@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { AddressService } from './address.service';
 import { AddressCreateDTO } from './dto/address-create.dto';
 import { AdressUpdateDTO } from './dto/address-update.dto';
+import { STRINGS } from 'src/common/strings/global.strings';
 
 @Controller('address')
 export class AddressController {
@@ -9,7 +10,11 @@ export class AddressController {
 
   @Post()
   async create(@Body() createAddressDto: AddressCreateDTO) {
-    return await this.addressService.create(createAddressDto);
+    const address = await this.addressService.create(createAddressDto);
+    return {
+      message: STRINGS.entityCreated('Address'),
+      payload: address
+    }
   }
 
   @Get('/by-user/:id')
@@ -24,11 +29,19 @@ export class AddressController {
 
   @Patch('/:id')
   async update(@Param('id') id: string, @Body() updateAddressDto: AdressUpdateDTO) {
-    return await this.addressService.update(id, updateAddressDto);
+    const address = await this.addressService.update(id, updateAddressDto);
+    return {
+      message: STRINGS.entityUpdated('Address'),
+      payload: address
+    }
   }
 
   @Delete('/:id')
   async remove(@Param('id') id: string) {
-    return await this.addressService.remove(id);
+    const address = await this.addressService.remove(id);
+    return {
+      message: STRINGS.entityDeleted('Address'),
+      payload: address
+    }
   }
 }
