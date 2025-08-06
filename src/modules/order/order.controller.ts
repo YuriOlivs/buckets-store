@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseInterceptors } from '@nestjs/common';
 import OrderService from './order.service';
 import { OrderCreateDTO } from './dto/order-create.dto';
 import { STRINGS } from 'src/common/strings/global.strings';
 import OrderMapper from './dto/order.mapper';
 import { OrderStatusCreateDTO } from '../order-status/dto/order-status-create.dto';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('orders')
 export default class OrderController {
@@ -44,12 +45,14 @@ export default class OrderController {
   }
 
   @Get('/:id')
+  @UseInterceptors(CacheInterceptor)
   async findById(@Param('id') id: string) {
     const orderFound = await this.orderService.findOrderById(id);
     return OrderMapper.toDTO(orderFound);
   }
 
   @Get('/by-user/:id')
+  @UseInterceptors(CacheInterceptor)
   async findByUser(@Param('id') id: string) {
     const ordersFound = await this.orderService.findOrdersByUser(id);
     return ordersFound.map(order => OrderMapper.toDTO(order));

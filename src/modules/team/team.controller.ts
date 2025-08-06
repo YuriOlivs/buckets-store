@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, UseInterceptors } from "@nestjs/common";
 import TeamCreateDTO from "./dto/team-create.dto";
 import TeamMapper from "./dto/team.mapper";
 import TeamEntity from "./team.entity";
@@ -6,6 +6,7 @@ import TeamService from "./team.service";
 import { STRINGS } from "src/common/strings/global.strings";
 import ImageEntity from "../image/image.entity";
 import TeamUpdateDTO from "./dto/team-update.dto";
+import { CacheInterceptor } from "@nestjs/cache-manager";
 
 @Controller("/teams")
 export default class TeamController {
@@ -22,6 +23,7 @@ export default class TeamController {
    }
 
    @Get()
+   @UseInterceptors(CacheInterceptor)
    async getAllTeams() {
       const teamEntites = await this.service.getAllTeams();
       return teamEntites.map(TeamMapper.toDTO);

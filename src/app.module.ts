@@ -12,6 +12,8 @@ import { OrderStatusModule } from './modules/order-status/order-status.module';
 import { APP_FILTER } from '@nestjs/core';
 import { AddressModule } from './modules/address/address.module';
 import GlobalExceptionFilter from './common/filters/global-exception.filter';
+import { CacheModule } from '@nestjs/cache-manager';
+import { redisStore } from 'cache-manager-redis-yet';
 
 @Module({
   imports: [
@@ -22,6 +24,14 @@ import GlobalExceptionFilter from './common/filters/global-exception.filter';
     OrderModule,
     OrderItemModule,
     OrderStatusModule,
+    CacheModule.registerAsync({
+      useFactory: async () => ({
+        store: await redisStore({
+          ttl: 10 * 1000
+        }),
+      }),
+      isGlobal: true,
+    }),
     ConfigModule.forRoot({
       isGlobal: true
     }),
