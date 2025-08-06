@@ -13,6 +13,8 @@ export default class GlobalExceptionFilter implements ExceptionFilter {
     const req = ctx.getRequest();
     const path = httpAdapter.getRequestUrl(req);
 
+    console.error(exception);
+
     let status: number;
     let body: any;
 
