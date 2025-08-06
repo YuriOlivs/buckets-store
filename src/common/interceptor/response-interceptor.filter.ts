@@ -12,7 +12,13 @@ export class ResponseInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       map((data) => {
-        if (data instanceof HttpResponse) return data;
+        if (statusCode === 200 || statusCode === 204) {
+          return data;
+        }
+
+        if (data instanceof HttpResponse) {
+          return data;
+        }
 
         const { message, payload } = data || {};
         return new HttpResponse(statusCode, message ?? 'Success', payload ?? data);
