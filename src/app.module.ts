@@ -27,7 +27,7 @@ import { redisStore } from 'cache-manager-redis-yet';
     CacheModule.registerAsync({
       useFactory: async () => ({
         store: await redisStore({
-          ttl: 3600 * 1000
+          ttl: 10 * 1000
         }),
       }),
       isGlobal: true,
