@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors } from '@nestjs/common';
 import { OrderItemService } from './order-item.service';
 import OrderItemCreateDTO from './dto/order-item-create.dto';
 import OrderItemUpdateDTO from './dto/order-item-update.dto';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('order-item')
 export class OrderItemController {
@@ -13,11 +14,13 @@ export class OrderItemController {
   }
 
   @Get()
+  @UseInterceptors(CacheInterceptor)
   findAllOrderItems() {
     return this.orderItemService.findAllOrderItems();
   }
 
   @Get('/:id')
+  @UseInterceptors(CacheInterceptor)
   findOrderItemById(@Param('id') id: string) {
     return this.orderItemService.findOrderItemById(id);
   }

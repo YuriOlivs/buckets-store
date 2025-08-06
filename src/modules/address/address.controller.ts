@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors } from '@nestjs/common';
 import { AddressService } from './address.service';
 import { AddressCreateDTO } from './dto/address-create.dto';
 import { AdressUpdateDTO } from './dto/address-update.dto';
 import { STRINGS } from 'src/common/strings/global.strings';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('address')
 export class AddressController {
@@ -18,11 +19,13 @@ export class AddressController {
   }
 
   @Get('/by-user/:id')
+  @UseInterceptors(CacheInterceptor)
   async findByUser(@Param('id') id: string) {
     return await this.addressService.findByUser(id);
   }
 
   @Get('/:id')
+  @UseInterceptors(CacheInterceptor)
   async findById(@Param('id') id: string) {
     return await this.addressService.findById(id);
   }

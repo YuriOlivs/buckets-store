@@ -23,6 +23,7 @@ export default class ProductController {
    }
 
    @Get()
+   @UseInterceptors(CacheInterceptor)
    async getAllProducts(@Query() filters: ProductFilterDTO) {
       const productEntities = await this.service.getAllProducts(filters);
       return productEntities.map(ProductMapper.toDTO);
@@ -36,6 +37,7 @@ export default class ProductController {
    }
 
    @Get('/team/:teamId')
+   @UseInterceptors(CacheInterceptor)
    async getProductByTeam(@Param('teamId') teamId: string) {
       const products = await this.service.getProductByTeam(teamId);
       return products.map(ProductMapper.toDTO);
