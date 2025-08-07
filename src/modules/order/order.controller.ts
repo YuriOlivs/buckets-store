@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseInterceptors, HttpStatus } from '@nestjs/common';
 import OrderService from './order.service';
 import { OrderCreateDTO } from './dto/order-create.dto';
 import { STRINGS } from 'src/common/strings/global.strings';
 import OrderMapper from './dto/order.mapper';
 import { OrderStatusCreateDTO } from '../order-status/dto/order-status-create.dto';
 import { CacheInterceptor } from '@nestjs/cache-manager';
+import { EmptyListToNoContentInterceptor } from 'src/common/interceptor/empty-list-to-no-content.interceptor';
 
 @Controller('orders')
 export default class OrderController {
@@ -13,22 +14,22 @@ export default class OrderController {
   @Post()
   async create(@Body() orderCreateDTO: OrderCreateDTO) {
     const orderCreated = await this.orderService.createOrder(orderCreateDTO);
-    return { 
-      message: STRINGS.entityCreated('Order'), 
-      payload: OrderMapper.toDTO(orderCreated) 
+    return {
+      message: STRINGS.entityCreated('Order'),
+      payload: OrderMapper.toDTO(orderCreated)
 
     };
   }
 
   @Put('/update-status/:id')
   async updateStatus(
-    @Param('id') id: string, 
+    @Param('id') id: string,
     @Body() status: OrderStatusCreateDTO
   ) {
     const orderUpdated = await this.orderService.updateOrderStatus(id, status);
-    return { 
-      message: STRINGS.entityUpdated('Order'), 
-      payload: OrderMapper.toDTO(orderUpdated) 
+    return {
+      message: STRINGS.entityUpdated('Order'),
+      payload: OrderMapper.toDTO(orderUpdated)
     };
   }
 
@@ -38,9 +39,9 @@ export default class OrderController {
     @Param('addressId') addressId: string
   ) {
     const orderUpdated = await this.orderService.updateOrderAddress(id, addressId);
-    return { 
-      message: STRINGS.entityUpdated('Order'), 
-      payload: OrderMapper.toDTO(orderUpdated) 
+    return {
+      message: STRINGS.entityUpdated('Order'),
+      payload: OrderMapper.toDTO(orderUpdated)
     };
   }
 
@@ -52,7 +53,7 @@ export default class OrderController {
   }
 
   @Get('/by-user/:id')
-  @UseInterceptors(CacheInterceptor)
+  @UseInterceptors(CacheInterceptor, EmptyListToNoContentInterceptor)
   async findByUser(@Param('id') id: string) {
     const ordersFound = await this.orderService.findOrdersByUser(id);
     return ordersFound.map(order => OrderMapper.toDTO(order));
@@ -61,9 +62,9 @@ export default class OrderController {
   @Delete('/:id')
   async remove(@Param('id') id: string) {
     await this.orderService.cancelOrder(id);
-    return { 
-      message: STRINGS.entityDeleted('Order'), 
-      payload: { } 
-  };
+    return {
+      message: STRINGS.entityDeleted('Order'),
+      payload: {}
+    };
   }
 }
