@@ -4,14 +4,22 @@ import UserEntity from './user.entity';
 import UserMapper from './dto/user.mapper';
 import UserService from './user.service';
 import { STRINGS } from 'src/common/strings/global.strings';
+import { HashPasswordPipe } from 'src/common/pipe/hash-password.pipe';
 
 @Controller('/users')
 export default class UserController {
    constructor(private service: UserService) { }
 
    @Post()
-   async createUser(@Body() body: UserCreateDTO) {
-      const userCreated = await this.service.createUser(body);
+   async createUser(
+      @Body() { password, ...body }: UserCreateDTO,
+      @Body('password', HashPasswordPipe) hashedPassword: string
+   ) {
+      const userCreated = await this.service.createUser({ 
+         ...body, 
+         password: hashedPassword 
+      });
+
       return { 
          message: STRINGS.entityCreated('User'), 
          payload: UserMapper.toDTO(userCreated) 
