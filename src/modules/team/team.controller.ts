@@ -7,6 +7,7 @@ import { STRINGS } from "src/common/strings/global.strings";
 import ImageEntity from "../image/image.entity";
 import TeamUpdateDTO from "./dto/team-update.dto";
 import { CacheInterceptor } from "@nestjs/cache-manager";
+import { EmptyListToNoContentInterceptor } from "src/common/interceptor/empty-list-to-no-content.interceptor";
 
 @Controller("/teams")
 export default class TeamController {
@@ -23,7 +24,7 @@ export default class TeamController {
    }
 
    @Get()
-   @UseInterceptors(CacheInterceptor)
+   @UseInterceptors(CacheInterceptor, EmptyListToNoContentInterceptor)
    async getAllTeams() {
       const teamEntites = await this.service.getAllTeams();
       return teamEntites.map(TeamMapper.toDTO);

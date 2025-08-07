@@ -8,6 +8,7 @@ import ImageEntity from "../image/image.entity";
 import ProductFilterDTO from "./dto/product-filter.dto";
 import ProductUpdateDTO from "./dto/product-update.dto";
 import { CacheInterceptor } from "@nestjs/cache-manager";
+import { EmptyListToNoContentInterceptor } from "src/common/interceptor/empty-list-to-no-content.interceptor";
 
 @Controller('/products')
 export default class ProductController {
@@ -23,7 +24,7 @@ export default class ProductController {
    }
 
    @Get()
-   @UseInterceptors(CacheInterceptor)
+   @UseInterceptors(CacheInterceptor, EmptyListToNoContentInterceptor)
    async getAllProducts(@Query() filters: ProductFilterDTO) {
       const productEntities = await this.service.getAllProducts(filters);
       return productEntities.map(ProductMapper.toDTO);
@@ -37,7 +38,7 @@ export default class ProductController {
    }
 
    @Get('/team/:teamId')
-   @UseInterceptors(CacheInterceptor)
+   @UseInterceptors(CacheInterceptor, EmptyListToNoContentInterceptor)
    async getProductByTeam(@Param('teamId') teamId: string) {
       const products = await this.service.getProductByTeam(teamId);
       return products.map(ProductMapper.toDTO);

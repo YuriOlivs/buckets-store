@@ -4,6 +4,7 @@ import { AddressCreateDTO } from './dto/address-create.dto';
 import { AdressUpdateDTO } from './dto/address-update.dto';
 import { STRINGS } from 'src/common/strings/global.strings';
 import { CacheInterceptor } from '@nestjs/cache-manager';
+import { EmptyListToNoContentInterceptor } from 'src/common/interceptor/empty-list-to-no-content.interceptor';
 
 @Controller('address')
 export class AddressController {
@@ -19,7 +20,7 @@ export class AddressController {
   }
 
   @Get('/by-user/:id')
-  @UseInterceptors(CacheInterceptor)
+  @UseInterceptors(CacheInterceptor, EmptyListToNoContentInterceptor)
   async findByUser(@Param('id') id: string) {
     return await this.addressService.findByUser(id);
   }
