@@ -18,6 +18,10 @@ export default class UserService {
       return userFound;
    }
 
+   async findByEmail(email: string): Promise<UserEntity | null> {
+      return await this.repo.getByEmail(email);
+   }
+
    async createUser(dto: UserCreateDTO): Promise<UserEntity> {
       const user = new UserEntity(
          dto.name,

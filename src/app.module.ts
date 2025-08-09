@@ -14,6 +14,7 @@ import { AddressModule } from './modules/address/address.module';
 import GlobalExceptionFilter from './common/filters/global-exception.filter';
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { redisStore } from 'cache-manager-redis-yet';
       inject: [PostgresConfigService]
     }),
     AddressModule,
+    AuthModule,
   ],
   providers: [{
     provide: APP_FILTER,
