@@ -13,8 +13,8 @@ export class AddressController {
   constructor(private readonly addressService: AddressService) { }
 
   @Post()
-  async create(@Body() createAddressDto: AddressCreateDTO) {
-    const address = await this.addressService.create(createAddressDto);
+  async create(@Body() dto: AddressCreateDTO) {
+    const address = await this.addressService.create(dto);
     return {
       message: STRINGS.entityCreated('Address'),
       payload: address
