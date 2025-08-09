@@ -45,8 +45,4 @@ export class AddressCreateDTO {
 
    @IsUUID()
    user: string;
-
-   @ValidateNested({ each: true })
-   @Type(() => AddressCreateDTO)
-   address: AddressCreateDTO;
 }
