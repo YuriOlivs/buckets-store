@@ -1,19 +1,19 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UseInterceptors } from "@nestjs/common";
 import TeamCreateDTO from "./dto/team-create.dto";
 import TeamMapper from "./dto/team.mapper";
-import TeamEntity from "./team.entity";
 import TeamService from "./team.service";
 import { STRINGS } from "src/common/strings/global.strings";
-import ImageEntity from "../image/image.entity";
 import TeamUpdateDTO from "./dto/team-update.dto";
 import { CacheInterceptor } from "@nestjs/cache-manager";
 import { EmptyListToNoContentInterceptor } from "src/common/interceptor/empty-list-to-no-content.interceptor";
+import { AuthGuard } from "../auth/auth.guard";
 
 @Controller("/teams")
 export default class TeamController {
    constructor(private service: TeamService) { }
 
    @Post()
+   @UseGuards(AuthGuard)
    async createTeam(@Body() body: TeamCreateDTO) {
       const teamCreated = await this.service.createTeam(body);
       return { 
@@ -31,6 +31,7 @@ export default class TeamController {
    }
 
    @Put(':id')
+   @UseGuards(AuthGuard)
    async updateTeam(@Param('id') id: string, @Body() body: TeamUpdateDTO) {
       const updatedTeam = await this.service.updateTeam(id, body);
       return { 
@@ -41,6 +42,7 @@ export default class TeamController {
    }
 
    @Delete()
+   @UseGuards(AuthGuard)
    async deleteTeam(@Param('id') id: string) {
       await this.service.deleteTeam(id);
       return { 

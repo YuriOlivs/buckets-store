@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, UseInterceptors } from "@nestjs/common";
 import ProductCreateDTO from "./dto/product-create.dto";
 import ProductEntity from "./product.entity";
 import ProductMapper from "./dto/product.mapper";
@@ -9,12 +9,14 @@ import ProductFilterDTO from "./dto/product-filter.dto";
 import ProductUpdateDTO from "./dto/product-update.dto";
 import { CacheInterceptor } from "@nestjs/cache-manager";
 import { EmptyListToNoContentInterceptor } from "src/common/interceptor/empty-list-to-no-content.interceptor";
+import { AuthGuard } from "../auth/auth.guard";
 
 @Controller('/products')
 export default class ProductController {
    constructor(private service: ProductService) { }
 
    @Post()
+   @UseGuards(AuthGuard)
    async createProduct(@Body() body: ProductCreateDTO) {
       const productCreated = await this.service.createProduct(body);
       return { 
@@ -45,6 +47,7 @@ export default class ProductController {
    }
 
    @Put('/:id')
+   @UseGuards(AuthGuard)
    async updateProduct(@Param('id') id: string, @Body() body: ProductUpdateDTO) {
       const product = await this.service.updateProduct(id, body);
       return { 
@@ -54,6 +57,7 @@ export default class ProductController {
    }
 
    @Delete()
+   @UseGuards(AuthGuard)
    async deleteProduct(@Param('id') id: string) {
       await this.service.deleteProduct(id);
       return { 

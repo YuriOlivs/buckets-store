@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import UserCreateDTO from './dto/user-create.dto';
 import UserEntity from './user.entity';
 import UserMapper from './dto/user.mapper';
 import UserService from './user.service';
 import { STRINGS } from 'src/common/strings/global.strings';
 import { HashPasswordPipe } from 'src/common/pipe/hash-password.pipe';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('/users')
 export default class UserController {
@@ -33,6 +34,7 @@ export default class UserController {
    }
 
    @Put('/:id')
+   @UseGuards(AuthGuard)
    async updateUser(@Param('id') id: string, @Body() body: Partial<UserEntity>) {
       const updatedUser = await this.service.updateUser(id, body);
       return { 
@@ -42,6 +44,7 @@ export default class UserController {
    }
 
    @Delete('/:id')
+   @UseGuards(AuthGuard)
    async removeUser(@Param('id') id: string) {
       await this.service.deleteUser(id);
       return { 

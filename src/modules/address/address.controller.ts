@@ -1,11 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UseGuards } from '@nestjs/common';
 import { AddressService } from './address.service';
 import { AddressCreateDTO } from './dto/address-create.dto';
 import { AdressUpdateDTO } from './dto/address-update.dto';
 import { STRINGS } from 'src/common/strings/global.strings';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { EmptyListToNoContentInterceptor } from 'src/common/interceptor/empty-list-to-no-content.interceptor';
+import { AuthGuard } from '../auth/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('address')
 export class AddressController {
   constructor(private readonly addressService: AddressService) { }
