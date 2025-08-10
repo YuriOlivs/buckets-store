@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseInterceptors, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseInterceptors, HttpStatus, UseGuards, Req } from '@nestjs/common';
 import OrderService from './order.service';
 import { OrderCreateDTO } from './dto/order-create.dto';
 import { STRINGS } from 'src/common/strings/global.strings';
@@ -6,18 +6,25 @@ import OrderMapper from './dto/order.mapper';
 import { OrderStatusCreateDTO } from '../order-status/dto/order-status-create.dto';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { EmptyListToNoContentInterceptor } from 'src/common/interceptor/empty-list-to-no-content.interceptor';
+import { AuthGuard } from '../auth/auth.guard';
+import RequestWithUser from '../auth/dto/req-with-user.dto';
 
+@UseGuards(AuthGuard)
 @Controller('orders')
 export default class OrderController {
   constructor(private readonly orderService: OrderService) { }
 
   @Post()
-  async create(@Body() orderCreateDTO: OrderCreateDTO) {
-    const orderCreated = await this.orderService.createOrder(orderCreateDTO);
+  async create(
+    @Req() req: RequestWithUser,
+    @Body() orderCreateDTO: OrderCreateDTO
+  ) {
+    const userId = req.user.sub;
+    const orderCreated = await this.orderService.createOrder(userId, orderCreateDTO);
+
     return {
       message: STRINGS.entityCreated('Order'),
       payload: OrderMapper.toDTO(orderCreated)
-
     };
   }
 

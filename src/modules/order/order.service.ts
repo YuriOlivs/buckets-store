@@ -21,11 +21,11 @@ export default class OrderService {
     private addressService: AddressService
   ) { }
 
-  async createOrder(dto: OrderCreateDTO): Promise<OrderEntity> {
+  async createOrder(userId: string, dto: OrderCreateDTO): Promise<OrderEntity> {
     const orderItems: OrderItemEntity[] = [];
     let totalValue: number = 0;
 
-    const user = await this.userService.getUserById(dto.user);
+    const user = await this.userService.getUserById(userId);
     if (!user) throw new NotFoundException('User not found');
 
     const address = await this.addressService.findById(dto.address);
