@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { STRINGS } from '../strings/global.strings';
 
 @Injectable()
-export class UserIdGuard implements CanActivate {
+export class OwnershipGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> {

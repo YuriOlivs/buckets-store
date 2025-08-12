@@ -8,7 +8,7 @@ import { CacheInterceptor } from '@nestjs/cache-manager';
 import { EmptyListToNoContentInterceptor } from 'src/common/interceptor/empty-list-to-no-content.interceptor';
 import { AuthGuard } from '../auth/auth.guard';
 import RequestWithUser from '../auth/dto/req-with-user.dto';
-import { UserIdGuard } from 'src/common/guards/user-id.guard';
+import { OwnershipGuard } from 'src/common/guards/ownership.guard';
 
 @UseGuards(AuthGuard)
 @Controller('orders')
@@ -62,7 +62,7 @@ export default class OrderController {
   }
 
   @Get('/by-user/:id')
-  @UseGuards(UserIdGuard)
+  @UseGuards(OwnershipGuard)
   @UseInterceptors(CacheInterceptor, EmptyListToNoContentInterceptor)
   async findByUser(@Param('id') id: string) {
     const ordersFound = await this.orderService.findOrdersByUser(id);
