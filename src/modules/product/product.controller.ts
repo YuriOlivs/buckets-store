@@ -28,8 +28,7 @@ export default class ProductController {
    @Get()
    @UseInterceptors(CacheInterceptor, EmptyListToNoContentInterceptor)
    async getAllProducts(@Query() filters: ProductFilterDTO) {
-      const productEntities = await this.service.getAllProducts(filters);
-      return productEntities.map(ProductMapper.toDTO);
+      return await this.service.getAllProducts(filters);
    }
 
    @Get('/:id')

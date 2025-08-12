@@ -1,4 +1,4 @@
-import { IsEnum, IsNumber, IsOptional, IsPositive, IsString, IsUUID, Max, Min } from "class-validator";
+import { IsEnum, IsInt, IsNumber, IsOptional, IsPositive, IsString, IsUUID, Max, Min } from "class-validator";
 import { ProductCategory } from "../enum/product-category.enum";
 import { ProductSubcategory } from "../enum/product-subcategory.enum";
 import { Type } from "class-transformer";
@@ -32,4 +32,14 @@ export default class ProductFilterDTO {
    @Min(0)
    maxPrice?: number;
 
+   @IsOptional()
+   @IsInt()
+   @Min(1)
+   @Max(50)
+   limit?: number;
+
+   @IsOptional()
+   @IsInt()
+   @Min(1)
+   page?: number;
 } 
