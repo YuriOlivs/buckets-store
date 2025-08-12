@@ -6,6 +6,7 @@ import { OrderStatusEntity } from './order-status.entity';
 import OrderService from '../order/order.service';
 import { OrderStatusCodeEnum } from './enum/order-status-code.enum';
 import { OrderStatusTextEnum } from './enum/order-status-text.enum';
+import { STRINGS } from 'src/common/strings/global.strings';
 
 @Injectable()
 export class OrderStatusService {
@@ -18,7 +19,7 @@ export class OrderStatusService {
     const statusCode = dto.statusCode ?? OrderStatusCodeEnum.PENDING_PAYMENT;
     const statusText = dto.statusText ?? OrderStatusTextEnum.PENDING_PAYMENT;
     const order = await this.orderService.findOrderById(dto.order);
-    if (!order) throw new Error('Order not found');
+    if (!order) throw new Error(STRINGS.notFound('Order'));
 
     const orderStatus = new OrderStatusEntity(
       statusCode,
@@ -40,7 +41,7 @@ export class OrderStatusService {
 
   async removeOrderStatus(id: string) {
     const orderStatusFound = await this.repo.findById(id);
-    if (!orderStatusFound) throw new Error('OrderStatus not found');
+    if (!orderStatusFound) throw new Error(STRINGS.notFound('Order Status'));
 
     return this.repo.remove(orderStatusFound);
   }

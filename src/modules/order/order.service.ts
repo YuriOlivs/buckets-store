@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { OrderCreateDTO } from './dto/order-create.dto';
 import OrderRepository from './order.repository';
 import ProductService from '../product/product.service';
@@ -9,8 +9,8 @@ import { OrderStatusEntity } from '../order-status/order-status.entity';
 import { OrderStatusCodeEnum } from '../order-status/enum/order-status-code.enum';
 import { OrderStatusTextEnum } from '../order-status/enum/order-status-text.enum';
 import { OrderStatusCreateDTO } from '../order-status/dto/order-status-create.dto';
-import { AddressEntity } from '../address/address.entity';
 import { AddressService } from '../address/address.service';
+import { STRINGS } from 'src/common/strings/global.strings';
 
 @Injectable()
 export default class OrderService {
@@ -26,17 +26,17 @@ export default class OrderService {
     let totalValue: number = 0;
 
     const user = await this.userService.getUserById(userId);
-    if (!user) throw new NotFoundException('User not found');
+    if (!user) throw new NotFoundException(STRINGS.notFound('User'));
 
     const address = await this.addressService.findById(dto.address);
-    if (!address) throw new NotFoundException('Address not found');
+    if (!address) throw new NotFoundException(STRINGS.notFound('Address'));
 
     for (const item of dto.products) {
       const product = await this.productService.getProductById(item.product);
-      if (!product) throw new NotFoundException('Product not found');
+      if (!product) throw new NotFoundException(STRINGS.notFound('Product'));
 
       if (!await this.productService.buyProduct(product, item.quantity)) {
-        throw new BadRequestException('Product not available');
+        throw new BadRequestException(STRINGS.notAvailable('Product'));
       }
 
       const orderItem = new OrderItemEntity(
@@ -67,7 +67,7 @@ export default class OrderService {
 
   async updateOrderStatus(id: string, status: OrderStatusCreateDTO) {
     const order = await this.repo.findById(id);
-    if (!order) throw new NotFoundException('Order not found');
+    if (!order) throw new NotFoundException(STRINGS.notFound('Order'));
 
     const newStatus = new OrderStatusEntity(
       status.statusCode,
@@ -82,10 +82,10 @@ export default class OrderService {
 
   async updateOrderAddress(id: string, addressId: string) {
     const order = await this.repo.findById(id);
-    if (!order) throw new NotFoundException('Order not found');
+    if (!order) throw new NotFoundException(STRINGS.notFound('Order'));
 
     const address = await this.addressService.findById(addressId);
-    if (!address) throw new NotFoundException('Address not found');
+    if (!address) throw new NotFoundException(STRINGS.notFound('Address'));
 
     order.address = address;
     return this.repo.save(order);
@@ -93,21 +93,23 @@ export default class OrderService {
 
   async findOrdersByUser(id: string): Promise<OrderEntity[]> {
     const user = await this.userService.getUserById(id);
-    if (!user) throw new NotFoundException('User not found');
+    if (!user) throw new NotFoundException(STRINGS.notFound('User'));
 
     return await this.repo.findOrdersByUser(id);
   }
 
   async findOrderById(id: string): Promise<OrderEntity> {
     const order = await this.repo.findById(id);
-    if (!order) throw new NotFoundException('Order not found');
+    if (!order) throw new NotFoundException(STRINGS.notFound('Order'));
 
     return order;
   }
 
-  async cancelOrder(id: string) {
+  async cancelOrder(id: string, userId: string) {
     const orderFound = await this.repo.findById(id);
-    if (!orderFound) throw new NotFoundException('Order not found');
+    if (!orderFound) throw new NotFoundException(STRINGS.notFound('Order'));
+
+    if (orderFound.user.id !== userId) throw new ForbiddenException(STRINGS.notAuthorized());
 
     const canceledStatus = new OrderStatusEntity(
       OrderStatusCodeEnum.CANCELED,
