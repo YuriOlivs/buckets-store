@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { OrderCreateDTO } from './dto/order-create.dto';
 import OrderRepository from './order.repository';
 import ProductService from '../product/product.service';
@@ -109,7 +109,7 @@ export default class OrderService {
     const orderFound = await this.repo.findById(id);
     if (!orderFound) throw new NotFoundException(STRINGS.notFound('Order'));
 
-    if (orderFound.user.id !== userId) throw new UnauthorizedException(STRINGS.notAuthorized());
+    if (orderFound.user.id !== userId) throw new ForbiddenException(STRINGS.notAuthorized());
 
     const canceledStatus = new OrderStatusEntity(
       OrderStatusCodeEnum.CANCELED,

@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { STRINGS } from '../strings/global.strings';
 
@@ -12,7 +12,7 @@ export class UserIdGuard implements CanActivate {
     const userIdToken = request.user.id;
 
     if (userIdParam !== userIdToken) {
-      throw new UnauthorizedException(STRINGS.notAuthorized());
+      throw new ForbiddenException(STRINGS.notAuthorized());
     }
 
     return true;
