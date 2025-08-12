@@ -20,7 +20,7 @@ export default class TeamService {
 
    async getTeamById(id: string): Promise<TeamEntity | null> {
       const teamFound = await this.repo.getById(id);
-      if (!teamFound) throw new NotFoundException('Team not found');
+      if (!teamFound) throw new NotFoundException(STRINGS.notFound('Team'));
 
       return teamFound;
    }
@@ -46,7 +46,7 @@ export default class TeamService {
 
    async updateTeam(id: string, teamData: TeamUpdateDTO): Promise<TeamEntity> {
       const teamFound = await this.repo.getById(id);
-      if (!teamFound) throw new NotFoundException('Team not found');
+      if (!teamFound) throw new NotFoundException(STRINGS.notFound('Team'));
 
       const { name, logo, ...rest } = teamData;
 
@@ -78,7 +78,7 @@ export default class TeamService {
 
    async deleteTeam(id: string) {
       const teamFound = await this.repo.getById(id);
-      if (!teamFound) throw new NotFoundException('Team not found');
+      if (!teamFound) throw new NotFoundException(STRINGS.notFound('Team'));
 
       return await this.repo.remove(teamFound);
    }

@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import ImageRepository from "./image.repository";
 import ImageEntity from "./image.entity";
+import { STRINGS } from "src/common/strings/global.strings";
 
 @Injectable()
 export default class ImageService {
@@ -43,7 +44,7 @@ export default class ImageService {
 
    async deleteTeam(id: string): Promise<ImageEntity> {
       const imageFound = await this.repo.getById(id);
-      if (!imageFound) throw new NotFoundException('Image not found');
+      if (!imageFound) throw new NotFoundException(STRINGS.notFound('Image'));
       
       return await this.repo.remove(imageFound);
    }

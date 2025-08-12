@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import ProductEntity from "./product.entity";
 import ProductRepository from "./product.repository";
 import TeamService from "../team/team.service";
@@ -7,6 +7,7 @@ import ImageEntity from "../image/image.entity";
 import ProductCreateDTO from "./dto/product-create.dto";
 import ProductFilterDTO from "./dto/product-filter.dto";
 import ProductUpdateDTO from "./dto/product-update.dto";
+import { STRINGS } from "src/common/strings/global.strings";
 
 @Injectable()
 export default class ProductService {
@@ -29,7 +30,7 @@ export default class ProductService {
 
    async getProductById(id: string): Promise<ProductEntity> {
       const productFound = await this.repo.getById(id);
-      if (!productFound) throw new NotFoundException('Product not found');
+      if (!productFound) throw new NotFoundException(STRINGS.notFound('Product'));
 
       const images = await this.imgService.getImagesByProduct(productFound.id);
       if (images) productFound.images = images;
@@ -39,7 +40,7 @@ export default class ProductService {
 
    async getProductByTeam(id: string): Promise<ProductEntity[]> {
       const teamFound = await this.teamService.getTeamById(id);
-      if (!teamFound) throw new NotFoundException('Team not found');
+      if (!teamFound) throw new NotFoundException(STRINGS.notFound('Team'));
 
       const products = await this.repo.getByTeam(id);
 
@@ -56,7 +57,7 @@ export default class ProductService {
       const productImages = dto.images.map(image => new ImageEntity(image.url, image.desc));
 
       const teamFound = await this.teamService.getTeamById(dto.team);
-      if (!teamFound) throw new NotFoundException('Team not found');
+      if (!teamFound) throw new NotFoundException(STRINGS.notFound('Team'));
 
       const product = new ProductEntity(
          dto.name,
@@ -101,14 +102,14 @@ export default class ProductService {
 
    async updateProduct(id: string, productData: ProductUpdateDTO): Promise<ProductEntity> {
       const productFound = await this.repo.getById(id);
-      if (!productFound) throw new NotFoundException('Product not found');
+      if (!productFound) throw new NotFoundException(STRINGS.notFound('Product'));
 
       const { team, ...rest } = productData;
       Object.assign(productFound, rest);
 
       if (team) {
          const teamFound = await this.teamService.getTeamById(team);
-         if (!teamFound) throw new NotFoundException('Team not found');
+         if (!teamFound) throw new NotFoundException(STRINGS.notFound('Team'));
 
          productFound.team = teamFound;
       }
@@ -118,8 +119,9 @@ export default class ProductService {
 
    async deleteProduct(id: string) {
       const productFound = await this.repo.getById(id);
-      if (!productFound) throw new NotFoundException('Product not found');
+      if (!productFound) throw new NotFoundException(STRINGS.notFound('Product'));
 
       return await this.repo.remove(productFound);
    }
 }
+
