@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { useContainer } from 'class-validator';
-import { ResponseInterceptor } from './common/interceptor/response-interceptor.filter';
 import { EmptyListToNoContentInterceptor } from './common/interceptor/empty-list-to-no-content.interceptor';
 
 async function bootstrap() {
@@ -15,7 +14,7 @@ async function bootstrap() {
     })
   );
 
-  app.useGlobalInterceptors(new ResponseInterceptor(), new EmptyListToNoContentInterceptor());
+  app.useGlobalInterceptors(new EmptyListToNoContentInterceptor());
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
