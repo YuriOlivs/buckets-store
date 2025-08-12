@@ -8,6 +8,7 @@ import { CacheInterceptor } from '@nestjs/cache-manager';
 import { EmptyListToNoContentInterceptor } from 'src/common/interceptor/empty-list-to-no-content.interceptor';
 import { AuthGuard } from '../auth/auth.guard';
 import RequestWithUser from '../auth/dto/req-with-user.dto';
+import { UserIdGuard } from 'src/common/guards/user-id.guard';
 
 @UseGuards(AuthGuard)
 @Controller('orders')
@@ -46,6 +47,7 @@ export default class OrderController {
     @Param('addressId') addressId: string
   ) {
     const orderUpdated = await this.orderService.updateOrderAddress(id, addressId);
+
     return {
       message: STRINGS.entityUpdated('Order'),
       payload: OrderMapper.toDTO(orderUpdated)
@@ -60,6 +62,7 @@ export default class OrderController {
   }
 
   @Get('/by-user/:id')
+  @UseGuards(UserIdGuard)
   @UseInterceptors(CacheInterceptor, EmptyListToNoContentInterceptor)
   async findByUser(@Param('id') id: string) {
     const ordersFound = await this.orderService.findOrdersByUser(id);
@@ -67,8 +70,12 @@ export default class OrderController {
   }
 
   @Delete('/:id')
-  async remove(@Param('id') id: string) {
-    await this.orderService.cancelOrder(id);
+  async remove(
+    @Req() req: RequestWithUser,
+    @Param('id') id: string
+  ) {
+    await this.orderService.cancelOrder(id, req.user.sub);
+
     return {
       message: STRINGS.entityDeleted('Order'),
       payload: {}

@@ -3,4 +3,7 @@ export const STRINGS = {
    entityUpdated: (field: string) => `${field} updated sucessfully`,
    entityDeleted: (field: string) => `${field} deleted sucessfully`,
    alreadyExists: (field: string) => `${field} already exists`,
+   notFound: (field: string) => `${field} not found`,
+   notAvailable: (field: string) => `${field} not available`,
+   notAuthorized: () => `User not authorized`
 }
