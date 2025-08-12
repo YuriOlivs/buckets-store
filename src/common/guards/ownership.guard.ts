@@ -11,9 +11,7 @@ export class OwnershipGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<RequestWithUser>();
     const userIdParam = request.params.id;
     const userIdToken = request.user.sub;
-
-    console.log(userIdParam, userIdToken);
-
+    
     if (userIdParam !== userIdToken) {
       throw new ForbiddenException(STRINGS.notAuthorized());
     }
