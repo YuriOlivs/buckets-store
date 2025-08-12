@@ -21,13 +21,13 @@ export default class ProductFilterDTO {
    team?: string;
 
    @IsOptional()
-   @Type(() => Number)   // <- garante que será convertido para number
+   @Type(() => Number)
    @IsNumber()
    @Min(0)
    minPrice?: number;
 
    @IsOptional()
-   @Type(() => Number)   // <- mesma coisa aqui
+   @Type(() => Number)
    @IsNumber()
    @Min(0)
    maxPrice?: number;
@@ -36,10 +36,12 @@ export default class ProductFilterDTO {
    @IsInt()
    @Min(1)
    @Max(50)
+   @Type(() => Number)
    limit?: number;
 
    @IsOptional()
    @IsInt()
    @Min(1)
+   @Type(() => Number)
    page?: number;
 } 
