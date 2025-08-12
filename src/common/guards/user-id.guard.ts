@@ -1,5 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Observable } from 'rxjs';
+import { STRINGS } from '../strings/global.strings';
 
 @Injectable()
 export class UserIdGuard implements CanActivate {
@@ -11,7 +12,7 @@ export class UserIdGuard implements CanActivate {
     const userIdToken = request.user.id;
 
     if (userIdParam !== userIdToken) {
-      throw new UnauthorizedException(`You don't have permission to access this resource.`);
+      throw new UnauthorizedException(STRINGS.notAuthorized());
     }
 
     return true;
