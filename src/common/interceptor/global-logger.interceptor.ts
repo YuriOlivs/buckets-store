@@ -10,8 +10,6 @@ export class GlobalLoggerInterceptor implements NestInterceptor {
     const req = context.switchToHttp().getRequest<Request | RequestWithUser>();
     const res = context.switchToHttp().getResponse<Response>();
 
-    this.logger.log(`${req.method} ${req.path}`);
-
     const instant = Date.now();
 
     return next.handle().pipe(

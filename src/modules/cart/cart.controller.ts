@@ -20,7 +20,7 @@ export class CartController {
     }
   }
 
-  @Get(':user_id')
+  @Get('/:user_id')
   async findByUser(@Param('user_id') userId: string) {
     return await this.cartService.findByUser(userId);
   }
