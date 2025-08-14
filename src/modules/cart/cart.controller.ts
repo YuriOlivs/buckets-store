@@ -2,6 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CartService } from './cart.service';
 import { CartItemCreateDTO } from './dto/cart-item/cart-item-create.dto';
 import { CartItemQuantityDTO } from './dto/cart-item/cart-item-quantity.dto';
+import CartMapper from './dto/cart/cart.mapper';
+import { STRINGS } from 'src/common/strings/global.strings';
 @Controller('cart')
 export class CartController {
   constructor(private readonly cartService: CartService) { }
@@ -11,7 +13,11 @@ export class CartController {
     @Param('user_id') userId: string,
     @Body() dto: CartItemCreateDTO
   ) {
-    return await this.cartService.addItemToCart(userId, dto);
+    const cartUpdated = await this.cartService.addItemToCart(userId, dto);
+    return {
+      message: `Item added to cart successfully`,
+      payload: CartMapper.toDTO(cartUpdated)
+    }
   }
 
   @Get(':user_id')

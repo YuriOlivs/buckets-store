@@ -15,12 +15,16 @@ export default class CartRepository {
 
    async findByUser(userId: string): Promise<CartEntity | null> {
       return await this.cartRepository.findOne({
-         where: { user: { id: userId } }
+         where: { user: { id: userId } },
+         relations: ['cartItems'],
       });
    }
 
    async findById(id: string): Promise<CartEntity | null> {
-      return await this.cartRepository.findOne({ where: { id } });
+      return await this.cartRepository.findOne({ 
+         where: { id },
+         relations: ['cartItems'],
+      });
    }
 
    async save(cart: CartEntity): Promise<CartEntity> {

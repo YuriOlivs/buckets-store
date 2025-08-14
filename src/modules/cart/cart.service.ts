@@ -30,7 +30,7 @@ export class CartService {
     return cartFound;
   }
 
-  async addItemToCart(userId: string, dto: CartItemCreateDTO) {
+  async addItemToCart(userId: string, dto: CartItemCreateDTO): Promise<CartEntity> {
     const user = await this.userService.getUserById(userId);
     if (!user) throw new BadRequestException(STRINGS.notFound('User'));
 
@@ -45,10 +45,13 @@ export class CartService {
       product.price, 
       cart
     );
+    
+    cart.cartItems = [cartItem];
+    cart.totalValue = Number(cart.totalValue) + Number(product.price) * Number(dto.quantity);
+    console.log(cart);
 
-    cart.cartItems.push(cartItem);
-    cart.totalValue += cartItem.salePrice * cartItem.quantity;
-
+    const sla = await this.repo.save(cart);
+    console.log(sla);
     return await this.repo.save(cart);
   }
 
