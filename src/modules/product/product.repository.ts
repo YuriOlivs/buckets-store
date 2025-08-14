@@ -15,7 +15,7 @@ export default class ProductRepository {
       return await this.repository.save(product);
    }
 
-   async getAll(filters: ProductFilterDTO): Promise<ProductEntity[]> {
+   async getAll(filters: ProductFilterDTO): Promise<[ProductEntity[], number]> {
       const where: FindOptionsWhere<ProductEntity> = {};
 
       if (filters.category) { where.category = filters.category; }
@@ -30,13 +30,24 @@ export default class ProductRepository {
          where.price = LessThanOrEqual(filters.maxPrice);
       }
 
-      const products = await this.repository.find({ where });
+      const page = filters.page || 1;
+      const limit = filters.limit || 50;
 
+      const [products, total] = await this.repository.findAndCount({
+         where,
+         skip: (page - 1) * limit,
+         take: limit,
+         order: { createdAt: 'DESC' }
+      });
+
+      let filteredProducts = products;
       if (filters.name) {
-         return products.filter(product => rankedSearch(product.name, filters.name) > 0.85);
+         filteredProducts = products.filter(
+            product => rankedSearch(product.name, filters.name) > 0.85
+         );
       }
 
-      return products;
+      return [filteredProducts, total];
    }
 
    async getById(id: string): Promise<ProductEntity | null> {

@@ -8,6 +8,9 @@ import ProductCreateDTO from "./dto/product-create.dto";
 import ProductFilterDTO from "./dto/product-filter.dto";
 import ProductUpdateDTO from "./dto/product-update.dto";
 import { STRINGS } from "src/common/strings/global.strings";
+import PagedResponseDTO from "src/common/dto/paged-response.dto";
+import ProductMapper from "./dto/product.mapper";
+import ProductResponseDTO from "./dto/product-response.dto";
 
 @Injectable()
 export default class ProductService {
@@ -17,15 +20,23 @@ export default class ProductService {
       private imgService: ImageService
    ) { }
 
-   async getAllProducts(filters: ProductFilterDTO): Promise<ProductEntity[]> {
-      const products = await this.repo.getAll(filters);
+   async getAllProducts(filters: ProductFilterDTO): Promise<PagedResponseDTO<ProductResponseDTO>> {
+      const [products, total] = await this.repo.getAll(filters);
 
       for (const product of products) {
          const images = await this.imgService.getImagesByProduct(product.id);
          if (images) product.images = images;
       }
 
-      return products;
+      const page = filters.page ?? 1;
+      const limit = filters.limit ?? 50;
+
+      return new PagedResponseDTO(
+         products.map(ProductMapper.toDTO),
+         total,
+         page,
+         limit
+      );
    }
 
    async getProductById(id: string): Promise<ProductEntity> {
