@@ -1,5 +1,5 @@
 import UserEntity from "src/modules/user/user.entity";
-import { CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { CartItemEntity } from "./cart-item.entity";
 
 @Entity('carts')
@@ -10,6 +10,9 @@ export default class CartEntity {
    @OneToOne(() => UserEntity, user => user.cart)
    @JoinColumn({ name: 'user_id' })
    user: UserEntity;
+
+   @Column({ name: 'total_value', type: 'numeric', precision: 10, scale: 2, nullable: false })
+   totalValue: number;
 
    @OneToMany(
       () => CartItemEntity, cartItem => cartItem.cart,
@@ -26,7 +29,11 @@ export default class CartEntity {
    @DeleteDateColumn({ name: 'deleted_at' })
    deletedAt: Date;
 
-   constructor(user: UserEntity) {
+   constructor(
+      user: UserEntity,
+      totalValue?: number
+   ) {
       this.user = user;
+      this.totalValue = totalValue || 0;
    }
 }

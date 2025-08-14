@@ -27,6 +27,10 @@ export default class CartRepository {
       return await this.cartRepository.save(cart);
    }
 
+   async saveItem(item: CartItemEntity): Promise<CartItemEntity> {
+      return await this.cartItemRepository.save(item);
+   }
+
    async remove(cart: CartEntity): Promise<CartEntity> {
       return await this.cartRepository.remove(cart);
    }

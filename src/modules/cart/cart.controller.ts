@@ -1,22 +1,35 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { CartService } from './cart.service';
-import { CartUpdateDTO } from './dto/cart/cart-update.dto';
+import { CartItemCreateDTO } from './dto/cart-item/cart-item-create.dto';
+import { CartItemQuantityDTO } from './dto/cart-item/cart-item-quantity.dto';
 @Controller('cart')
 export class CartController {
   constructor(private readonly cartService: CartService) { }
 
-  @Get('id')
-  findByUser(@Param('id') id: string) {
-    return this.cartService.findByUser(id);
+  @Post('/add-item/:user_id')
+  async addItemToCart(
+    @Param('user_id') userId: string,
+    @Body() dto: CartItemCreateDTO
+  ) {
+    return await this.cartService.addItemToCart(userId, dto);
   }
 
-  @Patch('/:id')
-  update(@Param('id') id: string, @Body() dto: CartUpdateDTO) {
-    return this.cartService.update(id, dto);
+  @Get(':user_id')
+  async findByUser(@Param('user_id') userId: string) {
+    return await this.cartService.findByUser(userId);
   }
 
-  @Delete('/:id')
-  remove(@Param('id') id: string) {
-    return this.cartService.remove(id);
+  @Patch('/adjust-quantity/:user_id/:item_item')
+  async update(
+    @Param('id') userId: string, 
+    @Param('item_id') itemId: string,
+    @Body('quantity') quantity: CartItemQuantityDTO
+  ) {
+    return await this.cartService.adjustQuantity(userId, itemId, quantity);
+  }
+
+  @Delete('/clear-cart/:user_id')
+  async clearCart(@Param('user_id') userId: string) {
+    return await this.cartService.clearCart(userId);
   }
 }
