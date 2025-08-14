@@ -34,8 +34,6 @@ export class CartService {
     const user = await this.userService.getUserById(userId);
     if (!user) throw new BadRequestException(STRINGS.notFound('User'));
 
-    console.log('------------------------')
-    console.log(dto)
     const product = await this.productService.getProductById(dto.product);
     if (!product) throw new BadRequestException(STRINGS.notFound('Product'));
 
