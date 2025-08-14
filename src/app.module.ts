@@ -16,6 +16,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
 import { AuthModule } from './modules/auth/auth.module';
 import { GlobalLoggerInterceptor } from './common/interceptor/global-logger.interceptor';
+import { CartModule } from './modules/cart/cart.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { GlobalLoggerInterceptor } from './common/interceptor/global-logger.inte
     }),
     AddressModule,
     AuthModule,
+    CartModule,
   ],
   providers: [
     {

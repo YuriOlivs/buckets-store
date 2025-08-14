@@ -4,6 +4,7 @@ import { ProductCategory } from "./enum/product-category.enum";
 import { ProductSubcategory } from "./enum/product-subcategory.enum";
 import TeamEntity from "../team/team.entity";
 import { OrderItemEntity } from "../order-item/order-item.entity";
+import { CartItemEntity } from "../cart/entities/cart-item.entity";
 
 @Entity({ name: 'products' })
 export default class ProductEntity {
@@ -37,6 +38,9 @@ export default class ProductEntity {
 
    @OneToMany(() => OrderItemEntity, orderItem => orderItem.product)
    orderItems: OrderItemEntity[];
+
+   @OneToMany(() => CartItemEntity, cartItem => cartItem.product)
+   cartItems: CartItemEntity[];
 
    @CreateDateColumn({ name: 'created_at' })
    createdAt: string;
