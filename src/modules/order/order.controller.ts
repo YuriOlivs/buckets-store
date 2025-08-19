@@ -18,7 +18,7 @@ export default class OrderController {
   @Post()
   async create(
     @Req() req: RequestWithUser,
-    @Body() orderCreateDTO: OrderCreateDTO
+    @Body() orderCreateDTO: OrderCreateDTO,
   ) {
     const userId = req.user.sub;
     const orderCreated = await this.orderService.createOrder(userId, orderCreateDTO);

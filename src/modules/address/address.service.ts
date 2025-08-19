@@ -32,11 +32,17 @@ export class AddressService {
   }
 
   async findByUser(id: string) {
-    return await this.repo.findByUser(id);
+    const addressFound = await this.repo.findByUser(id);
+    if(!addressFound) throw new NotFoundException(STRINGS.notFound('Address'));
+
+    return addressFound;
   }
 
   async findById(id: string) {
-    return await this.repo.findById(id);
+    const addressFound = await this.repo.findById(id);
+    if(!addressFound) throw new NotFoundException(STRINGS.notFound('Address'));
+    
+    return addressFound;
   }
 
   async update(id: string, dto: AdressUpdateDTO) {

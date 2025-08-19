@@ -56,6 +56,13 @@ export class CartService {
     return cartFound;
   }
 
+  async findById(id: string): Promise<CartEntity> {
+    const cartFound = await this.repo.findById(id);
+    if (!cartFound) throw new BadRequestException(STRINGS.notFound('Cart'));
+    
+    return cartFound;
+  }
+
   async update(userId: string, dto: CartUpdateDTO) {
     const user = await this.userService.getUserById(userId);
     if (!user) throw new BadRequestException(STRINGS.notFound('User'));

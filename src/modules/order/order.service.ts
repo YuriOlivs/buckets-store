@@ -11,6 +11,7 @@ import UserService from '../user/user.service';
 import { OrderCreateDTO } from './dto/order-create.dto';
 import { OrderEntity } from './order.entity';
 import OrderRepository from './order.repository';
+import { CartService } from '../cart/cart.service';
 
 @Injectable()
 export default class OrderService {
@@ -18,7 +19,8 @@ export default class OrderService {
     private repo: OrderRepository,
     private productService: ProductService,
     private userService: UserService,
-    private addressService: AddressService
+    private addressService: AddressService,
+    private cartService: CartService
   ) { }
 
   async createOrder(userId: string, dto: OrderCreateDTO): Promise<OrderEntity> {
@@ -26,27 +28,18 @@ export default class OrderService {
     let totalValue: number = 0;
 
     const user = await this.userService.getUserById(userId);
-    if (!user) throw new NotFoundException(STRINGS.notFound('User'));
-
     const address = await this.addressService.findById(dto.address);
-    if (!address) throw new NotFoundException(STRINGS.notFound('Address'));
+    const cart = await this.cartService.findById(dto.cart);
 
-    for (const item of dto.products) {
-      const product = await this.productService.getProductById(item.product);
-      if (!product) throw new NotFoundException(STRINGS.notFound('Product'));
-
-      if (!await this.productService.buyProduct(product, item.quantity)) {
-        throw new BadRequestException(STRINGS.notAvailable('Product'));
-      }
-
+    for (const item of cart.cartItems) {
       const orderItem = new OrderItemEntity(
-        product,
+        item.product,
         item.quantity,
-        product.price
+        item.product.price
       );
 
-      totalValue += orderItem.salePrice * orderItem.quantity;
       orderItems.push(orderItem);
+      totalValue += orderItem.salePrice * orderItem.quantity;
     }
 
     const orderStatus = new OrderStatusEntity(
@@ -62,6 +55,7 @@ export default class OrderService {
       orderStatus,
       address
     );
+
     return await this.repo.save(order);
   }
 
