@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { OrderEntity } from "../order/order.entity";
-import { OrderStatusTextEnum } from "./enum/order-status-text.enum";
+import { OrderEntity } from "../order/entities/order.entity";
 import { OrderStatusCodeEnum } from "./enum/order-status-code.enum";
+import { OrderStatusTextEnum } from "./enum/order-status-text.enum";
 
 @Entity({ name: "order_status" })
 export class OrderStatusEntity {

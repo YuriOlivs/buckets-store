@@ -11,7 +11,6 @@ import { AddressModule } from './modules/address/address.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CartModule } from './modules/cart/cart.module';
 import { ImageModule } from './modules/image/image.module';
-import { OrderItemModule } from './modules/order-item/order-item.module';
 import { OrderStatusModule } from './modules/order-status/order-status.module';
 import { OrderModule } from './modules/order/order.module';
 import { ProductModule } from './modules/product/product.module';
@@ -25,7 +24,6 @@ import { UserModule } from './modules/user/user.module';
     TeamModule,
     ImageModule,
     OrderModule,
-    OrderItemModule,
     OrderStatusModule,
     CacheModule.registerAsync({
       useFactory: async () => ({

@@ -6,8 +6,8 @@ import { STRINGS } from 'src/common/strings/global.strings';
 import { AuthGuard } from '../auth/auth.guard';
 import RequestWithUser from '../auth/dto/req-with-user.dto';
 import { OrderStatusCreateDTO } from '../order-status/dto/order-status-create.dto';
-import { OrderCreateDTO } from './dto/order-create.dto';
-import OrderMapper from './dto/order.mapper';
+import { OrderCreateDTO } from './dto/order/order-create.dto';
+import OrderMapper from './dto/order/order.mapper';
 import OrderService from './order.service';
 
 @UseGuards(AuthGuard)

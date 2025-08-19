@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AddressModule } from '../address/address.module';
+import { CartModule } from '../cart/cart.module';
 import { ProductModule } from '../product/product.module';
 import { UserModule } from '../user/user.module';
+import { OrderEntity } from './entities/order.entity';
 import OrderController from './order.controller';
-import { OrderEntity } from './order.entity';
 import OrderRepository from './order.repository';
 import OrderService from './order.service';
-import { CartModule } from '../cart/cart.module';
 
 @Module({
   imports: [
@@ -21,4 +21,4 @@ import { CartModule } from '../cart/cart.module';
   controllers: [OrderController],
   providers: [OrderService, OrderRepository],
 })
-export class OrderModule {}
+export class OrderModule { }

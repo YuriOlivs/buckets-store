@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { OrderEntity } from "../order/order.entity";
-import ProductEntity from "../product/product.entity";
+import ProductEntity from "../../product/product.entity";
+import { OrderEntity } from "./order.entity";
 
 @Entity({ name: 'order_items' })
 export class OrderItemEntity {
@@ -39,6 +39,6 @@ export class OrderItemEntity {
       this.product = product;
       this.quantity = quantity;
       this.salePrice = salePrice;
-      if(order)this.order = order;
+      if (order) this.order = order;
    }
 }
