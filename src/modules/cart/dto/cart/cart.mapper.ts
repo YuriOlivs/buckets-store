@@ -9,7 +9,7 @@ export default class CartMapper {
       return new CartResponseDTO(cart.totalValue, items);
    }
 
-   private static itemToDTO(item: CartItemEntity) {
+   static itemToDTO(item: CartItemEntity) {
       const product = ProductMapper.toDTO(item.product);
       return new CartItemResponseDTO(
          item.id,

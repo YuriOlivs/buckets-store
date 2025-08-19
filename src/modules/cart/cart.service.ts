@@ -68,7 +68,7 @@ export class CartService {
     return await this.repo.save(cartFound);
   }
 
-  async adjustQuantity(userId: string, itemId: string, quantity: CartItemQuantityDTO | number) {
+  async adjustQuantity(userId: string, itemId: string, quantity: number) {
     const user = await this.userService.getUserById(userId);
     if (!user) throw new BadRequestException(STRINGS.notFound('User'));
 
@@ -78,7 +78,8 @@ export class CartService {
     const cartItemFound = cartFound.cartItems.find(item => item.id === itemId);
     if (!cartItemFound) throw new BadRequestException(STRINGS.notFound('Cart item'));
 
-    cartItemFound.quantity = quantity as number;
+    if (cartItemFound.quantity === quantity) return cartItemFound;
+    cartItemFound.quantity = quantity;
     
     return await this.repo.saveItem(cartItemFound);
   }

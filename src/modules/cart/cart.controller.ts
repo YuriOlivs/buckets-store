@@ -28,11 +28,12 @@ export class CartController {
 
   @Patch('/adjust-quantity/:user_id/:item_id')
   async update(
-    @Param('id') userId: string,
+    @Param('user_id') userId: string,
     @Param('item_id') itemId: string,
-    @Body('quantity') quantity: CartItemQuantityDTO
+    @Body() dto: CartItemQuantityDTO
   ) {
-    return await this.cartService.adjustQuantity(userId, itemId, quantity);
+    const cartUpdated = await this.cartService.adjustQuantity(userId, itemId, dto.quantity);
+    return CartMapper.itemToDTO(cartUpdated);
   }
 
   @Delete('/clear-cart/:user_id')
