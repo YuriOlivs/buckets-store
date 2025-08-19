@@ -6,7 +6,7 @@ import { CartResponseDTO } from "./cart-response.dto";
 export default class CartMapper {
    static toDTO(cart: CartEntity) {
       const items = cart.cartItems.map(item => CartMapper.itemToDTO(item));
-      return new CartResponseDTO(cart.totalValue, items);
+      return new CartResponseDTO(cart.id, cart.totalValue, items);
    }
 
    static itemToDTO(item: CartItemEntity) {
