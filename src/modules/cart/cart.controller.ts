@@ -25,7 +25,7 @@ export class CartController {
     return await this.cartService.findByUser(userId);
   }
 
-  @Patch('/adjust-quantity/:user_id/:item_item')
+  @Patch('/adjust-quantity/:user_id/:item_id')
   async update(
     @Param('id') userId: string, 
     @Param('item_id') itemId: string,

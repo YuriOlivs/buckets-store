@@ -40,6 +40,10 @@ export default class CartRepository {
    }
 
    async clearCart(id: string): Promise<void> {
+      const cart = await this.findById(id);
+      if (!cart) throw new Error('Cart not found');
+      cart.totalValue = 0;
+      await this.cartRepository.save(cart);
       await this.cartItemRepository.delete({ cart: { id } });
    }
 }

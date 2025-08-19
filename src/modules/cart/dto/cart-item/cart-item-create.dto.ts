@@ -1,4 +1,4 @@
-import { IsNumber, IsPositive, IsUUID } from "class-validator";
+import { IsNumber, IsPositive, IsUUID, Min } from "class-validator";
 
 export class CartItemCreateDTO {
    @IsUUID()
@@ -6,5 +6,6 @@ export class CartItemCreateDTO {
 
    @IsNumber()
    @IsPositive()
+   @Min(1)
    quantity: number;
 }
