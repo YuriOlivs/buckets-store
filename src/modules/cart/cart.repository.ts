@@ -11,19 +11,19 @@ export default class CartRepository {
       private readonly cartRepository: Repository<CartEntity>,
       @InjectRepository(CartItemEntity)
       private readonly cartItemRepository: Repository<CartItemEntity>,
-   ) {}
+   ) { }
 
    async findByUser(userId: string): Promise<CartEntity | null> {
       return await this.cartRepository.findOne({
          where: { user: { id: userId } },
-         relations: ['cartItems'],
+         relations: ['cartItems', 'cartItems.product'],
       });
    }
 
    async findById(id: string): Promise<CartEntity | null> {
-      return await this.cartRepository.findOne({ 
+      return await this.cartRepository.findOne({
          where: { id },
-         relations: ['cartItems'],
+         relations: ['cartItems', 'cartItems.product'],
       });
    }
 
@@ -42,7 +42,6 @@ export default class CartRepository {
    async clearCart(id: string): Promise<void> {
       const cart = await this.findById(id);
       if (!cart) throw new Error('Cart not found');
-      cart.totalValue = 0;
       await this.cartRepository.save(cart);
       await this.cartItemRepository.delete({ cart: { id } });
    }

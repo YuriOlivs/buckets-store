@@ -11,9 +11,6 @@ export default class CartEntity {
    @JoinColumn({ name: 'user_id' })
    user: UserEntity;
 
-   @Column({ name: 'total_value', type: 'numeric', precision: 10, scale: 2, nullable: false })
-   totalValue: number;
-
    @OneToMany(
       () => CartItemEntity, cartItem => cartItem.cart,
       { cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' }
@@ -29,11 +26,13 @@ export default class CartEntity {
    @DeleteDateColumn({ name: 'deleted_at' })
    deletedAt: Date;
 
+   get totalValue(): number {
+      return this.cartItems.reduce((total, item) => total + item.salePrice * item.quantity, 0);
+   }
+
    constructor(
-      user: UserEntity,
-      totalValue?: number
+      user: UserEntity
    ) {
       this.user = user;
-      this.totalValue = totalValue || 0;
    }
 }

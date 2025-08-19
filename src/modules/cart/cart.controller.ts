@@ -2,8 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CartService } from './cart.service';
 import { CartItemCreateDTO } from './dto/cart-item/cart-item-create.dto';
 import { CartItemQuantityDTO } from './dto/cart-item/cart-item-quantity.dto';
-import CartMapper from './dto/cart/cart.mapper';
 import { STRINGS } from 'src/common/strings/global.strings';
+import CartMapper from './dto/cart/cart.mapper';
 @Controller('cart')
 export class CartController {
   constructor(private readonly cartService: CartService) { }
@@ -22,12 +22,13 @@ export class CartController {
 
   @Get('/:user_id')
   async findByUser(@Param('user_id') userId: string) {
-    return await this.cartService.findByUser(userId);
+    const cartFound = await this.cartService.findByUser(userId);
+    return CartMapper.toDTO(cartFound);
   }
 
   @Patch('/adjust-quantity/:user_id/:item_id')
   async update(
-    @Param('id') userId: string, 
+    @Param('id') userId: string,
     @Param('item_id') itemId: string,
     @Body('quantity') quantity: CartItemQuantityDTO
   ) {

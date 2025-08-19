@@ -47,16 +47,14 @@ export class CartService {
     );
     
     cart.cartItems = [cartItem];
-    cart.totalValue = Number(cart.totalValue) + Number(product.price) * Number(dto.quantity);
-    console.log(cart);
-
-    const sla = await this.repo.save(cart);
-    console.log(sla);
     return await this.repo.save(cart);
   }
 
-  async findByUser(userId: string): Promise<CartEntity | null> {
-    return await this.repo.findByUser(userId);
+  async findByUser(userId: string): Promise<CartEntity> {
+    const cartFound = await this.repo.findByUser(userId);
+    if (!cartFound) throw new BadRequestException(STRINGS.notFound('Cart'));
+    
+    return cartFound;
   }
 
   async update(userId: string, dto: CartUpdateDTO) {
