@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { OrderStatusCreateDTO } from './dto/order-status-create.dto';
-import { OrderStatusUpdateDTO } from './dto/order-status-update.dto';
-import OrderStatusRepository from './order-status.repository';
-import { OrderStatusEntity } from './order-status.entity';
+import { STRINGS } from 'src/common/strings/global.strings';
 import OrderService from '../order/order.service';
+import { OrderStatusCreateDTO } from './dto/order-status-create.dto';
 import { OrderStatusCodeEnum } from './enum/order-status-code.enum';
 import { OrderStatusTextEnum } from './enum/order-status-text.enum';
-import { STRINGS } from 'src/common/strings/global.strings';
+import { OrderStatusEntity } from './order-status.entity';
+import OrderStatusRepository from './order-status.repository';
 
 @Injectable()
 export class OrderStatusService {

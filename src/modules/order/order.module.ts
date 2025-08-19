@@ -1,14 +1,12 @@
 import { Module } from '@nestjs/common';
-import OrderService from './order.service';
-import OrderController from './order.controller';
-import OrderRepository from './order.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { OrderEntity } from './order.entity';
+import { AddressModule } from '../address/address.module';
 import { ProductModule } from '../product/product.module';
 import { UserModule } from '../user/user.module';
-import { OrderItemModule } from '../order-item/order-item.module';
-import { OrderStatusModule } from '../order-status/order-status.module';
-import { AddressModule } from '../address/address.module';
+import OrderController from './order.controller';
+import { OrderEntity } from './order.entity';
+import OrderRepository from './order.repository';
+import OrderService from './order.service';
 
 @Module({
   imports: [

@@ -1,8 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { CartItemCreateDTO } from './dto/cart-item/cart-item-create.dto';
 import { CartItemQuantityDTO } from './dto/cart-item/cart-item-quantity.dto';
-import { STRINGS } from 'src/common/strings/global.strings';
 import CartMapper from './dto/cart/cart.mapper';
 @Controller('cart')
 export class CartController {

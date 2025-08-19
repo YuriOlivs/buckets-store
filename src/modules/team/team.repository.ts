@@ -1,8 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import TeamCreateDTO from "./dto/team-create.dto";
-import TeamEntity from "./team.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import TeamEntity from "./team.entity";
 
 @Injectable()
 export default class TeamRepository {

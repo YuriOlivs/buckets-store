@@ -1,8 +1,8 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import UserEntity from "../user/user.entity";
+import { AddressEntity } from "../address/address.entity";
 import { OrderItemEntity } from "../order-item/order-item.entity";
 import { OrderStatusEntity } from "../order-status/order-status.entity";
-import { AddressEntity } from "../address/address.entity";
+import UserEntity from "../user/user.entity";
 
 @Entity({ name: 'orders' })
 export class OrderEntity {

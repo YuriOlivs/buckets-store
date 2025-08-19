@@ -1,15 +1,13 @@
+import { CacheInterceptor } from "@nestjs/cache-manager";
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, UseInterceptors } from "@nestjs/common";
-import ProductCreateDTO from "./dto/product-create.dto";
-import ProductEntity from "./product.entity";
-import ProductMapper from "./dto/product.mapper";
-import ProductService from "./product.service";
+import { EmptyListToNoContentInterceptor } from "src/common/interceptor/empty-list-to-no-content.interceptor";
 import { STRINGS } from "src/common/strings/global.strings";
-import ImageEntity from "../image/image.entity";
+import { AuthGuard } from "../auth/auth.guard";
+import ProductCreateDTO from "./dto/product-create.dto";
 import ProductFilterDTO from "./dto/product-filter.dto";
 import ProductUpdateDTO from "./dto/product-update.dto";
-import { CacheInterceptor } from "@nestjs/cache-manager";
-import { EmptyListToNoContentInterceptor } from "src/common/interceptor/empty-list-to-no-content.interceptor";
-import { AuthGuard } from "../auth/auth.guard";
+import ProductMapper from "./dto/product.mapper";
+import ProductService from "./product.service";
 
 @Controller('/products')
 export default class ProductController {

@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import ProductEntity from "./product.entity";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Between, FindOptionsWhere, ILike, LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm";
-import ProductFilterDTO from "./dto/product-filter.dto";
 import rankedSearch from "src/common/utils/ranked-search.util";
+import { Between, FindOptionsWhere, LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm";
+import ProductFilterDTO from "./dto/product-filter.dto";
+import ProductEntity from "./product.entity";
 
 @Injectable()
 export default class ProductRepository {

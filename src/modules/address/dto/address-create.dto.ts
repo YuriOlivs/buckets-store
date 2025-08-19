@@ -1,4 +1,3 @@
-import { Type } from "class-transformer";
 import { IsNotEmpty, IsOptional, IsString, IsUUID, MaxLength, } from "class-validator";
 
 export class AddressCreateDTO {
