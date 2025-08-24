@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateCouponDto } from './dto/coupon-update.dto';
-import { CreateCouponDto } from './dto/coupon-create.dto';
+import { CouponCreateDTO } from './dto/coupon-create.dto';
+import { CouponUpdateDTO } from './dto/coupon-update.dto';
 
 @Injectable()
 export class CouponService {
-  create(dto: CreateCouponDto) {
+  create(dto: CouponCreateDTO) {
     return 'This action adds a new coupon';
   }
 
@@ -16,7 +16,7 @@ export class CouponService {
     return `This action returns a #${id} coupon`;
   }
 
-  update(id: number, dto: UpdateCouponDto) {
+  update(id: number, dto: CouponUpdateDTO) {
     return `This action updates a #${id} coupon`;
   }
 

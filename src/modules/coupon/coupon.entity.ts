@@ -9,6 +9,7 @@ export class Coupon {
    @Column({ name: "code", length: 6, nullable: false })
    code: string;
 
+   @Column({ name: "discount", nullable: false })
    discount: number;
 
    @Column({ name: "start_date", nullable: false })
