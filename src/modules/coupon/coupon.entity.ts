@@ -42,6 +42,8 @@ export class CouponEntity {
    @DeleteDateColumn({ name: "deleted_at" })
    deletedAt: Date;
 
+   active: boolean;
+
    constructor(
       code: string,
       discount: number,
@@ -51,7 +53,7 @@ export class CouponEntity {
       targetValue: string | null,
       isPercentage: boolean,
       maxUses: number,
-      currentUses: number,
+      currentUses?: number,
       id?: string
    ) {
       this.code = code;
@@ -62,7 +64,13 @@ export class CouponEntity {
       this.targetValue = targetValue;
       this.isPercentage = isPercentage;   
       this.maxUses = maxUses;
-      this.currentUses = currentUses;
+      if(currentUses) this.currentUses = currentUses;
       if(id) this.id = id;
+      this.active = this.isActive();
+   }
+
+   private isActive(): boolean {
+      const now = new Date();
+      return now >= this.startDate && now < this.endDate;
    }
 }

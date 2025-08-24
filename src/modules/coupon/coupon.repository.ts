@@ -52,6 +52,17 @@ export class CouponRepository {
       });
    }
 
+   async findActiveByCode(code: string): Promise<CouponEntity | null> {
+      const now = new Date();
+      return await this.repository.findOne({
+         where: { 
+            code: code,
+            startDate: MoreThanOrEqual(now),
+            endDate: LessThan(now)
+         }
+      })
+   }
+
    async deactivate(coupon: CouponEntity): Promise<void> {
       await this.repository.softRemove(coupon);
    }
