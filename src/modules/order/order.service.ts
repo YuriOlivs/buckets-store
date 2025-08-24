@@ -17,7 +17,6 @@ import OrderRepository from './order.repository';
 export default class OrderService {
   constructor(
     private repo: OrderRepository,
-    private productService: ProductService,
     private userService: UserService,
     private addressService: AddressService,
     private cartService: CartService
