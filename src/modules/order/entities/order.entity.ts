@@ -1,8 +1,8 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import UserEntity from "../user/user.entity";
-import { OrderItemEntity } from "../order-item/order-item.entity";
-import { OrderStatusEntity } from "../order-status/order-status.entity";
-import { AddressEntity } from "../address/address.entity";
+import { AddressEntity } from "../../address/address.entity";
+import { OrderStatusEntity } from "../../order-status/order-status.entity";
+import UserEntity from "../../user/user.entity";
+import { OrderItemEntity } from "./order-item.entity";
 
 @Entity({ name: 'orders' })
 export class OrderEntity {
@@ -20,7 +20,7 @@ export class OrderEntity {
    address: AddressEntity;
 
    @OneToOne(
-      () => OrderStatusEntity, orderStatus => orderStatus.order, 
+      () => OrderStatusEntity, orderStatus => orderStatus.order,
       { cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE', eager: true }
    )
    orderStatus: OrderStatusEntity;
@@ -41,7 +41,7 @@ export class OrderEntity {
    deletedAt: Date;
 
    constructor(
-      totalValue: number, 
+      totalValue: number,
       user: UserEntity,
       orderItems: OrderItemEntity[],
       orderStatus: OrderStatusEntity,

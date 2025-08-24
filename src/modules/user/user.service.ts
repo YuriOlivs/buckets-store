@@ -1,28 +1,28 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
-import UserRepository from "./user.repository";
-import UserEntity from "./user.entity";
 import { STRINGS } from "src/common/strings/global.strings";
 import UserCreateDTO from "./dto/user-create.dto";
+import UserEntity from "./user.entity";
+import UserRepository from "./user.repository";
 
 @Injectable()
 export default class UserService {
    constructor(private repo: UserRepository) { }
 
-   async getAllUsers(): Promise<UserEntity[]> {
-      return await this.repo.getAll();
+   async findAll(): Promise<UserEntity[]> {
+      return await this.repo.findAll();
    }
 
-   async getUserById(id: string): Promise<UserEntity> {
-      const userFound = await this.repo.getById(id);
+   async findById(id: string): Promise<UserEntity> {
+      const userFound = await this.repo.findById(id);
       if (!userFound) throw new NotFoundException('User not found');
       return userFound;
    }
 
    async findByEmail(email: string): Promise<UserEntity | null> {
-      return await this.repo.getByEmail(email);
+      return await this.repo.findByEmail(email);
    }
 
-   async createUser(dto: UserCreateDTO): Promise<UserEntity> {
+   async create(dto: UserCreateDTO): Promise<UserEntity> {
       const user = new UserEntity(
          dto.name,
          dto.lastName,
@@ -31,18 +31,18 @@ export default class UserService {
          dto.birthDate
       );
 
-      const emailExists = await this.repo.getByEmail(user.email);
+      const emailExists = await this.repo.findByEmail(user.email);
       if (emailExists) throw new BadRequestException(STRINGS.alreadyExists('Email'));
 
       return await this.repo.save(user);
    }
 
-   async updateUser(id: string, userData: Partial<UserEntity>): Promise<UserEntity> {
-      const userFound = await this.repo.getById(id);
+   async update(id: string, userData: Partial<UserEntity>): Promise<UserEntity> {
+      const userFound = await this.repo.findById(id);
       if (!userFound) throw new NotFoundException('User not found');
 
       if (userData.email && userData.email !== userFound.email) {
-         const emailExists = await this.repo.getByEmail(userData.email);
+         const emailExists = await this.repo.findByEmail(userData.email);
          if (emailExists) throw new BadRequestException(STRINGS.alreadyExists('Email'));
       }
 
@@ -52,8 +52,8 @@ export default class UserService {
    }
 
 
-   async deleteUser(id: string) {
-      const userFound = await this.repo.getById(id);
+   async delete(id: string) {
+      const userFound = await this.repo.findById(id);
       if (!userFound) throw new NotFoundException('User not found');
 
       return await this.repo.remove(userFound);

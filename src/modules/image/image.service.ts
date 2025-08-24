@@ -1,18 +1,18 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import ImageRepository from "./image.repository";
-import ImageEntity from "./image.entity";
 import { STRINGS } from "src/common/strings/global.strings";
+import ImageEntity from "./image.entity";
+import ImageRepository from "./image.repository";
 
 @Injectable()
 export default class ImageService {
-   constructor(private repo: ImageRepository) {}
+   constructor(private repo: ImageRepository) { }
 
-   async createImage(image: ImageEntity | ImageEntity[]): Promise<ImageEntity | ImageEntity[]> {
+   async create(image: ImageEntity | ImageEntity[]): Promise<ImageEntity | ImageEntity[]> {
       const images = Array.isArray(image) ? image : [image];
       const finalResults: ImageEntity[] = [];
 
       for (const img of images) {
-         const existing = await this.repo.getByUrl(img.url);
+         const existing = await this.repo.findByUrl(img.url);
 
          if (existing) {
             if (img.description != existing.description) existing.description = img.description;
@@ -26,26 +26,26 @@ export default class ImageService {
       return Array.isArray(image) ? finalResults : finalResults[0];
    }
 
-   async getImageById(id: string): Promise<ImageEntity | null> {
-      return await this.repo.getById(id);
+   async findById(id: string): Promise<ImageEntity | null> {
+      return await this.repo.findById(id);
    }
 
-   async getImageByUrl(url: string): Promise<ImageEntity | null> {
-      return await this.repo.getByUrl(url);
+   async findByUrl(url: string): Promise<ImageEntity | null> {
+      return await this.repo.findByUrl(url);
    }
 
-   async getImageByTeam(id: string): Promise<ImageEntity | null> {
-      return await this.repo.getByTeam(id);
+   async findByTeam(id: string): Promise<ImageEntity | null> {
+      return await this.repo.findByTeam(id);
    }
 
-   async getImagesByProduct(id: string): Promise<ImageEntity[] | null> {
-      return await this.repo.getByProduct(id);
+   async findByProduct(id: string): Promise<ImageEntity[] | null> {
+      return await this.repo.findByProduct(id);
    }
 
-   async deleteTeam(id: string): Promise<ImageEntity> {
-      const imageFound = await this.repo.getById(id);
+   async delete(id: string): Promise<ImageEntity> {
+      const imageFound = await this.repo.findById(id);
       if (!imageFound) throw new NotFoundException(STRINGS.notFound('Image'));
-      
+
       return await this.repo.remove(imageFound);
    }
 }

@@ -1,52 +1,43 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
-import { OrderCreateDTO } from './dto/order-create.dto';
-import OrderRepository from './order.repository';
-import ProductService from '../product/product.service';
-import { OrderItemEntity } from '../order-item/order-item.entity';
-import { OrderEntity } from './order.entity';
-import UserService from '../user/user.service';
-import { OrderStatusEntity } from '../order-status/order-status.entity';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { STRINGS } from 'src/common/strings/global.strings';
+import { AddressService } from '../address/address.service';
+import { CartService } from '../cart/cart.service';
+import { OrderStatusCreateDTO } from '../order-status/dto/order-status-create.dto';
 import { OrderStatusCodeEnum } from '../order-status/enum/order-status-code.enum';
 import { OrderStatusTextEnum } from '../order-status/enum/order-status-text.enum';
-import { OrderStatusCreateDTO } from '../order-status/dto/order-status-create.dto';
-import { AddressService } from '../address/address.service';
-import { STRINGS } from 'src/common/strings/global.strings';
+import { OrderStatusEntity } from '../order-status/order-status.entity';
+import UserService from '../user/user.service';
+import { OrderCreateDTO } from './dto/order/order-create.dto';
+import { OrderItemEntity } from './entities/order-item.entity';
+import { OrderEntity } from './entities/order.entity';
+import OrderRepository from './order.repository';
 
 @Injectable()
 export default class OrderService {
   constructor(
     private repo: OrderRepository,
-    private productService: ProductService,
     private userService: UserService,
-    private addressService: AddressService
+    private addressService: AddressService,
+    private cartService: CartService
   ) { }
 
-  async createOrder(userId: string, dto: OrderCreateDTO): Promise<OrderEntity> {
+  async create(userId: string, dto: OrderCreateDTO): Promise<OrderEntity> {
     const orderItems: OrderItemEntity[] = [];
     let totalValue: number = 0;
 
-    const user = await this.userService.getUserById(userId);
-    if (!user) throw new NotFoundException(STRINGS.notFound('User'));
-
+    const user = await this.userService.findById(userId);
     const address = await this.addressService.findById(dto.address);
-    if (!address) throw new NotFoundException(STRINGS.notFound('Address'));
+    const cart = await this.cartService.findById(dto.cart);
 
-    for (const item of dto.products) {
-      const product = await this.productService.getProductById(item.product);
-      if (!product) throw new NotFoundException(STRINGS.notFound('Product'));
-
-      if (!await this.productService.buyProduct(product, item.quantity)) {
-        throw new BadRequestException(STRINGS.notAvailable('Product'));
-      }
-
+    for (const item of cart.cartItems) {
       const orderItem = new OrderItemEntity(
-        product,
+        item.product,
         item.quantity,
-        product.price
+        item.product.price
       );
 
-      totalValue += orderItem.salePrice * orderItem.quantity;
       orderItems.push(orderItem);
+      totalValue += orderItem.salePrice * orderItem.quantity;
     }
 
     const orderStatus = new OrderStatusEntity(
@@ -62,10 +53,11 @@ export default class OrderService {
       orderStatus,
       address
     );
+
     return await this.repo.save(order);
   }
 
-  async updateOrderStatus(id: string, status: OrderStatusCreateDTO) {
+  async updateStatus(id: string, status: OrderStatusCreateDTO) {
     const order = await this.repo.findById(id);
     if (!order) throw new NotFoundException(STRINGS.notFound('Order'));
 
@@ -80,7 +72,7 @@ export default class OrderService {
     return this.repo.save(order);
   }
 
-  async updateOrderAddress(id: string, addressId: string) {
+  async updateAddress(id: string, addressId: string) {
     const order = await this.repo.findById(id);
     if (!order) throw new NotFoundException(STRINGS.notFound('Order'));
 
@@ -91,31 +83,28 @@ export default class OrderService {
     return this.repo.save(order);
   }
 
-  async findOrdersByUser(id: string): Promise<OrderEntity[]> {
-    const user = await this.userService.getUserById(id);
+  async findByUser(id: string): Promise<OrderEntity[]> {
+    const user = await this.userService.findById(id);
     if (!user) throw new NotFoundException(STRINGS.notFound('User'));
 
-    return await this.repo.findOrdersByUser(id);
+    return await this.repo.findByUser(id);
   }
 
-  async findOrderById(id: string): Promise<OrderEntity> {
+  async findById(id: string): Promise<OrderEntity> {
     const order = await this.repo.findById(id);
     if (!order) throw new NotFoundException(STRINGS.notFound('Order'));
 
     return order;
   }
 
-  async cancelOrder(id: string, userId: string) {
+  async cancel(id: string, userId: string) {
     const orderFound = await this.repo.findById(id);
     if (!orderFound) throw new NotFoundException(STRINGS.notFound('Order'));
 
-    if (orderFound.user.id !== userId) throw new ForbiddenException(STRINGS.notAuthorized());
-
-    const canceledStatus = new OrderStatusEntity(
-      OrderStatusCodeEnum.CANCELED,
-      OrderStatusTextEnum.CANCELED,
-      new Date()
-    );
+    const canceledStatus = orderFound.orderStatus;
+    canceledStatus.statusCode = OrderStatusCodeEnum.CANCELED;
+    canceledStatus.statusText = OrderStatusTextEnum.CANCELED;
+    canceledStatus.statusDate = new Date();
 
     orderFound.orderStatus = canceledStatus;
 

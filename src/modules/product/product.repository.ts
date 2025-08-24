@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import ProductEntity from "./product.entity";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Between, FindOptionsWhere, ILike, LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm";
-import ProductFilterDTO from "./dto/product-filter.dto";
 import rankedSearch from "src/common/utils/ranked-search.util";
+import { Between, FindOptionsWhere, LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm";
+import ProductFilterDTO from "./dto/product-filter.dto";
+import ProductEntity from "./product.entity";
 
 @Injectable()
 export default class ProductRepository {
@@ -50,11 +50,11 @@ export default class ProductRepository {
       return [filteredProducts, total];
    }
 
-   async getById(id: string): Promise<ProductEntity | null> {
+   async findById(id: string): Promise<ProductEntity | null> {
       return await this.repository.findOne({ where: { id } });
    }
 
-   async getByTeam(id: string): Promise<ProductEntity[]> {
+   async findByTeam(id: string): Promise<ProductEntity[]> {
       return await this.repository.find({ where: { team: { id } } });
    }
 

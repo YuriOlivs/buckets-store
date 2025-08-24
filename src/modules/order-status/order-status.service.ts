@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { OrderStatusCreateDTO } from './dto/order-status-create.dto';
-import { OrderStatusUpdateDTO } from './dto/order-status-update.dto';
-import OrderStatusRepository from './order-status.repository';
-import { OrderStatusEntity } from './order-status.entity';
+import { STRINGS } from 'src/common/strings/global.strings';
 import OrderService from '../order/order.service';
+import { OrderStatusCreateDTO } from './dto/order-status-create.dto';
 import { OrderStatusCodeEnum } from './enum/order-status-code.enum';
 import { OrderStatusTextEnum } from './enum/order-status-text.enum';
-import { STRINGS } from 'src/common/strings/global.strings';
+import { OrderStatusEntity } from './order-status.entity';
+import OrderStatusRepository from './order-status.repository';
 
 @Injectable()
 export class OrderStatusService {
@@ -18,7 +17,7 @@ export class OrderStatusService {
   async createOrderStatus(dto: OrderStatusCreateDTO): Promise<OrderStatusEntity> {
     const statusCode = dto.statusCode ?? OrderStatusCodeEnum.PENDING_PAYMENT;
     const statusText = dto.statusText ?? OrderStatusTextEnum.PENDING_PAYMENT;
-    const order = await this.orderService.findOrderById(dto.order);
+    const order = await this.orderService.findById(dto.order);
     if (!order) throw new Error(STRINGS.notFound('Order'));
 
     const orderStatus = new OrderStatusEntity(

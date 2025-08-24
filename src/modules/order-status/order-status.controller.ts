@@ -1,9 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UseGuards } from '@nestjs/common';
-import { OrderStatusService } from './order-status.service';
-import { OrderStatusCreateDTO } from './dto/order-status-create.dto';
-import { OrderStatusUpdateDTO } from './dto/order-status-update.dto';
 import { CacheInterceptor } from '@nestjs/cache-manager';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
+import { OrderStatusCreateDTO } from './dto/order-status-create.dto';
+import { OrderStatusService } from './order-status.service';
 
 @UseGuards(AuthGuard)
 @Controller('order-status')

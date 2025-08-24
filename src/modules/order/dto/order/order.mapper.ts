@@ -1,8 +1,8 @@
 import OrderStatusResponseDTO from "src/modules/order-status/dto/order-status-response.dto";
-import { OrderEntity } from "../order.entity";
-import OrderResponseDTO from "./order-response.dto";
-import OrderItemResponseDTO from "src/modules/order-item/dto/order-item-response.dto";
+import OrderItemResponseDTO from "src/modules/order/dto/order-item/order-item-response.dto";
 import ProductMapper from "src/modules/product/dto/product.mapper";
+import { OrderEntity } from "../../entities/order.entity";
+import OrderResponseDTO from "./order-response.dto";
 
 export default class OrderMapper {
    static toDTO(entity: OrderEntity) {
