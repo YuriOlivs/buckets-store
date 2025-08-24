@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
-import UserCreateDTO from './dto/user-create.dto';
-import UserEntity from './user.entity';
-import UserMapper from './dto/user.mapper';
-import UserService from './user.service';
-import { STRINGS } from 'src/common/strings/global.strings';
 import { HashPasswordPipe } from 'src/common/pipe/hash-password.pipe';
+import { STRINGS } from 'src/common/strings/global.strings';
 import { AuthGuard } from '../auth/auth.guard';
+import UserCreateDTO from './dto/user-create.dto';
+import UserMapper from './dto/user.mapper';
+import UserEntity from './user.entity';
+import UserService from './user.service';
 
 @Controller('/users')
 export default class UserController {
@@ -16,40 +16,40 @@ export default class UserController {
       @Body() { password, ...body }: UserCreateDTO,
       @Body('password', HashPasswordPipe) hashedPassword: string
    ) {
-      const userCreated = await this.service.createUser({ 
-         ...body, 
-         password: hashedPassword 
+      const userCreated = await this.service.create({
+         ...body,
+         password: hashedPassword
       });
 
-      return { 
-         message: STRINGS.entityCreated('User'), 
-         payload: UserMapper.toDTO(userCreated) 
+      return {
+         message: STRINGS.entityCreated('User'),
+         payload: UserMapper.toDTO(userCreated)
       };
    }
 
    @Get()
    async getUsers() {
-      const userEntities = await this.service.getAllUsers();
+      const userEntities = await this.service.findAll();
       return userEntities.map(UserMapper.toDTO);
    }
 
    @Put('/:id')
    @UseGuards(AuthGuard)
    async updateUser(@Param('id') id: string, @Body() body: Partial<UserEntity>) {
-      const updatedUser = await this.service.updateUser(id, body);
-      return { 
-         message: STRINGS.entityUpdated('User'), 
-         payload: UserMapper.toDTO(updatedUser) 
+      const updatedUser = await this.service.update(id, body);
+      return {
+         message: STRINGS.entityUpdated('User'),
+         payload: UserMapper.toDTO(updatedUser)
       };
    }
 
    @Delete('/:id')
    @UseGuards(AuthGuard)
    async removeUser(@Param('id') id: string) {
-      await this.service.deleteUser(id);
-      return { 
-         message: STRINGS.entityDeleted('User'), 
-         payload: {} 
+      await this.service.delete(id);
+      return {
+         message: STRINGS.entityDeleted('User'),
+         payload: {}
       };
    }
 }

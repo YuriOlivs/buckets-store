@@ -12,7 +12,7 @@ export class CartController {
     @Param('user_id') userId: string,
     @Body() dto: CartItemCreateDTO
   ) {
-    const cartUpdated = await this.cartService.addItemToCart(userId, dto);
+    const cartUpdated = await this.cartService.addItem(userId, dto);
     return {
       message: `Item added to cart successfully`,
       payload: CartMapper.toDTO(cartUpdated)
@@ -37,6 +37,6 @@ export class CartController {
 
   @Delete('/clear-cart/:user_id')
   async clearCart(@Param('user_id') userId: string) {
-    return await this.cartService.clearCart(userId);
+    return await this.cartService.clear(userId);
   }
 }

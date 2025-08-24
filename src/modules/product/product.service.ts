@@ -1,16 +1,16 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import ProductEntity from "./product.entity";
-import ProductRepository from "./product.repository";
-import TeamService from "../team/team.service";
-import ImageService from "../image/image.service";
+import PagedResponseDTO from "src/common/dto/paged-response.dto";
+import { STRINGS } from "src/common/strings/global.strings";
 import ImageEntity from "../image/image.entity";
+import ImageService from "../image/image.service";
+import TeamService from "../team/team.service";
 import ProductCreateDTO from "./dto/product-create.dto";
 import ProductFilterDTO from "./dto/product-filter.dto";
-import ProductUpdateDTO from "./dto/product-update.dto";
-import { STRINGS } from "src/common/strings/global.strings";
-import PagedResponseDTO from "src/common/dto/paged-response.dto";
-import ProductMapper from "./dto/product.mapper";
 import ProductResponseDTO from "./dto/product-response.dto";
+import ProductUpdateDTO from "./dto/product-update.dto";
+import ProductMapper from "./dto/product.mapper";
+import ProductEntity from "./product.entity";
+import ProductRepository from "./product.repository";
 
 @Injectable()
 export default class ProductService {
@@ -24,7 +24,7 @@ export default class ProductService {
       const [products, total] = await this.repo.getAll(filters);
 
       for (const product of products) {
-         const images = await this.imgService.getImagesByProduct(product.id);
+         const images = await this.imgService.findByProduct(product.id);
          if (images) product.images = images;
       }
 
@@ -43,20 +43,20 @@ export default class ProductService {
       const productFound = await this.repo.getById(id);
       if (!productFound) throw new NotFoundException(STRINGS.notFound('Product'));
 
-      const images = await this.imgService.getImagesByProduct(productFound.id);
+      const images = await this.imgService.findByProduct(productFound.id);
       if (images) productFound.images = images;
 
       return productFound;
    }
 
    async getProductByTeam(id: string): Promise<ProductEntity[]> {
-      const teamFound = await this.teamService.getTeamById(id);
+      const teamFound = await this.teamService.findById(id);
       if (!teamFound) throw new NotFoundException(STRINGS.notFound('Team'));
 
       const products = await this.repo.getByTeam(id);
 
       for (const product of products) {
-         const images = await this.imgService.getImagesByProduct(product.id);
+         const images = await this.imgService.findByProduct(product.id);
          if (images) product.images = images;
       }
 
@@ -67,7 +67,7 @@ export default class ProductService {
       const images: ImageEntity[] = [];
       const productImages = dto.images.map(image => new ImageEntity(image.url, image.desc));
 
-      const teamFound = await this.teamService.getTeamById(dto.team);
+      const teamFound = await this.teamService.findById(dto.team);
       if (!teamFound) throw new NotFoundException(STRINGS.notFound('Team'));
 
       const product = new ProductEntity(
@@ -83,14 +83,14 @@ export default class ProductService {
 
       for (const image of product.images) {
          let img: ImageEntity;
-         const urlExists = await this.imgService.getImageByUrl(image.url);
+         const urlExists = await this.imgService.findByUrl(image.url);
          if (urlExists) {
             if (image.description !== urlExists.description) {
                urlExists.description = image.description;
             }
             img = urlExists;
          } else {
-            img = await this.imgService.createImage(image) as ImageEntity;
+            img = await this.imgService.create(image) as ImageEntity;
          }
 
          images.push(img);
@@ -119,7 +119,7 @@ export default class ProductService {
       Object.assign(productFound, rest);
 
       if (team) {
-         const teamFound = await this.teamService.getTeamById(team);
+         const teamFound = await this.teamService.findById(team);
          if (!teamFound) throw new NotFoundException(STRINGS.notFound('Team'));
 
          productFound.team = teamFound;

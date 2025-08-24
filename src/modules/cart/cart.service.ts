@@ -16,8 +16,8 @@ export class CartService {
     private productService: ProductService
   ) { }
 
-  async findOrCreateCart(userId: string): Promise<CartEntity> {
-    const user = await this.userService.getUserById(userId);
+  async findOrCreate(userId: string): Promise<CartEntity> {
+    const user = await this.userService.findById(userId);
     if (!user) throw new BadRequestException(STRINGS.notFound('User'));
 
     const cartFound = await this.repo.findByUser(user.id);
@@ -29,22 +29,22 @@ export class CartService {
     return cartFound;
   }
 
-  async addItemToCart(userId: string, dto: CartItemCreateDTO): Promise<CartEntity> {
-    const user = await this.userService.getUserById(userId);
+  async addItem(userId: string, dto: CartItemCreateDTO): Promise<CartEntity> {
+    const user = await this.userService.findById(userId);
     if (!user) throw new BadRequestException(STRINGS.notFound('User'));
 
     const product = await this.productService.getProductById(dto.product);
     if (!product) throw new BadRequestException(STRINGS.notFound('Product'));
 
-    const cart = await this.findOrCreateCart(user.id);
+    const cart = await this.findOrCreate(user.id);
 
     const cartItem = new CartItemEntity(
-      product, 
-      dto.quantity, 
-      product.price, 
+      product,
+      dto.quantity,
+      product.price,
       cart
     );
-    
+
     cart.cartItems = [cartItem];
     return await this.repo.save(cart);
   }
@@ -52,19 +52,19 @@ export class CartService {
   async findByUser(userId: string): Promise<CartEntity> {
     const cartFound = await this.repo.findByUser(userId);
     if (!cartFound) throw new BadRequestException(STRINGS.notFound('Cart'));
-    
+
     return cartFound;
   }
 
   async findById(id: string): Promise<CartEntity> {
     const cartFound = await this.repo.findById(id);
     if (!cartFound) throw new BadRequestException(STRINGS.notFound('Cart'));
-    
+
     return cartFound;
   }
 
   async update(userId: string, dto: CartUpdateDTO) {
-    const user = await this.userService.getUserById(userId);
+    const user = await this.userService.findById(userId);
     if (!user) throw new BadRequestException(STRINGS.notFound('User'));
 
     const cartFound = await this.repo.findByUser(userId);
@@ -75,7 +75,7 @@ export class CartService {
   }
 
   async adjustQuantity(userId: string, itemId: string, quantity: number) {
-    const user = await this.userService.getUserById(userId);
+    const user = await this.userService.findById(userId);
     if (!user) throw new BadRequestException(STRINGS.notFound('User'));
 
     const cartFound = await this.repo.findByUser(userId);
@@ -86,7 +86,7 @@ export class CartService {
 
     if (cartItemFound.quantity === quantity) return cartItemFound;
     cartItemFound.quantity = quantity;
-    
+
     return await this.repo.saveItem(cartItemFound);
   }
 
@@ -97,8 +97,8 @@ export class CartService {
     return this.repo.remove(cart);
   }
 
-  async clearCart(userId: string) {
-    const user = await this.userService.getUserById(userId);
+  async clear(userId: string) {
+    const user = await this.userService.findById(userId);
     if (!user) throw new BadRequestException(STRINGS.notFound('User'));
 
     const cartFound = await this.repo.findByUser(userId);

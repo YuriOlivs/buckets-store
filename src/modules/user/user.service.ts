@@ -1,18 +1,18 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
-import UserRepository from "./user.repository";
-import UserEntity from "./user.entity";
 import { STRINGS } from "src/common/strings/global.strings";
 import UserCreateDTO from "./dto/user-create.dto";
+import UserEntity from "./user.entity";
+import UserRepository from "./user.repository";
 
 @Injectable()
 export default class UserService {
    constructor(private repo: UserRepository) { }
 
-   async getAllUsers(): Promise<UserEntity[]> {
+   async findAll(): Promise<UserEntity[]> {
       return await this.repo.getAll();
    }
 
-   async getUserById(id: string): Promise<UserEntity> {
+   async findById(id: string): Promise<UserEntity> {
       const userFound = await this.repo.getById(id);
       if (!userFound) throw new NotFoundException('User not found');
       return userFound;
@@ -22,7 +22,7 @@ export default class UserService {
       return await this.repo.getByEmail(email);
    }
 
-   async createUser(dto: UserCreateDTO): Promise<UserEntity> {
+   async create(dto: UserCreateDTO): Promise<UserEntity> {
       const user = new UserEntity(
          dto.name,
          dto.lastName,
@@ -37,7 +37,7 @@ export default class UserService {
       return await this.repo.save(user);
    }
 
-   async updateUser(id: string, userData: Partial<UserEntity>): Promise<UserEntity> {
+   async update(id: string, userData: Partial<UserEntity>): Promise<UserEntity> {
       const userFound = await this.repo.getById(id);
       if (!userFound) throw new NotFoundException('User not found');
 
@@ -52,7 +52,7 @@ export default class UserService {
    }
 
 
-   async deleteUser(id: string) {
+   async delete(id: string) {
       const userFound = await this.repo.getById(id);
       if (!userFound) throw new NotFoundException('User not found');
 

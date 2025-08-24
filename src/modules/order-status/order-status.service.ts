@@ -17,7 +17,7 @@ export class OrderStatusService {
   async createOrderStatus(dto: OrderStatusCreateDTO): Promise<OrderStatusEntity> {
     const statusCode = dto.statusCode ?? OrderStatusCodeEnum.PENDING_PAYMENT;
     const statusText = dto.statusText ?? OrderStatusTextEnum.PENDING_PAYMENT;
-    const order = await this.orderService.findOrderById(dto.order);
+    const order = await this.orderService.findById(dto.order);
     if (!order) throw new Error(STRINGS.notFound('Order'));
 
     const orderStatus = new OrderStatusEntity(

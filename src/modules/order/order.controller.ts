@@ -21,7 +21,7 @@ export default class OrderController {
     @Body() orderCreateDTO: OrderCreateDTO,
   ) {
     const userId = req.user.sub;
-    const orderCreated = await this.orderService.createOrder(userId, orderCreateDTO);
+    const orderCreated = await this.orderService.create(userId, orderCreateDTO);
 
     return {
       message: STRINGS.entityCreated('Order'),
@@ -34,7 +34,7 @@ export default class OrderController {
     @Param('id') id: string,
     @Body() status: OrderStatusCreateDTO
   ) {
-    const orderUpdated = await this.orderService.updateOrderStatus(id, status);
+    const orderUpdated = await this.orderService.updateStatus(id, status);
     return {
       message: STRINGS.entityUpdated('Order'),
       payload: OrderMapper.toDTO(orderUpdated)
@@ -46,7 +46,7 @@ export default class OrderController {
     @Param('id') id: string,
     @Param('addressId') addressId: string
   ) {
-    const orderUpdated = await this.orderService.updateOrderAddress(id, addressId);
+    const orderUpdated = await this.orderService.updateAddress(id, addressId);
 
     return {
       message: STRINGS.entityUpdated('Order'),
@@ -57,7 +57,7 @@ export default class OrderController {
   @Get('/:id')
   @UseInterceptors(CacheInterceptor)
   async findById(@Param('id') id: string) {
-    const orderFound = await this.orderService.findOrderById(id);
+    const orderFound = await this.orderService.findById(id);
     return OrderMapper.toDTO(orderFound);
   }
 
@@ -65,7 +65,7 @@ export default class OrderController {
   @UseGuards(OwnershipGuard)
   @UseInterceptors(CacheInterceptor, EmptyListToNoContentInterceptor)
   async findByUser(@Param('id') id: string) {
-    const ordersFound = await this.orderService.findOrdersByUser(id);
+    const ordersFound = await this.orderService.findByUser(id);
     return ordersFound.map(order => OrderMapper.toDTO(order));
   }
 
@@ -74,7 +74,7 @@ export default class OrderController {
     @Req() req: RequestWithUser,
     @Param('id') id: string
   ) {
-    await this.orderService.cancelOrder(id, req.user.sub);
+    await this.orderService.cancel(id, req.user.sub);
 
     return {
       message: STRINGS.entityDeleted('Order'),

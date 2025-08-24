@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { STRINGS } from 'src/common/strings/global.strings';
 import { AddressService } from '../address/address.service';
 import { CartService } from '../cart/cart.service';
@@ -23,11 +23,11 @@ export default class OrderService {
     private cartService: CartService
   ) { }
 
-  async createOrder(userId: string, dto: OrderCreateDTO): Promise<OrderEntity> {
+  async create(userId: string, dto: OrderCreateDTO): Promise<OrderEntity> {
     const orderItems: OrderItemEntity[] = [];
     let totalValue: number = 0;
 
-    const user = await this.userService.getUserById(userId);
+    const user = await this.userService.findById(userId);
     const address = await this.addressService.findById(dto.address);
     const cart = await this.cartService.findById(dto.cart);
 
@@ -59,7 +59,7 @@ export default class OrderService {
     return await this.repo.save(order);
   }
 
-  async updateOrderStatus(id: string, status: OrderStatusCreateDTO) {
+  async updateStatus(id: string, status: OrderStatusCreateDTO) {
     const order = await this.repo.findById(id);
     if (!order) throw new NotFoundException(STRINGS.notFound('Order'));
 
@@ -74,7 +74,7 @@ export default class OrderService {
     return this.repo.save(order);
   }
 
-  async updateOrderAddress(id: string, addressId: string) {
+  async updateAddress(id: string, addressId: string) {
     const order = await this.repo.findById(id);
     if (!order) throw new NotFoundException(STRINGS.notFound('Order'));
 
@@ -85,21 +85,21 @@ export default class OrderService {
     return this.repo.save(order);
   }
 
-  async findOrdersByUser(id: string): Promise<OrderEntity[]> {
-    const user = await this.userService.getUserById(id);
+  async findByUser(id: string): Promise<OrderEntity[]> {
+    const user = await this.userService.findById(id);
     if (!user) throw new NotFoundException(STRINGS.notFound('User'));
 
     return await this.repo.findOrdersByUser(id);
   }
 
-  async findOrderById(id: string): Promise<OrderEntity> {
+  async findById(id: string): Promise<OrderEntity> {
     const order = await this.repo.findById(id);
     if (!order) throw new NotFoundException(STRINGS.notFound('Order'));
 
     return order;
   }
 
-  async cancelOrder(id: string, userId: string) {
+  async cancel(id: string, userId: string) {
     const orderFound = await this.repo.findById(id);
     if (!orderFound) throw new NotFoundException(STRINGS.notFound('Order'));
 
