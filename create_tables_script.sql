@@ -120,6 +120,35 @@ CREATE TABLE IF NOT EXISTS public.order_status (
 
 ALTER TABLE IF EXISTS public.order_status OWNER TO root;
 
+-- CART
+CREATE TABLE IF NOT EXISTS public.carts (
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    created_at timestamp without time zone NOT NULL DEFAULT now(),
+    updated_at timestamp without time zone NOT NULL DEFAULT now(),
+    deleted_at timestamp without time zone,
+    user_id uuid NOT NULL,
+
+    CONSTRAINT "pk_carts" PRIMARY KEY (id)
+)
+
+ALTER TABLE IF EXISTS public.carts OWNER to root;
+
+-- CART ITEMS
+CREATE TABLE IF NOT EXISTS public.cart_items (
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    quantity integer NOT NULL,
+    sale_price numeric(10,2) NOT NULL,
+    created_at timestamp without time zone NOT NULL DEFAULT now(),
+    updated_at timestamp without time zone NOT NULL DEFAULT now(),
+    deleted_at timestamp without time zone,
+    cart_id UUID NOT NULL,
+    product_id UUID NOT NULL,
+
+    CONSTRAINT "pk_cart_items" PRIMARY KEY (id)
+)
+
+ALTER TABLE IF EXISTS public.cart_items OWNER to root;
+
 -- FK: addresses.user_id → users.id
 ALTER TABLE public.addresses
   ADD CONSTRAINT fk_addresses_user FOREIGN KEY (user_id)
@@ -190,9 +219,34 @@ ALTER TABLE public.images
   ON UPDATE CASCADE
   ON DELETE CASCADE;
 
+-- FK: cart.user_id → user.id
+ALTER TABLE public.cart
+ ADD CONSTRAINT "fk_carts_users" FOREIGN KEY (user_id)
+      REFERENCES public.users (id) MATCH SIMPLE
+      ON UPDATE NO ACTION
+      ON DELETE NO ACTION;
+
+-- FK: cart_items.product_id → product.id
+ALTER TABLE public.cart_items
+  ADD CONSTRAINT "FK_30e89257a105eab7648a35c7fce" FOREIGN KEY (product_id)
+        REFERENCES public.products (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION;
+
+-- FK: cart_items.cart_id → cart.id
+ALTER TABLE public.cart_items
+ ADD CONSTRAINT "FK_6385a745d9e12a89b859bb25623" FOREIGN KEY (cart_id)
+        REFERENCES public.carts (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION;
+
 -- CHECK: só um pai (team ou product)
 ALTER TABLE public.images
   ADD CONSTRAINT chk_only_one_parent CHECK (
     (product_id IS NOT NULL AND team_id IS NULL) OR
     (product_id IS NULL AND team_id IS NOT NULL)
   );
+
+-- CHECK: só um carrinho por usuário
+ALTER TABLE public.carts
+  ADD CONSTRAINT "chk_user_has_one_cart" UNIQUE (user_id);
