@@ -31,8 +31,20 @@ export default class CartEntity {
    @DeleteDateColumn({ name: 'deleted_at' })
    deletedAt: Date;
 
-   get totalValue(): number {
+   get rawValue(): number {
       return this.cartItems.reduce((total, item) => total + item.salePrice * item.quantity, 0);
+   }
+
+   get discountValue(): number {
+      if (this.coupon.isPercentage) {
+         return this.rawValue * this.coupon.discount / 100;
+      } else {
+         return this.coupon.discount;
+      }
+   }
+
+   get totalValue(): number {
+      return this.rawValue - this.discountValue;
    }
 
    constructor(
