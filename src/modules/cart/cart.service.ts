@@ -33,7 +33,7 @@ export class CartService {
     const user = await this.userService.findById(userId);
     if (!user) throw new BadRequestException(STRINGS.notFound('User'));
 
-    const product = await this.productService.getProductById(dto.product);
+    const product = await this.productService.findById(dto.product);
     if (!product) throw new BadRequestException(STRINGS.notFound('Product'));
 
     const cart = await this.findOrCreate(user.id);

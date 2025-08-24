@@ -18,7 +18,7 @@ export default class TeamService {
       return await this.repo.getAll();
    }
 
-   async findById(id: string): Promise<TeamEntity | null> {
+   async findById(id: string): Promise<TeamEntity> {
       const teamFound = await this.repo.getById(id);
       if (!teamFound) throw new NotFoundException(STRINGS.notFound('Team'));
 

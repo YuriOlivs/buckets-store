@@ -12,7 +12,7 @@ export class AddressService {
     private repo: AddressRepository,
     private userService: UserService
   ) { }
-  async create(dto: AddressCreateDTO) {
+  async create(dto: AddressCreateDTO): Promise<AddressEntity> {
     const user = await this.userService.findById(dto.user);
     if (!user) throw new NotFoundException(STRINGS.notFound('User'));
 
@@ -31,31 +31,25 @@ export class AddressService {
     return await this.repo.save(address);
   }
 
-  async findByUser(id: string) {
-    const addressFound = await this.repo.findByUser(id);
-    if (!addressFound) throw new NotFoundException(STRINGS.notFound('Address'));
-
+  async findByUser(id: string): Promise<AddressEntity[]> {
+    const addressFound = await this.findByUser(id);
     return addressFound;
   }
 
-  async findById(id: string) {
-    const addressFound = await this.repo.findById(id);
-    if (!addressFound) throw new NotFoundException(STRINGS.notFound('Address'));
-
+  async findById(id: string): Promise<AddressEntity> {
+    const addressFound = await this.findById(id);
     return addressFound;
   }
 
   async update(id: string, dto: AdressUpdateDTO) {
-    const address = await this.repo.findById(id);
-    if (!address) throw new NotFoundException(STRINGS.notFound('Address'));
+    const address = await this.findById(id);
 
     Object.assign(address, dto);
     return await this.repo.save(address);
   }
 
   async remove(id: string) {
-    const address = await this.repo.findById(id);
-    if (!address) throw new NotFoundException(STRINGS.notFound('Address'));
+    const address = await this.findById(id);
 
     return await this.repo.remove(address);
   }

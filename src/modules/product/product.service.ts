@@ -20,7 +20,7 @@ export default class ProductService {
       private imgService: ImageService
    ) { }
 
-   async getAllProducts(filters: ProductFilterDTO): Promise<PagedResponseDTO<ProductResponseDTO>> {
+   async findAll(filters: ProductFilterDTO): Promise<PagedResponseDTO<ProductResponseDTO>> {
       const [products, total] = await this.repo.getAll(filters);
 
       for (const product of products) {
@@ -39,9 +39,8 @@ export default class ProductService {
       );
    }
 
-   async getProductById(id: string): Promise<ProductEntity> {
-      const productFound = await this.repo.getById(id);
-      if (!productFound) throw new NotFoundException(STRINGS.notFound('Product'));
+   async findById(id: string): Promise<ProductEntity> {
+      const productFound = await this.findById(id);
 
       const images = await this.imgService.findByProduct(productFound.id);
       if (images) productFound.images = images;
@@ -49,10 +48,8 @@ export default class ProductService {
       return productFound;
    }
 
-   async getProductByTeam(id: string): Promise<ProductEntity[]> {
-      const teamFound = await this.teamService.findById(id);
-      if (!teamFound) throw new NotFoundException(STRINGS.notFound('Team'));
-
+   async findByTeam(id: string): Promise<ProductEntity[]> {
+      await this.teamService.findById(id);
       const products = await this.repo.getByTeam(id);
 
       for (const product of products) {
@@ -63,12 +60,10 @@ export default class ProductService {
       return products;
    }
 
-   async createProduct(dto: ProductCreateDTO): Promise<ProductEntity> {
+   async create(dto: ProductCreateDTO): Promise<ProductEntity> {
       const images: ImageEntity[] = [];
       const productImages = dto.images.map(image => new ImageEntity(image.url, image.desc));
-
       const teamFound = await this.teamService.findById(dto.team);
-      if (!teamFound) throw new NotFoundException(STRINGS.notFound('Team'));
 
       const product = new ProductEntity(
          dto.name,
@@ -101,7 +96,7 @@ export default class ProductService {
       return await this.repo.save(product);
    }
 
-   async buyProduct(product: ProductEntity, quantity: number): Promise<boolean> {
+   async buy(product: ProductEntity, quantity: number): Promise<boolean> {
       if (product.quantityAvailable <= 0) {
          return false;
       }
@@ -111,9 +106,8 @@ export default class ProductService {
       return true;
    }
 
-   async updateProduct(id: string, productData: ProductUpdateDTO): Promise<ProductEntity> {
-      const productFound = await this.repo.getById(id);
-      if (!productFound) throw new NotFoundException(STRINGS.notFound('Product'));
+   async update(id: string, productData: ProductUpdateDTO): Promise<ProductEntity> {
+      const productFound = await this.findById(id);
 
       const { team, ...rest } = productData;
       Object.assign(productFound, rest);
@@ -128,10 +122,8 @@ export default class ProductService {
       return await this.repo.save(productFound);
    }
 
-   async deleteProduct(id: string) {
-      const productFound = await this.repo.getById(id);
-      if (!productFound) throw new NotFoundException(STRINGS.notFound('Product'));
-
+   async delete(id: string) {
+      const productFound = await this.findById(id);
       return await this.repo.remove(productFound);
    }
 }
