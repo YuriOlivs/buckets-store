@@ -34,11 +34,13 @@ export class OrderItemEntity {
       product: ProductEntity,
       quantity: number,
       salePrice: number,
-      order?: OrderEntity
+      order?: OrderEntity,
+      id?: string
    ) {
       this.product = product;
       this.quantity = quantity;
       this.salePrice = salePrice;
       if (order) this.order = order;
+      if (id) this.id = id;
    }
 }

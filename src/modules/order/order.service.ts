@@ -103,13 +103,10 @@ export default class OrderService {
     const orderFound = await this.repo.findById(id);
     if (!orderFound) throw new NotFoundException(STRINGS.notFound('Order'));
 
-    if (orderFound.user.id !== userId) throw new ForbiddenException(STRINGS.notAuthorized());
-
-    const canceledStatus = new OrderStatusEntity(
-      OrderStatusCodeEnum.CANCELED,
-      OrderStatusTextEnum.CANCELED,
-      new Date()
-    );
+    const canceledStatus = orderFound.orderStatus;
+    canceledStatus.statusCode = OrderStatusCodeEnum.CANCELED;
+    canceledStatus.statusText = OrderStatusTextEnum.CANCELED;
+    canceledStatus.statusDate = new Date();
 
     orderFound.orderStatus = canceledStatus;
 
