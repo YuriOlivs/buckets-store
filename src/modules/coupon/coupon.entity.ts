@@ -2,7 +2,7 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedCol
 import { CouponTargetEnum } from "./enum/CouponTarget.enum";
 
 @Entity({ name: "coupons" })
-export class Coupon {
+export class CouponEntity {
    @PrimaryGeneratedColumn("uuid")
    id: string;
 
