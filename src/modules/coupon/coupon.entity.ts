@@ -22,7 +22,7 @@ export class CouponEntity {
    @Column({ name: "target_type", enum: CouponTargetEnum, nullable: true })
    targetType: CouponTargetEnum;
 
-   @Column({ name: "target_value", nullable: true })
+   @Column({ name: "target_value", type: "varchar", length: 255,nullable: true })
    targetValue: string | null;
 
    @Column({ name: "is_percentage", nullable: false })
