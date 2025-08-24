@@ -7,13 +7,15 @@ import { CartItemCreateDTO } from './dto/cart-item/cart-item-create.dto';
 import { CartUpdateDTO } from './dto/cart/cart-update.dto';
 import { CartItemEntity } from './entities/cart-item.entity';
 import CartEntity from './entities/cart.entity';
+import { CouponService } from '../coupon/coupon.service';
 
 @Injectable()
 export class CartService {
   constructor(
     private repo: CartRepository,
     private userService: UserService,
-    private productService: ProductService
+    private productService: ProductService,
+    private couponService: CouponService
   ) { }
 
   async findOrCreate(userId: string): Promise<CartEntity> {
@@ -46,6 +48,14 @@ export class CartService {
     );
 
     cart.cartItems = [cartItem];
+    return await this.repo.save(cart);
+  }
+  
+  async applyCoupon(cartId: string, code: string) {
+    const coupon = await this.couponService.findActiveByCode(code);
+    const cart = await this.findById(cartId);
+
+    cart.coupon = coupon;
     return await this.repo.save(cart);
   }
 

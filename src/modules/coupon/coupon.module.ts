@@ -11,5 +11,6 @@ import { CouponEntity } from './coupon.entity';
   imports: [
     TypeOrmModule.forFeature([CouponEntity]),
   ],
+  exports: [CouponService]
 })
 export class CouponModule {}

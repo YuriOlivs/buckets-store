@@ -1,6 +1,7 @@
 import UserEntity from "src/modules/user/user.entity";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { CartItemEntity } from "./cart-item.entity";
+import { CouponEntity } from "src/modules/coupon/coupon.entity";
 
 @Entity('carts')
 export default class CartEntity {
@@ -16,6 +17,10 @@ export default class CartEntity {
       { cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' }
    )
    cartItems: CartItemEntity[];
+
+   @ManyToOne(() => CouponEntity, coupon => coupon.carts)
+   @JoinColumn({ name: "coupon_id" })
+   coupon: CouponEntity;
 
    @CreateDateColumn({ name: 'created_at' })
    createdAt: Date;

@@ -53,6 +53,13 @@ export class CouponService {
     return coupon
   }
 
+  async findActiveByCode(code: string): Promise<CouponEntity> {
+    const coupon = await this.repo.findActiveByCode(code);
+    if (!coupon) throw new NotFoundException(STRINGS.notFound('Coupon'));
+
+    return coupon
+  }
+
   async findByActive(): Promise<CouponEntity[]> {
     const coupon = await this.repo.findByActive();
     if (!coupon) throw new NotFoundException(STRINGS.notFound('Coupon'));

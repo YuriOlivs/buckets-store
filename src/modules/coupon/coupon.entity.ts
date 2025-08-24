@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { CouponTargetEnum } from "./enum/CouponTarget.enum";
+import CartEntity from "../cart/entities/cart.entity";
 
 @Entity({ name: "coupons" })
 export class CouponEntity {
@@ -41,6 +42,9 @@ export class CouponEntity {
 
    @DeleteDateColumn({ name: "deleted_at" })
    deletedAt: Date;
+
+   @OneToMany(() => CartEntity, cart => cart.coupon)
+   carts: CartEntity[];
 
    active: boolean;
 
