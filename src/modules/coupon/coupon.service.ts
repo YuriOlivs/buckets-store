@@ -60,6 +60,14 @@ export class CouponService {
     return coupon
   }
 
+  async update(id: string, dto: CouponUpdateDTO): Promise<CouponEntity> {
+    const coupon = await this.findById(id);
+    if(coupon.active) throw new BadRequestException(STRINGS.cannotUpdate('Coupon', 'Active coupons cannot be updated.'));
+    Object.assign(coupon, dto);
+
+    return await this.repo.save(coupon);
+  }
+
   async deactivate(id: string) {
     const coupon = await this.findById(id);
     return await this.repo.deactivate(coupon);
