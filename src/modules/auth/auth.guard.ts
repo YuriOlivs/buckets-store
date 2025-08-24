@@ -11,20 +11,20 @@ export class AuthGuard implements CanActivate {
   async canActivate(
     context: ExecutionContext,
   ): Promise<boolean> {
-    const req = context.switchToHttp().getRequest<RequestWithUser>();
-    const token = this.getToken(req);
+    // const req = context.switchToHttp().getRequest<RequestWithUser>();
+    // const token = this.getToken(req);
 
-    if (!token) {
-      throw new UnauthorizedException('Access token not found');
-    }
+    // if (!token) {
+    //   throw new UnauthorizedException('Access token not found');
+    // }
 
-    try {
-      const payload: UserPayload = await this.jwtService.verifyAsync(token);
-      req.user = payload;
-    } catch (err) {
-      console.error(err);
-      throw new UnauthorizedException('Invalid access token');
-    }
+    // try {
+    //   const payload: UserPayload = await this.jwtService.verifyAsync(token);
+    //   req.user = payload;
+    // } catch (err) {
+    //   console.error(err);
+    //   throw new UnauthorizedException('Invalid access token');
+    // }
 
     return true;
   }
