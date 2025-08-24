@@ -6,7 +6,6 @@ import { OrderStatusCreateDTO } from '../order-status/dto/order-status-create.dt
 import { OrderStatusCodeEnum } from '../order-status/enum/order-status-code.enum';
 import { OrderStatusTextEnum } from '../order-status/enum/order-status-text.enum';
 import { OrderStatusEntity } from '../order-status/order-status.entity';
-import ProductService from '../product/product.service';
 import UserService from '../user/user.service';
 import { OrderCreateDTO } from './dto/order/order-create.dto';
 import { OrderItemEntity } from './entities/order-item.entity';
@@ -88,7 +87,7 @@ export default class OrderService {
     const user = await this.userService.findById(id);
     if (!user) throw new NotFoundException(STRINGS.notFound('User'));
 
-    return await this.repo.findOrdersByUser(id);
+    return await this.repo.findByUser(id);
   }
 
   async findById(id: string): Promise<OrderEntity> {

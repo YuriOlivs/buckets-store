@@ -10,7 +10,7 @@ export default class OrderRepository {
       private readonly repository: Repository<OrderEntity>
    ) { }
 
-   async findOrdersByUser(id: string): Promise<OrderEntity[]> {
+   async findByUser(id: string): Promise<OrderEntity[]> {
       return await this.repository.find({
          where: { user: { id: id } },
          relations: [

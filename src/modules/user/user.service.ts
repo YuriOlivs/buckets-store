@@ -9,17 +9,17 @@ export default class UserService {
    constructor(private repo: UserRepository) { }
 
    async findAll(): Promise<UserEntity[]> {
-      return await this.repo.getAll();
+      return await this.repo.findAll();
    }
 
    async findById(id: string): Promise<UserEntity> {
-      const userFound = await this.repo.getById(id);
+      const userFound = await this.repo.findById(id);
       if (!userFound) throw new NotFoundException('User not found');
       return userFound;
    }
 
    async findByEmail(email: string): Promise<UserEntity | null> {
-      return await this.repo.getByEmail(email);
+      return await this.repo.findByEmail(email);
    }
 
    async create(dto: UserCreateDTO): Promise<UserEntity> {
@@ -31,18 +31,18 @@ export default class UserService {
          dto.birthDate
       );
 
-      const emailExists = await this.repo.getByEmail(user.email);
+      const emailExists = await this.repo.findByEmail(user.email);
       if (emailExists) throw new BadRequestException(STRINGS.alreadyExists('Email'));
 
       return await this.repo.save(user);
    }
 
    async update(id: string, userData: Partial<UserEntity>): Promise<UserEntity> {
-      const userFound = await this.repo.getById(id);
+      const userFound = await this.repo.findById(id);
       if (!userFound) throw new NotFoundException('User not found');
 
       if (userData.email && userData.email !== userFound.email) {
-         const emailExists = await this.repo.getByEmail(userData.email);
+         const emailExists = await this.repo.findByEmail(userData.email);
          if (emailExists) throw new BadRequestException(STRINGS.alreadyExists('Email'));
       }
 
@@ -53,7 +53,7 @@ export default class UserService {
 
 
    async delete(id: string) {
-      const userFound = await this.repo.getById(id);
+      const userFound = await this.repo.findById(id);
       if (!userFound) throw new NotFoundException('User not found');
 
       return await this.repo.remove(userFound);

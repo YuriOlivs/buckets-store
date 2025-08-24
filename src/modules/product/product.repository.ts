@@ -50,11 +50,11 @@ export default class ProductRepository {
       return [filteredProducts, total];
    }
 
-   async getById(id: string): Promise<ProductEntity | null> {
+   async findById(id: string): Promise<ProductEntity | null> {
       return await this.repository.findOne({ where: { id } });
    }
 
-   async getByTeam(id: string): Promise<ProductEntity[]> {
+   async findByTeam(id: string): Promise<ProductEntity[]> {
       return await this.repository.find({ where: { team: { id } } });
    }
 

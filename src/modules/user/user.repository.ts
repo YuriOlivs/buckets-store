@@ -8,17 +8,17 @@ export default class UserRepository {
   constructor(
     @InjectRepository(UserEntity)
     private readonly repository: Repository<UserEntity>,
-  ) {}
+  ) { }
 
-  async getAll(): Promise<UserEntity[]> {
+  async findAll(): Promise<UserEntity[]> {
     return this.repository.find();
   }
 
-  async getById(id: string): Promise<UserEntity | null> {
+  async findById(id: string): Promise<UserEntity | null> {
     return await this.repository.findOne({ where: { id: id } });
   }
 
-  async getByEmail(email: string): Promise<UserEntity | null> {
+  async findByEmail(email: string): Promise<UserEntity | null> {
     return await this.repository.findOne({ where: { email } });;
   }
 

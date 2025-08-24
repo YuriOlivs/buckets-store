@@ -14,18 +14,18 @@ export default class TeamRepository {
       return await this.repository.save(team);
    }
 
-   async getAll(): Promise<TeamEntity[]> {
+   async findAll(): Promise<TeamEntity[]> {
       return await this.repository.find({ relations: ['logo'] });
    }
 
-   async getById(id: string): Promise<TeamEntity | null> {
+   async findById(id: string): Promise<TeamEntity | null> {
       return await this.repository.findOne({
          where: { id },
          relations: ['logo']
       });
    }
 
-   async getByName(name: string): Promise<TeamEntity | null> {
+   async findByName(name: string): Promise<TeamEntity | null> {
       return await this.repository.findOne({
          where: { name },
          relations: ['logo']

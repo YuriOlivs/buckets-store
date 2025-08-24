@@ -15,11 +15,11 @@ export default class TeamService {
    ) { }
 
    async findAll(): Promise<TeamEntity[]> {
-      return await this.repo.getAll();
+      return await this.repo.findAll();
    }
 
    async findById(id: string): Promise<TeamEntity> {
-      const teamFound = await this.repo.getById(id);
+      const teamFound = await this.repo.findById(id);
       if (!teamFound) throw new NotFoundException(STRINGS.notFound('Team'));
 
       return teamFound;
@@ -29,7 +29,7 @@ export default class TeamService {
       const logo = new ImageEntity(dto.logo.url, dto.logo.desc)
       const team = new TeamEntity(dto.name, dto.city, logo);
 
-      const nameExists = await this.repo.getByName(team.name);
+      const nameExists = await this.repo.findByName(team.name);
       if (nameExists) throw new BadRequestException(STRINGS.alreadyExists('Name'));
 
       const urlExists = await this.imgService.findByUrl(team.logo.url);
@@ -45,13 +45,13 @@ export default class TeamService {
    }
 
    async update(id: string, teamData: TeamUpdateDTO): Promise<TeamEntity> {
-      const teamFound = await this.repo.getById(id);
+      const teamFound = await this.repo.findById(id);
       if (!teamFound) throw new NotFoundException(STRINGS.notFound('Team'));
 
       const { name, logo, ...rest } = teamData;
 
       if (name) {
-         const nameExists = await this.repo.getByName(name);
+         const nameExists = await this.repo.findByName(name);
          if (nameExists) throw new BadRequestException(STRINGS.alreadyExists('Name'));
          teamFound.name = name;
       }
@@ -77,7 +77,7 @@ export default class TeamService {
 
 
    async delete(id: string) {
-      const teamFound = await this.repo.getById(id);
+      const teamFound = await this.repo.findById(id);
       if (!teamFound) throw new NotFoundException(STRINGS.notFound('Team'));
 
       return await this.repo.remove(teamFound);

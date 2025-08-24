@@ -50,7 +50,7 @@ export default class ProductService {
 
    async findByTeam(id: string): Promise<ProductEntity[]> {
       await this.teamService.findById(id);
-      const products = await this.repo.getByTeam(id);
+      const products = await this.repo.findByTeam(id);
 
       for (const product of products) {
          const images = await this.imgService.findByProduct(product.id);

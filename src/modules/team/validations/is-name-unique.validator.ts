@@ -5,11 +5,11 @@ import TeamRepository from "../team.repository";
 @Injectable()
 @ValidatorConstraint({ async: true })
 export class isNameUniqueValidtor implements ValidatorConstraintInterface {
-   constructor(private repository: TeamRepository) {}
+   constructor(private repository: TeamRepository) { }
 
    async validate(value: any): Promise<boolean> {
-       const teamFound = await this.repository.getByName(value);
-       return !teamFound;
+      const teamFound = await this.repository.findByName(value);
+      return !teamFound;
    }
 }
 

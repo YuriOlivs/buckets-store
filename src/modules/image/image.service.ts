@@ -12,7 +12,7 @@ export default class ImageService {
       const finalResults: ImageEntity[] = [];
 
       for (const img of images) {
-         const existing = await this.repo.getByUrl(img.url);
+         const existing = await this.repo.findByUrl(img.url);
 
          if (existing) {
             if (img.description != existing.description) existing.description = img.description;
@@ -27,23 +27,23 @@ export default class ImageService {
    }
 
    async findById(id: string): Promise<ImageEntity | null> {
-      return await this.repo.getById(id);
+      return await this.repo.findById(id);
    }
 
    async findByUrl(url: string): Promise<ImageEntity | null> {
-      return await this.repo.getByUrl(url);
+      return await this.repo.findByUrl(url);
    }
 
    async findByTeam(id: string): Promise<ImageEntity | null> {
-      return await this.repo.getByTeam(id);
+      return await this.repo.findByTeam(id);
    }
 
    async findByProduct(id: string): Promise<ImageEntity[] | null> {
-      return await this.repo.getByProduct(id);
+      return await this.repo.findByProduct(id);
    }
 
    async delete(id: string): Promise<ImageEntity> {
-      const imageFound = await this.repo.getById(id);
+      const imageFound = await this.repo.findById(id);
       if (!imageFound) throw new NotFoundException(STRINGS.notFound('Image'));
 
       return await this.repo.remove(imageFound);
