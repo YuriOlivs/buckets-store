@@ -1,9 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CouponService } from './coupon.service';
 import { CouponCreateDTO } from './dto/coupon-create.dto';
-import { CouponUpdateDTO } from './dto/coupon-update.dto';
 
-@Controller('coupon')
+@Controller('coupons')
 export class CouponController {
   constructor(private readonly couponService: CouponService) { }
 

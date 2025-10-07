@@ -68,7 +68,7 @@ export class CouponEntity {
       this.targetValue = targetValue;
       this.isPercentage = isPercentage;   
       this.maxUses = maxUses;
-      if(currentUses) this.currentUses = currentUses;
+      this.currentUses = currentUses ?? 0;
       if(id) this.id = id;
       this.active = this.isActive();
    }

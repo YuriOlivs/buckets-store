@@ -1,4 +1,5 @@
-import { IsDateString, IsEnum, IsNumber, IsOptional, IsPositive, IsString, MaxLength, Min, MinLength } from "class-validator";
+import { Type } from "class-transformer";
+import { IsBoolean, IsDate, IsEnum, IsNumber, IsOptional, IsPositive, IsString, MaxLength, Min, MinLength } from "class-validator";
 import { CouponTargetEnum } from "../enum/CouponTarget.enum";
 import { IsNotPastDate } from "../validations/is-not-past-date.validation";
 
@@ -12,12 +13,14 @@ export class CouponCreateDTO {
    @IsPositive()
    discount: number;
 
-   @IsDateString()
+   @IsDate()
+   @Type(() => Date)
    @IsNotPastDate()
    startDate: Date;
 
+   @IsDate()
+   @Type(() => Date)
    @IsNotPastDate()
-   @IsDateString()
    endDate: Date;
 
    @IsEnum(CouponTargetEnum)
@@ -27,9 +30,7 @@ export class CouponCreateDTO {
    @IsOptional()
    targetValue: string;
 
-   @IsNumber()
-   @IsPositive()
-   @Min(1)
+   @IsBoolean()
    isPercentage: boolean;
 
    @IsNumber()

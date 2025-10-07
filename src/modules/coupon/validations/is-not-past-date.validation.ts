@@ -5,7 +5,11 @@ import { registerDecorator, ValidationArguments, ValidationOptions, ValidatorCon
 @ValidatorConstraint({ async: false })
 export class IsNotPastDateValidator implements ValidatorConstraintInterface {
    validate(value: any): Promise<boolean> | boolean {
-      if (!(value instanceof Date)) return false;
+      if (!value) return false;
+
+      const dateToCheck = new Date(value);
+      if (isNaN(dateToCheck.getTime())) return false;
+
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       return value >= today;
@@ -13,7 +17,7 @@ export class IsNotPastDateValidator implements ValidatorConstraintInterface {
 }
 
 export const IsNotPastDate = (
-   validationOptions: ValidationOptions = { message: 'Start date must be greater or equal than current date' }
+   validationOptions: ValidationOptions = { message: 'Date must be greater or equal than current date' }
 ) => {
    return (object: object, propertyName: string) => {
       registerDecorator({
