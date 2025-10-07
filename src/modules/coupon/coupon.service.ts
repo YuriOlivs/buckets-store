@@ -8,12 +8,12 @@ import { CouponTargetEnum } from './enum/CouponTarget.enum';
 
 @Injectable()
 export class CouponService {
-  constructor(private readonly repo: CouponRepository) {}
+  constructor(private readonly repo: CouponRepository) { }
 
   async create(dto: CouponCreateDTO): Promise<CouponEntity> {
     const existsActiveWithCode = await this.repo.findActiveByCode(dto.code);
     if (existsActiveWithCode) throw new BadRequestException(STRINGS.alreadyExists('Coupon'));
-    
+
     const coupon = new CouponEntity(
       dto.code,
       dto.discount,
@@ -69,7 +69,7 @@ export class CouponService {
 
   async update(id: string, dto: CouponUpdateDTO): Promise<CouponEntity> {
     const coupon = await this.findById(id);
-    if(coupon.active) throw new BadRequestException(STRINGS.cannotUpdate('Coupon', 'Active coupons cannot be updated.'));
+    if (coupon.active) throw new BadRequestException(STRINGS.cannotUpdate('Coupon', 'Active coupons cannot be updated.'));
     Object.assign(coupon, dto);
 
     return await this.repo.save(coupon);

@@ -32,19 +32,23 @@ export default class CartEntity {
    deletedAt: Date;
 
    get rawValue(): number {
-      return this.cartItems.reduce((total, item) => total + item.salePrice * item.quantity, 0);
+      const value = this.cartItems.reduce((total, item) => total + item.salePrice * item.quantity, 0);
+      return Math.round(value * 100) / 100;
    }
 
    get discountValue(): number {
+      if (!this.coupon) return 0;
       if (this.coupon.isPercentage) {
-         return this.rawValue * this.coupon.discount / 100;
+         let value = this.rawValue * this.coupon.discount / 100;
+         return Math.round(value * 100) / 100;
       } else {
          return this.coupon.discount;
       }
    }
 
    get totalValue(): number {
-      return this.rawValue - this.discountValue;
+      const value = this.rawValue - this.discountValue;
+      return Math.round(value * 100) / 100;
    }
 
    constructor(

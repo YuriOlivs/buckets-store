@@ -6,5 +6,7 @@ export const STRINGS = {
    notFound: (field: string) => `${field} not found`,
    notAvailable: (field: string) => `${field} not available`,
    notAuthorized: () => `User not authorized`,
-   cannotUpdate: (field: string, text: string) => `${field} cannot be updated. ${text}`
+   cannotUpdate: (field: string, text: string) => `${field} cannot be updated. ${text}`,
+   invalidCoupon: () => `Coupon code is invalid`,
+   invalidCartForCoupon: () => `Your cart contains invalid items for this coupon. Please remove them and try again`,
 }

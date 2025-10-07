@@ -4,6 +4,9 @@ export class CartResponseDTO {
    constructor(
       private readonly id: string,
       private readonly totalValue: number,
+      private readonly discountValue: number,
+      private readonly rawValue: number,
+      private readonly coupon: string,
       private readonly items: CartItemResponseDTO[]
    ) {}
 }

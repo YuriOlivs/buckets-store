@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { LessThan, MoreThanOrEqual, Repository } from "typeorm";
+import { LessThan, LessThanOrEqual, MoreThan, MoreThanOrEqual, Repository } from "typeorm";
 import { CouponEntity } from "./coupon.entity";
 import { CouponTargetEnum } from "./enum/CouponTarget.enum";
 
@@ -57,8 +57,8 @@ export class CouponRepository {
       return await this.repository.findOne({
          where: { 
             code: code,
-            startDate: MoreThanOrEqual(now),
-            endDate: LessThan(now)
+            startDate: LessThanOrEqual(now),
+            endDate: MoreThan(now)
          }
       })
    }
