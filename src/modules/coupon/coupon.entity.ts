@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { CouponTargetEnum } from "./enum/CouponTarget.enum";
 import CartEntity from "../cart/entities/cart.entity";
+import { OrderEntity } from "../order/entities/order.entity";
 
 @Entity({ name: "coupons" })
 export class CouponEntity {
@@ -45,6 +46,9 @@ export class CouponEntity {
 
    @OneToMany(() => CartEntity, cart => cart.coupon)
    carts: CartEntity[];
+
+   @OneToMany(() => OrderEntity, order => order.coupon)
+   orders: OrderEntity[];
 
    active: boolean;
 

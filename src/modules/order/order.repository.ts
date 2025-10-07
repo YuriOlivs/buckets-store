@@ -16,7 +16,8 @@ export default class OrderRepository {
          relations: [
             'orderStatus',
             'orderItems',
-            'orderItems.product'
+            'orderItems.product',
+            'coupon'
          ],
          order: { createdAt: "DESC" }
       });
@@ -28,7 +29,8 @@ export default class OrderRepository {
          relations: [
             'orderStatus',
             'orderItems',
-            'orderItems.product'
+            'orderItems.product',
+            'coupon'
          ],
          order: { createdAt: "DESC" }
       });

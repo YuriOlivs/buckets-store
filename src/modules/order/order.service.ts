@@ -46,10 +46,13 @@ export default class OrderService {
 
     const order = new OrderEntity(
       cart.totalValue,
+      cart.rawValue,
+      cart.discountValue,
       user,
       orderItems,
       orderStatus,
-      address
+      address,
+      cart.coupon
     );
 
     return await this.repo.save(order);

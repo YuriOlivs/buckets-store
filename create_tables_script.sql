@@ -80,6 +80,8 @@ CREATE TABLE IF NOT EXISTS public.orders (
   user_id UUID NOT NULL,
   address_id UUID NOT NULL,
   total_value NUMERIC(10, 2) NOT NULL,
+    raw_value NUMERIC(10, 2) NOT NULL,
+  discount_value NUMERIC(10, 2) NOT NULL,
   coupon_id UUID,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
@@ -271,7 +273,7 @@ ALTER TABLE public.cart
 -- FK: orders.coupon_id -> coupon_id
 ALTER TABLE public.orders
   ADD CONSTRAINT "FK_order_coupon" FOREIGN KEY (coupon_id)
-        REFERENTES public.coupons (id) MATCH SIMPLE
+        REFERENCES public.coupons (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE SET NULL;
 

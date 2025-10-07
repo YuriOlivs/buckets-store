@@ -6,6 +6,8 @@ import OrderResponseDTO from "./order-response.dto";
 
 export default class OrderMapper {
    static toDTO(entity: OrderEntity) {
+      const coupon = entity.coupon?.code ?? null;
+
       const status = new OrderStatusResponseDTO(
          entity.orderStatus.statusCode,
          entity.orderStatus.statusText,
@@ -22,6 +24,9 @@ export default class OrderMapper {
       const order = new OrderResponseDTO(
          entity.id,
          Math.floor(entity.totalValue * 100) / 100,
+         Number(entity.rawValue),
+         Number(entity.discountValue),
+         coupon,
          status,
          items
       );
