@@ -263,14 +263,14 @@ ALTER TABLE public.cart_items
 
 -- FK: cart.coupon_id -> coupon_id
 ALTER TABLE public.cart
-CONSTRAINT "FK_cart_coupon" FOREIGN KEY (coupon_id)
+  ADD CONSTRAINT "FK_cart_coupon" FOREIGN KEY (coupon_id)
         REFERENCES public.coupons (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE SET NULL;
 
 -- FK: orders.coupon_id -> coupon_id
 ALTER TABLE public.orders
-CONSTRAINT "FK_order_coupon" FOREIGN KEY (coupon_id)
+  ADD CONSTRAINT "FK_order_coupon" FOREIGN KEY (coupon_id)
         REFERENTES public.coupons (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE SET NULL;
