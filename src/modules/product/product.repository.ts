@@ -35,9 +35,10 @@ export default class ProductRepository {
 
       const [products, total] = await this.repository.findAndCount({
          where,
+         relations: ['stock'],
          skip: (page - 1) * limit,
          take: limit,
-         order: { createdAt: 'DESC' }
+         order: { createdAt: 'DESC' },
       });
 
       let filteredProducts = products;
@@ -51,11 +52,17 @@ export default class ProductRepository {
    }
 
    async findById(id: string): Promise<ProductEntity | null> {
-      return await this.repository.findOne({ where: { id } });
+      return await this.repository.findOne({ 
+         where: { id },
+         relations: ['stock']
+      });
    }
 
    async findByTeam(id: string): Promise<ProductEntity[]> {
-      return await this.repository.find({ where: { team: { id } } });
+      return await this.repository.find({ 
+         where: { team: { id } },
+         relations: ['stock'] 
+      });
    }
 
    async remove(product: ProductEntity) {
