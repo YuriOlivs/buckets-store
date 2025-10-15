@@ -32,4 +32,9 @@ export class StockService {
 
     return await this.repo.updateQuantity(productStockList);    
   }
+
+  //uso interno apenas
+  async updateStockByEntity(entities: StockEntity[]): Promise<StockEntity[]> {
+    return await this.repo.updateQuantity(entities);
+  }
 }

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { STRINGS } from 'src/common/strings/global.strings';
 import { AddressService } from '../address/address.service';
 import { CartService } from '../cart/cart.service';
@@ -14,7 +14,9 @@ import OrderRepository from './order.repository';
 import { StockService } from '../stock/stock.service';
 import { StockStatusEnum } from '../stock/enum/stock-status.enum';
 import CartEntity from '../cart/entities/cart.entity';
-import { CartItemEntity } from '../cart/entities/cart-item.entity';
+import { StockEntity } from '../stock/stock.entity';
+import StockUpdateListDTO from '../stock/dto/stock-update-list.dto';
+import { StockUpdateDTO } from '../stock/dto/stock-update-dto';
 
 @Injectable()
 export default class OrderService {
@@ -28,11 +30,13 @@ export default class OrderService {
 
   async create(userId: string, dto: OrderCreateDTO): Promise<OrderEntity> {
     const orderItems: OrderItemEntity[] = [];
-    const user = await this.userService.findById(userId);
-    const address = await this.addressService.findById(dto.address);
-    const cart = await this.cartService.findById(dto.cart);
 
-    await this.validateStock(cart);
+    const [user, address, cart] = await Promise.all([
+      this.userService.findById(userId),
+      this.addressService.findById(dto.address),
+      this.cartService.findById(dto.cart)
+    ]);
+    const stockList = await this.findProductsStock(cart);
 
     for (const item of cart.cartItems) {
       const orderItem = new OrderItemEntity(
@@ -44,13 +48,15 @@ export default class OrderService {
       orderItems.push(orderItem);
     }
 
+    if (orderItems.length === 0) {
+      throw new BadRequestException(STRINGS.noItemsInCart());
+    }
+
     const orderStatus = new OrderStatusEntity(
       OrderStatusCodeEnum.PENDING_PAYMENT,
       OrderStatusTextEnum.PENDING_PAYMENT,
       new Date()
     );
-
-    if (orderItems.length === 0) throw new Error(STRINGS.noItemsInCart());
 
     const order = new OrderEntity(
       cart.totalValue,
@@ -63,6 +69,8 @@ export default class OrderService {
       cart.coupon ?? null
     );
 
+    await this.validateStock(stockList);
+    await this.updateStock(stockList, orderItems);
     const savedOrder = await this.repo.save(order);
     await this.cartService.clear(userId);
 
@@ -123,19 +131,46 @@ export default class OrderService {
     return this.repo.save(orderFound);
   }
 
-  private async validateStock(cart: CartEntity) {
-    let outOfStockItems: CartItemEntity[] = [];
-    
+  private async findProductsStock(cart: CartEntity): Promise<StockEntity[]> {
+    let stockList: StockEntity[] = [];
+
     for (const item of cart.cartItems) {
       const stock = await this.stockService.findByProduct(item.product.id);
+      stockList.push(stock);
+    }
+
+    return stockList;
+  }
+
+  private async validateStock(stockList: StockEntity[]) {
+    let outOfStockItems: StockEntity[] = [];
+
+    for (const stock of stockList) {
       if (stock.status === StockStatusEnum.OUT_OF_STOCK) {
-        outOfStockItems.push(item);
+        outOfStockItems.push(stock);
       }
     }
 
-    //ajustar essa parte
-    if(outOfStockItems.length > 0) {
+    if (outOfStockItems.length > 0) {
       throw new Error(STRINGS.outOfStock(outOfStockItems.map(item => item.product.name).join(', ')));
     }
+  }
+
+  private async updateStock(stockList: StockEntity[], orderItems: OrderItemEntity[]) {
+    const updatedList: StockEntity[] = [];
+
+    for (const stock of stockList) {
+      const quantityBought = orderItems.find(item => item.product.id === stock.product.id)?.quantity ?? 0;
+      const newQuantity = stock.quantity - quantityBought;
+
+      if (newQuantity < 0) {
+        throw new BadRequestException(STRINGS.notEnoughStock(stock.product.name));
+      }
+
+      stock.quantity = newQuantity;
+      updatedList.push(stock);
+    }
+
+    return await this.stockService.updateStockByEntity(updatedList);
   }
 }

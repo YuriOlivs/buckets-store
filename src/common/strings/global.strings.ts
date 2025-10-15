@@ -10,5 +10,6 @@ export const STRINGS = {
    invalidCoupon: () => `Coupon code is invalid`,
    invalidCartForCoupon: () => `Your cart contains invalid items for this coupon. Please remove them and try again`,
    noItemsInCart: () => `Your cart is empty. Please add some items and try again`,
-   outOfStock: (product: string) => `${product} is out of stock.`
+   outOfStock: (product: string) => `${product} is out of stock.`,
+   notEnoughStock: (product: string) => `Not enough stock for ${product}. Please remove some items and try again`
 }
