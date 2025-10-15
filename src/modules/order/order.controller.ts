@@ -61,11 +61,15 @@ export default class OrderController {
     return OrderMapper.toDTO(orderFound);
   }
 
-  @Get('/by-user/:id')
+  @Get('/by-user')
   @UseGuards(OwnershipGuard)
   @UseInterceptors(CacheInterceptor, EmptyListToNoContentInterceptor)
-  async findByUser(@Param('id') id: string) {
-    const ordersFound = await this.orderService.findByUser(id);
+  async findByUser(
+    @Req() req: RequestWithUser
+  ) {
+    const userId = req.user.sub;
+
+    const ordersFound = await this.orderService.findByUser(userId);
     return ordersFound.map(order => OrderMapper.toDTO(order));
   }
 

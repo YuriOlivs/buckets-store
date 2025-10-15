@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UseGuards, Req } from '@nestjs/common';
 import { AddressService } from './address.service';
 import { AddressCreateDTO } from './dto/address-create.dto';
 import { AdressUpdateDTO } from './dto/address-update.dto';
@@ -7,6 +7,7 @@ import { CacheInterceptor } from '@nestjs/cache-manager';
 import { EmptyListToNoContentInterceptor } from 'src/common/interceptor/empty-list-to-no-content.interceptor';
 import { AuthGuard } from '../auth/auth.guard';
 import { OwnershipGuard } from 'src/common/guards/ownership.guard';
+import RequestWithUser from '../auth/dto/req-with-user.dto';
 
 @UseGuards(AuthGuard)
 @Controller('address')
@@ -22,11 +23,15 @@ export class AddressController {
     }
   }
 
-  @Get('/by-user/:id')
+  @Get('/by-user')
   @UseGuards(OwnershipGuard)
   @UseInterceptors(CacheInterceptor, EmptyListToNoContentInterceptor)
-  async findByUser(@Param('id') id: string) {
-    return await this.addressService.findByUser(id);
+  async findByUser(
+    @Req() req: RequestWithUser,
+  ) {
+    const userId = req.user.sub;
+
+    return await this.addressService.findByUser(userId);
   }
 
   @Get('/:id')
