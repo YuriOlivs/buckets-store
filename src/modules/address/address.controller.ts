@@ -6,7 +6,6 @@ import { STRINGS } from 'src/common/strings/global.strings';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { EmptyListToNoContentInterceptor } from 'src/common/interceptor/empty-list-to-no-content.interceptor';
 import { AuthGuard } from '../auth/auth.guard';
-import { OwnershipGuard } from 'src/common/guards/ownership.guard';
 import RequestWithUser from '../auth/dto/req-with-user.dto';
 
 @UseGuards(AuthGuard)
@@ -24,13 +23,11 @@ export class AddressController {
   }
 
   @Get('/by-user')
-  @UseGuards(OwnershipGuard)
   @UseInterceptors(CacheInterceptor, EmptyListToNoContentInterceptor)
   async findByUser(
     @Req() req: RequestWithUser,
   ) {
     const userId = req.user.sub;
-
     return await this.addressService.findByUser(userId);
   }
 
