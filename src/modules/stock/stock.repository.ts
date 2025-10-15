@@ -18,8 +18,7 @@ export class StockRepository {
       return await this.repository.findOne({ where: { product: { id: productId } } });
    }
 
-   async updateQuantity(stock: StockEntity, quantity: number): Promise<StockEntity> {
-      stock.quantity = quantity;
-      return await this.repository.save(stock);
+   async updateQuantity(items: StockEntity[]): Promise<StockEntity[]> {
+      return await this.repository.save(items);
    }
 }

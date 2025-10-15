@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { StockUpdateDTO } from './dto/stock-update-dto';
 import { StockRepository } from './stock.repository';
 import { StockEntity } from './stock.entity';
+import StockUpdateListDTO from './dto/stock-update-list.dto';
 
 @Injectable()
 export class StockService {
@@ -20,9 +21,15 @@ export class StockService {
     return productStock;
   }
 
-  async updateQuantity(productId: string, dto: StockUpdateDTO): Promise<StockEntity> {
-    const productStock = await this.findByProduct(productId);
-    productStock.quantity = dto.quantity;
-    return await this.repo.updateQuantity(productStock, dto.quantity);
+  async updateQuantity(dto: StockUpdateListDTO): Promise<StockEntity[]> {
+    let productStockList: StockEntity[] = [];
+
+    for (const item of dto.items) {
+      const productStock = await this.findByProduct(item.productId);
+      productStock.quantity = item.quantity;
+      productStockList.push(productStock);
+    }
+
+    return await this.repo.updateQuantity(productStockList);    
   }
 }

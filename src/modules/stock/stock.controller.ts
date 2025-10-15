@@ -1,10 +1,9 @@
-import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
-import { StockUpdateDTO } from './dto/stock-update-dto';
+import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';;
 import { StockService } from './stock.service';
 import { AuthGuard } from '../auth/auth.guard';
-import StockResponseDTO from './dto/stock-response.dto';
 import StockMapper from './dto/stock.mapper';
 import { STRINGS } from 'src/common/strings/global.strings';
+import StockUpdateListDTO from './dto/stock-update-list.dto';
 
 @UseGuards(AuthGuard)
 @Controller('stock')
@@ -23,11 +22,11 @@ export class StockController {
   }
 
   @Patch('/:product_id')
-  async updateQuantity(@Param('product_id') id: string, @Body() dto: StockUpdateDTO) {
-    const productStock = await this.stockService.updateQuantity(id, dto);
+  async updateQuantity(@Param('product_id') id: string, @Body() dto: StockUpdateListDTO) {
+    const productStock = await this.stockService.updateQuantity(dto);
     return {
       message: STRINGS.entityUpdated(`Stock for Product ${id}`),
-      payload: StockMapper.toDTO(productStock)
+      payload: productStock.map(StockMapper.toDTO)
     }
   }
 }
