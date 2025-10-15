@@ -18,9 +18,9 @@ export default class CartEntity {
    )
    cartItems: CartItemEntity[];
 
-   @ManyToOne(() => CouponEntity, coupon => coupon.carts)
+   @ManyToOne(() => CouponEntity, coupon => coupon.carts, { nullable: true })
    @JoinColumn({ name: "coupon_id" })
-   coupon: CouponEntity;
+   coupon: CouponEntity | null;
 
    @CreateDateColumn({ name: 'created_at' })
    createdAt: Date;

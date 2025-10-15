@@ -133,7 +133,7 @@ export class CartService {
     const cartFound = await this.repo.findByUser(userId);
     if (!cartFound) throw new BadRequestException(STRINGS.notFound('Cart'));
 
-    return this.repo.clearCart(cartFound.id);
+    return this.repo.clearCart(cartFound);
   }
 
   private readonly couponValidators: Record<string, (cart: CartEntity, coupon: CouponEntity) => void> = {

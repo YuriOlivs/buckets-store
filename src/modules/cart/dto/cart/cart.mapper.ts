@@ -11,7 +11,7 @@ export default class CartMapper {
          cart.totalValue, 
          cart.discountValue,
          cart.rawValue,
-         cart.coupon.code,
+         cart.coupon?.code ?? null,
          items
       );
    }

@@ -32,12 +32,16 @@ export class AddressService {
   }
 
   async findByUser(id: string): Promise<AddressEntity[]> {
-    const addressFound = await this.findByUser(id);
+    const addressFound = await this.repo.findByUser(id);
+    if(!addressFound) throw new NotFoundException(STRINGS.notFound('Address'));
+
     return addressFound;
   }
 
   async findById(id: string): Promise<AddressEntity> {
-    const addressFound = await this.findById(id);
+    const addressFound = await this.repo.findById(id);
+    if(!addressFound) throw new NotFoundException(STRINGS.notFound('Address'));
+
     return addressFound;
   }
 

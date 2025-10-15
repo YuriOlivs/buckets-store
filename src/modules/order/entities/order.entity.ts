@@ -26,9 +26,9 @@ export class OrderEntity {
    @ManyToOne(() => AddressEntity, address => address.orders, { eager: true })
    address: AddressEntity;
 
-   @ManyToOne(() => CouponEntity, coupon => coupon.orders)
+   @ManyToOne(() => CouponEntity, coupon => coupon.orders, { nullable: true })
    @JoinColumn({ name: "coupon_id" })
-   coupon: CouponEntity;
+   coupon: CouponEntity | null;
 
    @OneToOne(
       () => OrderStatusEntity, orderStatus => orderStatus.order,
@@ -59,7 +59,7 @@ export class OrderEntity {
       orderItems: OrderItemEntity[],
       orderStatus: OrderStatusEntity,
       address: AddressEntity,
-      coupon?: CouponEntity
+      coupon?: CouponEntity | null
    ) {
       this.totalValue = totalValue;
       this.rawValue = rawValue;

@@ -1,6 +1,5 @@
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Req, UseGuards, UseInterceptors } from '@nestjs/common';
-import { OwnershipGuard } from 'src/common/guards/ownership.guard';
 import { EmptyListToNoContentInterceptor } from 'src/common/interceptor/empty-list-to-no-content.interceptor';
 import { STRINGS } from 'src/common/strings/global.strings';
 import { AuthGuard } from '../auth/auth.guard';
@@ -54,19 +53,22 @@ export default class OrderController {
     };
   }
 
+  @Get('/by-user')
+  @UseInterceptors(CacheInterceptor, EmptyListToNoContentInterceptor)
+  async findByUser(
+    @Req() req: RequestWithUser
+  ) {
+    const userId = req.user.sub;
+
+    const ordersFound = await this.orderService.findByUser(userId);
+    return ordersFound.map(order => OrderMapper.toDTO(order));
+  }
+
   @Get('/:id')
   @UseInterceptors(CacheInterceptor)
   async findById(@Param('id') id: string) {
     const orderFound = await this.orderService.findById(id);
     return OrderMapper.toDTO(orderFound);
-  }
-
-  @Get('/by-user/:id')
-  @UseGuards(OwnershipGuard)
-  @UseInterceptors(CacheInterceptor, EmptyListToNoContentInterceptor)
-  async findByUser(@Param('id') id: string) {
-    const ordersFound = await this.orderService.findByUser(id);
-    return ordersFound.map(order => OrderMapper.toDTO(order));
   }
 
   @Delete('/:id')

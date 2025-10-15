@@ -52,10 +52,13 @@ export default class OrderService {
       orderItems,
       orderStatus,
       address,
-      cart.coupon
+      cart.coupon ?? null
     );
 
-    return await this.repo.save(order);
+    const savedOrder = await this.repo.save(order);
+    await this.cartService.clear(userId);
+
+    return savedOrder;
   }
 
   async updateStatus(id: string, status: OrderStatusCreateDTO) {
