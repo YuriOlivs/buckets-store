@@ -39,7 +39,9 @@ export default class CartRepository {
       return await this.cartRepository.remove(cart);
    }
 
-   async clearCart(id: string): Promise<void> {
-      await this.cartItemRepository.delete({ cart: { id } });
+   async clearCart(cart: CartEntity): Promise<void> {
+      cart.coupon = null;
+      await this.cartRepository.save(cart);
+      await this.cartItemRepository.delete({ cart: { id: cart.id } });
    }
 }

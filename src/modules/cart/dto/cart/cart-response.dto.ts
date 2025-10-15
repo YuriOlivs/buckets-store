@@ -6,7 +6,7 @@ export class CartResponseDTO {
       private readonly totalValue: number,
       private readonly discountValue: number,
       private readonly rawValue: number,
-      private readonly coupon: string,
+      private readonly coupon: string | null,
       private readonly items: CartItemResponseDTO[]
    ) {}
 }

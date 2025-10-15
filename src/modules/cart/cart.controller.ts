@@ -51,6 +51,8 @@ export class CartController {
 
   @Delete('/clear-cart/:user_id')
   async clearCart(@Param('user_id') userId: string) {
-    return await this.cartService.clear(userId);
+    await this.cartService.clear(userId);
+
+    return { message: 'Cart cleared successfully' };
   }
 }
