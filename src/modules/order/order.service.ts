@@ -44,6 +44,8 @@ export default class OrderService {
       new Date()
     );
 
+    if (orderItems.length === 0) throw new Error(STRINGS.noItemsInCart());
+
     const order = new OrderEntity(
       cart.totalValue,
       cart.rawValue,
