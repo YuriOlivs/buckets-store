@@ -1,8 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { CartItemCreateDTO } from './dto/cart-item/cart-item-create.dto';
 import { CartItemQuantityDTO } from './dto/cart-item/cart-item-quantity.dto';
 import CartMapper from './dto/cart/cart.mapper';
+import { AuthGuard } from '../auth/auth.guard';
+@UseGuards(AuthGuard)
 @Controller('cart')
 export class CartController {
   constructor(private readonly cartService: CartService) { }
