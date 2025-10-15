@@ -7,6 +7,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import CartEntity from './entities/cart.entity';
 import { CartItemEntity } from './entities/cart-item.entity';
 import { ProductModule } from '../product/product.module';
+import { CouponModule } from '../coupon/coupon.module';
 
 @Module({
   controllers: [CartController],
@@ -14,7 +15,8 @@ import { ProductModule } from '../product/product.module';
   imports: [
     TypeOrmModule.forFeature([CartEntity, CartItemEntity]),
     UserModule,
-    ProductModule
+    ProductModule,
+    CouponModule
   ],
   exports: [CartService]
 })

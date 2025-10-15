@@ -19,6 +19,18 @@ export class CartController {
     }
   }
 
+  @Patch('/remove-item/:user_id/:item_id')
+  async removeItemFromCart(@Param('user_id') userId: string, @Param('item_id') itemId: string) {
+    const cartUpdated = await this.cartService.removeItem(userId, itemId);
+    return CartMapper.toDTO(cartUpdated);
+  }
+
+  @Patch('/apply-coupon/:user_id')
+  async applyCoupon(@Param('user_id') userId: string, @Body() dto: { code: string }) {
+    const cartUpdated = await this.cartService.applyCoupon(userId, dto.code);
+    return CartMapper.toDTO(cartUpdated);  
+  }
+
   @Get('/:user_id')
   async findByUser(@Param('user_id') userId: string) {
     const cartFound = await this.cartService.findByUser(userId);

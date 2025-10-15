@@ -5,6 +5,9 @@ export default class OrderResponseDTO {
    constructor(
       readonly id: string,
       readonly totalValue: number,
+      readonly rawValue: number,
+      readonly discountValue: number,
+      readonly coupon: string | null,
       readonly status: OrderStatusResponseDTO,
       readonly items: OrderItemResponseDTO[],
    ) { }

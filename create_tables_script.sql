@@ -80,6 +80,9 @@ CREATE TABLE IF NOT EXISTS public.orders (
   user_id UUID NOT NULL,
   address_id UUID NOT NULL,
   total_value NUMERIC(10, 2) NOT NULL,
+    raw_value NUMERIC(10, 2) NOT NULL,
+  discount_value NUMERIC(10, 2) NOT NULL,
+  coupon_id UUID,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   deleted_at TIMESTAMP WITHOUT TIME ZONE,
@@ -148,6 +151,26 @@ CREATE TABLE IF NOT EXISTS public.cart_items (
 )
 
 ALTER TABLE IF EXISTS public.cart_items OWNER to root;
+
+CREATE TABLE IF NOT EXISTS public.coupons (
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    code character varying(6) COLLATE pg_catalog."default" NOT NULL,
+    discount integer NOT NULL,
+    start_date timestamp without time zone NOT NULL,
+    end_date timestamp without time zone NOT NULL,
+    target_type character varying COLLATE pg_catalog."default",
+    target_value character varying(255) COLLATE pg_catalog."default",
+    is_percentage boolean NOT NULL,
+    max_uses integer NOT NULL,
+    current_uses integer NOT NULL,
+    created_at timestamp without time zone NOT NULL DEFAULT now(),
+    updated_at timestamp without time zone NOT NULL DEFAULT now(),
+    deleted_at timestamp without time zone,
+
+    CONSTRAINT "PK_d7ea8864a0150183770f3e9a8cb" PRIMARY KEY (id)
+)
+
+ALTER TABLE IF EXISTS public.coupons OWNER to root;
 
 -- FK: addresses.user_id → users.id
 ALTER TABLE public.addresses
@@ -228,7 +251,7 @@ ALTER TABLE public.cart
 
 -- FK: cart_items.product_id → product.id
 ALTER TABLE public.cart_items
-  ADD CONSTRAINT "FK_30e89257a105eab7648a35c7fce" FOREIGN KEY (product_id)
+  ADD CONSTRAINT "FK_items_product" FOREIGN KEY (product_id)
         REFERENCES public.products (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION;
@@ -239,6 +262,20 @@ ALTER TABLE public.cart_items
         REFERENCES public.carts (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION;
+
+-- FK: cart.coupon_id -> coupon_id
+ALTER TABLE public.cart
+  ADD CONSTRAINT "FK_cart_coupon" FOREIGN KEY (coupon_id)
+        REFERENCES public.coupons (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE SET NULL;
+
+-- FK: orders.coupon_id -> coupon_id
+ALTER TABLE public.orders
+  ADD CONSTRAINT "FK_order_coupon" FOREIGN KEY (coupon_id)
+        REFERENCES public.coupons (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE SET NULL;
 
 -- CHECK: só um pai (team ou product)
 ALTER TABLE public.images

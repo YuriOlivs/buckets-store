@@ -3,6 +3,7 @@ import { AddressEntity } from "../../address/address.entity";
 import { OrderStatusEntity } from "../../order-status/order-status.entity";
 import UserEntity from "../../user/user.entity";
 import { OrderItemEntity } from "./order-item.entity";
+import { CouponEntity } from "src/modules/coupon/coupon.entity";
 
 @Entity({ name: 'orders' })
 export class OrderEntity {
@@ -12,12 +13,22 @@ export class OrderEntity {
    @Column({ name: 'total_value', type: 'numeric', precision: 10, scale: 2, nullable: false })
    totalValue: number;
 
+   @Column({ name: 'raw_value', type: 'numeric', precision: 10, scale: 2, nullable: false, default: 0.00  })
+   rawValue: number;
+
+   @Column({ name: 'discount_value', type: 'numeric', precision: 10, scale: 2, nullable: false, default: 0.00 })
+   discountValue: number;
+
    @ManyToOne(() => UserEntity, user => user.orders)
    @JoinColumn({ name: 'user_id' })
    user: UserEntity;
 
    @ManyToOne(() => AddressEntity, address => address.orders, { eager: true })
    address: AddressEntity;
+
+   @ManyToOne(() => CouponEntity, coupon => coupon.orders)
+   @JoinColumn({ name: "coupon_id" })
+   coupon: CouponEntity;
 
    @OneToOne(
       () => OrderStatusEntity, orderStatus => orderStatus.order,
@@ -42,15 +53,21 @@ export class OrderEntity {
 
    constructor(
       totalValue: number,
+      rawValue: number,
+      discountValue: number,
       user: UserEntity,
       orderItems: OrderItemEntity[],
       orderStatus: OrderStatusEntity,
-      address: AddressEntity
+      address: AddressEntity,
+      coupon?: CouponEntity
    ) {
       this.totalValue = totalValue;
+      this.rawValue = rawValue;
+      this.discountValue = discountValue;
       this.user = user;
       this.orderItems = orderItems;
       this.orderStatus = orderStatus;
       this.address = address;
+      if (coupon) this.coupon = coupon;
    }
 }

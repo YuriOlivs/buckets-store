@@ -23,7 +23,6 @@ export default class OrderService {
 
   async create(userId: string, dto: OrderCreateDTO): Promise<OrderEntity> {
     const orderItems: OrderItemEntity[] = [];
-    let totalValue: number = 0;
 
     const user = await this.userService.findById(userId);
     const address = await this.addressService.findById(dto.address);
@@ -37,7 +36,6 @@ export default class OrderService {
       );
 
       orderItems.push(orderItem);
-      totalValue += orderItem.salePrice * orderItem.quantity;
     }
 
     const orderStatus = new OrderStatusEntity(
@@ -47,11 +45,14 @@ export default class OrderService {
     );
 
     const order = new OrderEntity(
-      totalValue,
+      cart.totalValue,
+      cart.rawValue,
+      cart.discountValue,
       user,
       orderItems,
       orderStatus,
-      address
+      address,
+      cart.coupon
     );
 
     return await this.repo.save(order);

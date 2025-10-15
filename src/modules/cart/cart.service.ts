@@ -7,13 +7,16 @@ import { CartItemCreateDTO } from './dto/cart-item/cart-item-create.dto';
 import { CartUpdateDTO } from './dto/cart/cart-update.dto';
 import { CartItemEntity } from './entities/cart-item.entity';
 import CartEntity from './entities/cart.entity';
+import { CouponService } from '../coupon/coupon.service';
+import { CouponEntity } from '../coupon/coupon.entity';
 
 @Injectable()
 export class CartService {
   constructor(
     private repo: CartRepository,
     private userService: UserService,
-    private productService: ProductService
+    private productService: ProductService,
+    private couponService: CouponService
   ) { }
 
   async findOrCreate(userId: string): Promise<CartEntity> {
@@ -46,6 +49,32 @@ export class CartService {
     );
 
     cart.cartItems = [cartItem];
+    return await this.repo.save(cart);
+  }
+
+  async removeItem(userId: string, itemId: string): Promise<CartEntity> {
+    const user = await this.userService.findById(userId);
+    if (!user) throw new BadRequestException(STRINGS.notFound('User'));
+
+    const cart = await this.repo.findByUser(user.id);
+    if (!cart) throw new BadRequestException(STRINGS.notFound('Cart'));
+
+    const cartItem = cart.cartItems.find((item) => item.id === itemId);
+    if (!cartItem) throw new BadRequestException(STRINGS.notFound('Cart item'));
+
+    cart.cartItems = cart.cartItems.filter((item) => item.id !== itemId);
+    return await this.repo.save(cart);
+  }
+
+  async applyCoupon(userId: string, code: string) {
+    const coupon = await this.couponService.findActiveByCode(code);
+    const cart = await this.findByUser(userId);
+
+    const validator = this.couponValidators[coupon.targetType];
+    if (!validator) throw new BadRequestException(STRINGS.invalidCoupon());
+
+    validator(cart, coupon);
+
     return await this.repo.save(cart);
   }
 
@@ -106,4 +135,27 @@ export class CartService {
 
     return this.repo.clearCart(cartFound.id);
   }
+
+  private readonly couponValidators: Record<string, (cart: CartEntity, coupon: CouponEntity) => void> = {
+    GLOBAL: (cart, coupon) => {
+      cart.coupon = coupon;
+    },
+
+    USER: (cart, coupon) => {
+      if (cart.user.id !== coupon.targetValue) throw new BadRequestException(STRINGS.invalidCoupon());
+      cart.coupon = coupon;
+    },
+
+    CATEGORY: (cart, coupon) => {
+      for (const item of cart.cartItems) {
+        const { category, subcategory } = item.product;
+
+        if (category !== coupon.targetValue!.toLowerCase() && subcategory !== coupon.targetValue!.toLowerCase()) {
+          throw new BadRequestException(STRINGS.invalidCartForCoupon());
+        }
+
+        cart.coupon = coupon;
+      }
+    },
+  };
 }
