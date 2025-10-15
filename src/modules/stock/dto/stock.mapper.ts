@@ -6,9 +6,9 @@ export default class StockMapper {
    static toDTO(stock: StockEntity) {
       const product = ProductMapper.toDTO(stock.product);
       return new StockResponseDTO(
-         product, 
-         stock.quantity, 
-         stock.stockStatus
+         product,
+         stock.quantity,
+         stock.status
       );
    }
 }

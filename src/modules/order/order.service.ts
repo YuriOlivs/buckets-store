@@ -11,6 +11,10 @@ import { OrderCreateDTO } from './dto/order/order-create.dto';
 import { OrderItemEntity } from './entities/order-item.entity';
 import { OrderEntity } from './entities/order.entity';
 import OrderRepository from './order.repository';
+import { StockService } from '../stock/stock.service';
+import { StockStatusEnum } from '../stock/enum/stock-status.enum';
+import CartEntity from '../cart/entities/cart.entity';
+import { CartItemEntity } from '../cart/entities/cart-item.entity';
 
 @Injectable()
 export default class OrderService {
@@ -18,15 +22,17 @@ export default class OrderService {
     private repo: OrderRepository,
     private userService: UserService,
     private addressService: AddressService,
-    private cartService: CartService
+    private cartService: CartService,
+    private stockService: StockService
   ) { }
 
   async create(userId: string, dto: OrderCreateDTO): Promise<OrderEntity> {
     const orderItems: OrderItemEntity[] = [];
-
     const user = await this.userService.findById(userId);
     const address = await this.addressService.findById(dto.address);
     const cart = await this.cartService.findById(dto.cart);
+
+    await this.validateStock(cart);
 
     for (const item of cart.cartItems) {
       const orderItem = new OrderItemEntity(
@@ -115,5 +121,21 @@ export default class OrderService {
     orderFound.orderStatus = canceledStatus;
 
     return this.repo.save(orderFound);
+  }
+
+  private async validateStock(cart: CartEntity) {
+    let outOfStockItems: CartItemEntity[] = [];
+    
+    for (const item of cart.cartItems) {
+      const stock = await this.stockService.findByProduct(item.product.id);
+      if (stock.status === StockStatusEnum.OUT_OF_STOCK) {
+        outOfStockItems.push(item);
+      }
+    }
+
+    //ajustar essa parte
+    if(outOfStockItems.length > 0) {
+      throw new Error(STRINGS.outOfStock(outOfStockItems.map(item => item.product.name).join(', ')));
+    }
   }
 }

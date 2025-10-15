@@ -11,5 +11,6 @@ import { StockEntity } from './stock.entity';
   ],
   controllers: [StockController],
   providers: [StockService, StockRepository],
+  exports: [StockService]
 })
 export class StockModule {}

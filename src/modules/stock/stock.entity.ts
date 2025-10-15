@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import ProductEntity from "../product/product.entity";
 import { StockStatusEnum } from "./enum/stock-status.enum";
 
@@ -16,7 +16,7 @@ export class StockEntity {
    @Column({ name: 'quantity', type: 'int', nullable: false })
    quantity: number;
 
-   get stockStatus(): string {
+   get status(): string {
       if (this.quantity == 0) {
          return StockStatusEnum.OUT_OF_STOCK;
       } else if (this.quantity < 10) {
@@ -34,7 +34,7 @@ export class StockEntity {
       quantity: number,
       product?: ProductEntity
    ) {
-      if(product) this.product = product;
+      if (product) this.product = product;
       this.quantity = quantity;
    }
 }
