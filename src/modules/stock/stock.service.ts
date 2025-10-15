@@ -3,6 +3,7 @@ import { StockUpdateDTO } from './dto/stock-update-dto';
 import { StockRepository } from './stock.repository';
 import { StockEntity } from './stock.entity';
 import StockUpdateListDTO from './dto/stock-update-list.dto';
+import { STRINGS } from 'src/common/strings/global.strings';
 
 @Injectable()
 export class StockService {
@@ -16,7 +17,7 @@ export class StockService {
 
   async findByProduct(productId: string): Promise<StockEntity> {
     const productStock = await this.repo.findByProduct(productId);
-    if(!productStock) throw new NotFoundException('Stock for this product');
+    if(!productStock) throw new NotFoundException(STRINGS.notFound('Stock for this product'));
 
     return productStock;
   }
