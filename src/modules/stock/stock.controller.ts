@@ -21,11 +21,11 @@ export class StockController {
     return StockMapper.toDTO(productStock);
   }
 
-  @Patch('/:product_id')
-  async updateQuantity(@Param('product_id') id: string, @Body() dto: StockUpdateListDTO) {
+  @Patch('/update-stock')
+  async updateQuantity(@Body() dto: StockUpdateListDTO) {
     const productStock = await this.stockService.updateQuantity(dto);
     return {
-      message: STRINGS.entityUpdated(`Stock for Product ${id}`),
+      message: STRINGS.entityUpdated(`Product's stock`),
       payload: productStock.map(StockMapper.toDTO)
     }
   }

@@ -11,13 +11,13 @@ export class StockRepository {
    ) { }
 
    async findAllProductStock(): Promise<StockEntity[]> {
-      return await this.repository.find({ relations: ['product'] });
+      return await this.repository.find({ relations: ['product', 'product.images'] });
    }
 
    async findByProduct(productId: string): Promise<StockEntity | null> {
       return await this.repository.findOne({ 
          where: { product: { id: productId } },
-         relations: ['product']
+         relations: ['product', 'product.images']
        });
    }
 
