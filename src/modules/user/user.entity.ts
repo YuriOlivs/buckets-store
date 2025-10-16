@@ -1,7 +1,8 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { AddressEntity } from '../address/address.entity';
 import CartEntity from '../cart/entities/cart.entity';
 import { OrderEntity } from '../order/entities/order.entity';
+import { RoleEntity } from '../roles/role.entity';
 
 @Entity({ name: 'users' })
 export default class UserEntity {
@@ -26,6 +27,10 @@ export default class UserEntity {
   @Column({ name: 'birth_date', nullable: false })
   birthDate: Date;
 
+  @OneToMany(() => RoleEntity, role => role.users)
+  @JoinColumn({ name: 'role_id' })
+  role: RoleEntity;
+
   @OneToMany(() => AddressEntity, address => address.user)
   addresses: AddressEntity[];
 
@@ -47,11 +52,13 @@ export default class UserEntity {
     email: string,
     password: string,
     birthDate: Date,
+    role: RoleEntity
   ) {
     this.name = name;
     this.lastName = lastName;
     this.email = email;
     this.password = password;
     this.birthDate = birthDate;
+    this.role = role;
   }
 }

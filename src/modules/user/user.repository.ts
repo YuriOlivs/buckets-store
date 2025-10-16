@@ -11,11 +11,16 @@ export default class UserRepository {
   ) { }
 
   async findAll(): Promise<UserEntity[]> {
-    return this.repository.find();
+    return this.repository.find({
+      relations: ['role']
+    });
   }
 
   async findById(id: string): Promise<UserEntity | null> {
-    return await this.repository.findOne({ where: { id: id } });
+    return await this.repository.findOne({ 
+      where: { id: id },
+      relations: ['role']
+    });
   }
 
   async findByEmail(email: string): Promise<UserEntity | null> {
