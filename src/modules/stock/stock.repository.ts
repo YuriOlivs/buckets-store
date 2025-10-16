@@ -15,7 +15,10 @@ export class StockRepository {
    }
 
    async findByProduct(productId: string): Promise<StockEntity | null> {
-      return await this.repository.findOne({ where: { product: { id: productId } } });
+      return await this.repository.findOne({ 
+         where: { product: { id: productId } },
+         relations: ['product']
+       });
    }
 
    async updateQuantity(items: StockEntity[]): Promise<StockEntity[]> {
