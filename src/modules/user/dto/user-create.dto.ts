@@ -1,4 +1,4 @@
-import { IsDateString, IsEmail, IsNotEmpty, IsString, Matches, MaxLength, MinLength } from "class-validator";
+import { IsDateString, IsEmail, IsNotEmpty, IsOptional, IsString, Matches, MaxLength, MinLength } from "class-validator";
 import { IsEmailUnique } from "../validations/is-email-unique.validator";
 
 export default class UserCreateDTO {
@@ -29,4 +29,10 @@ export default class UserCreateDTO {
 
    @IsDateString()
    birthDate: Date;
+
+   @IsString()
+   @IsNotEmpty()
+   @MaxLength(10)
+   @IsOptional()
+   role?: string;
 }

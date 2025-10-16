@@ -11,6 +11,7 @@ import ProductUpdateDTO from "./dto/product-update.dto";
 import ProductMapper from "./dto/product.mapper";
 import ProductEntity from "./product.entity";
 import ProductRepository from "./product.repository";
+import { StockEntity } from "../stock/stock.entity";
 
 @Injectable()
 export default class ProductService {
@@ -63,7 +64,10 @@ export default class ProductService {
    async create(dto: ProductCreateDTO): Promise<ProductEntity> {
       const images: ImageEntity[] = [];
       const productImages = dto.images.map(image => new ImageEntity(image.url, image.desc));
-      const teamFound = await this.teamService.findById(dto.team);
+      const teamFound = await this.teamService.findById(dto.team);;
+      const stock = new StockEntity(
+         dto.quantityAvailable ?? 0
+      );
 
       const product = new ProductEntity(
          dto.name,
@@ -73,7 +77,7 @@ export default class ProductService {
          dto.price,
          teamFound,
          productImages,
-         dto.quantityAvailable,
+         stock
       );
 
       for (const image of product.images) {
@@ -94,16 +98,6 @@ export default class ProductService {
       product.images = images;
 
       return await this.repo.save(product);
-   }
-
-   async buy(product: ProductEntity, quantity: number): Promise<boolean> {
-      if (product.quantityAvailable <= 0) {
-         return false;
-      }
-
-      product.quantityAvailable -= quantity;
-      await this.repo.save(product);
-      return true;
    }
 
    async update(id: string, productData: ProductUpdateDTO): Promise<ProductEntity> {

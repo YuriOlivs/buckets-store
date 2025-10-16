@@ -8,6 +8,8 @@ import { OrderStatusCreateDTO } from '../order-status/dto/order-status-create.dt
 import { OrderCreateDTO } from './dto/order/order-create.dto';
 import OrderMapper from './dto/order/order.mapper';
 import OrderService from './order.service';
+import { AdminGuard } from 'src/common/guards/admin.guard';
+import UserPayload from '../auth/dto/user-payload.dto';
 
 @UseGuards(AuthGuard)
 @Controller('orders')
@@ -28,6 +30,7 @@ export default class OrderController {
     };
   }
 
+  @UseGuards(AdminGuard)
   @Put('/update-status/:id')
   async updateStatus(
     @Param('id') id: string,
@@ -42,10 +45,11 @@ export default class OrderController {
 
   @Patch('/update-address/:id/:addressId')
   async updateAddress(
+    @Req() req: RequestWithUser,
     @Param('id') id: string,
     @Param('addressId') addressId: string
   ) {
-    const orderUpdated = await this.orderService.updateAddress(id, addressId);
+    const orderUpdated = await this.orderService.updateAddress(id, addressId, req.user);
 
     return {
       message: STRINGS.entityUpdated('Order'),
@@ -76,7 +80,7 @@ export default class OrderController {
     @Req() req: RequestWithUser,
     @Param('id') id: string
   ) {
-    await this.orderService.cancel(id, req.user.sub);
+    await this.orderService.cancel(id, req.user);
 
     return {
       message: STRINGS.entityDeleted('Order'),

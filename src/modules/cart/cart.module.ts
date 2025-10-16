@@ -8,6 +8,7 @@ import CartEntity from './entities/cart.entity';
 import { CartItemEntity } from './entities/cart-item.entity';
 import { ProductModule } from '../product/product.module';
 import { CouponModule } from '../coupon/coupon.module';
+import { StockModule } from '../stock/stock.module';
 
 @Module({
   controllers: [CartController],
@@ -16,7 +17,8 @@ import { CouponModule } from '../coupon/coupon.module';
     TypeOrmModule.forFeature([CartEntity, CartItemEntity]),
     UserModule,
     ProductModule,
-    CouponModule
+    CouponModule,
+    StockModule
   ],
   exports: [CartService]
 })

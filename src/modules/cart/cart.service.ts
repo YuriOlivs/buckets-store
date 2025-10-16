@@ -1,14 +1,16 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { STRINGS } from 'src/common/strings/global.strings';
+import { CouponEntity } from '../coupon/coupon.entity';
+import { CouponService } from '../coupon/coupon.service';
 import ProductService from '../product/product.service';
+import { StockStatusEnum } from '../stock/enum/stock-status.enum';
+import { StockService } from '../stock/stock.service';
 import UserService from '../user/user.service';
 import CartRepository from './cart.repository';
 import { CartItemCreateDTO } from './dto/cart-item/cart-item-create.dto';
 import { CartUpdateDTO } from './dto/cart/cart-update.dto';
 import { CartItemEntity } from './entities/cart-item.entity';
 import CartEntity from './entities/cart.entity';
-import { CouponService } from '../coupon/coupon.service';
-import { CouponEntity } from '../coupon/coupon.entity';
 
 @Injectable()
 export class CartService {
@@ -16,7 +18,8 @@ export class CartService {
     private repo: CartRepository,
     private userService: UserService,
     private productService: ProductService,
-    private couponService: CouponService
+    private couponService: CouponService,
+    private stockService: StockService
   ) { }
 
   async findOrCreate(userId: string): Promise<CartEntity> {
@@ -38,6 +41,9 @@ export class CartService {
 
     const product = await this.productService.findById(dto.product);
     if (!product) throw new BadRequestException(STRINGS.notFound('Product'));
+
+    const stock = await this.stockService.findByProduct(product.id);
+    if (stock.status === StockStatusEnum.OUT_OF_STOCK) throw new BadRequestException(STRINGS.outOfStock(product.name));
 
     const cart = await this.findOrCreate(user.id);
 

@@ -7,13 +7,15 @@ import { OrderEntity } from './entities/order.entity';
 import OrderController from './order.controller';
 import OrderRepository from './order.repository';
 import OrderService from './order.service';
+import { StockModule } from '../stock/stock.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([OrderEntity]),
     UserModule,
     AddressModule,
-    CartModule
+    CartModule,
+    StockModule
   ],
   exports: [OrderService],
   controllers: [OrderController],

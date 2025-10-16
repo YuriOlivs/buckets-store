@@ -1,7 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { CouponService } from './coupon.service';
 import { CouponCreateDTO } from './dto/coupon-create.dto';
+import { AuthGuard } from '../auth/auth.guard';
+import { AdminGuard } from 'src/common/guards/admin.guard';
 
+@UseGuards(AuthGuard, AdminGuard)
 @Controller('coupons')
 export class CouponController {
   constructor(private readonly couponService: CouponService) { }

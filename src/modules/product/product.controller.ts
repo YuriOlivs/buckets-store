@@ -8,13 +8,14 @@ import ProductFilterDTO from "./dto/product-filter.dto";
 import ProductUpdateDTO from "./dto/product-update.dto";
 import ProductMapper from "./dto/product.mapper";
 import ProductService from "./product.service";
+import { SellerGuard } from "src/common/guards/seller.guard";
 
 @Controller('/products')
 export default class ProductController {
    constructor(private service: ProductService) { }
 
    @Post()
-   @UseGuards(AuthGuard)
+   @UseGuards(AuthGuard, SellerGuard)
    async createProduct(@Body() body: ProductCreateDTO) {
       const productCreated = await this.service.create(body);
       return {
@@ -44,7 +45,7 @@ export default class ProductController {
    }
 
    @Put('/:id')
-   @UseGuards(AuthGuard)
+   @UseGuards(AuthGuard, SellerGuard)
    async updateProduct(@Param('id') id: string, @Body() body: ProductUpdateDTO) {
       const product = await this.service.update(id, body);
       return {
@@ -54,7 +55,7 @@ export default class ProductController {
    }
 
    @Delete()
-   @UseGuards(AuthGuard)
+   @UseGuards(AuthGuard, SellerGuard)
    async deleteProduct(@Param('id') id: string) {
       await this.service.delete(id);
       return {

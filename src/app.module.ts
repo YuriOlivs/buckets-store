@@ -17,6 +17,8 @@ import { ProductModule } from './modules/product/product.module';
 import { TeamModule } from './modules/team/team.module';
 import { UserModule } from './modules/user/user.module';
 import { CouponModule } from './modules/coupon/coupon.module';
+import { StockModule } from './modules/stock/stock.module';
+import { RolesModule } from './modules/roles/roles.module';
 
 @Module({
   imports: [
@@ -45,6 +47,8 @@ import { CouponModule } from './modules/coupon/coupon.module';
     AuthModule,
     CartModule,
     CouponModule,
+    StockModule,
+    RolesModule,
   ],
   providers: [
     {

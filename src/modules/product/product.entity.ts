@@ -1,10 +1,11 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { CartItemEntity } from "../cart/entities/cart-item.entity";
 import ImageEntity from "../image/image.entity";
 import { OrderItemEntity } from "../order/entities/order-item.entity";
 import TeamEntity from "../team/team.entity";
 import { ProductCategory } from "./enum/product-category.enum";
 import { ProductSubcategory } from "./enum/product-subcategory.enum";
+import { StockEntity } from "../stock/stock.entity";
 
 @Entity({ name: 'products' })
 export default class ProductEntity {
@@ -26,9 +27,6 @@ export default class ProductEntity {
    @Column({ name: 'price', type: 'numeric', precision: 10, scale: 2, nullable: false })
    price: number;
 
-   @Column({ name: 'quantity_available', type: 'int', nullable: false })
-   quantityAvailable: number;
-
    @ManyToOne(() => TeamEntity, team => team.products)
    @JoinColumn({ name: 'team_id' })
    team: TeamEntity;
@@ -41,6 +39,13 @@ export default class ProductEntity {
 
    @OneToMany(() => CartItemEntity, cartItem => cartItem.product)
    cartItems: CartItemEntity[];
+
+   @OneToOne(() => StockEntity, stock => stock.product, {
+      cascade: ["insert", "update"],
+      onDelete: "CASCADE",
+      eager: true
+   })
+   stock: StockEntity; 
 
    @CreateDateColumn({ name: 'created_at' })
    createdAt: string;
@@ -59,7 +64,7 @@ export default class ProductEntity {
       price: number,
       team: TeamEntity,
       images: ImageEntity[],
-      quantityAvailable?: number
+      stock: StockEntity
    ) {
       this.name = name;
       this.description = description;
@@ -68,6 +73,6 @@ export default class ProductEntity {
       this.price = price;
       this.team = team;
       this.images = images;
-      this.quantityAvailable = quantityAvailable || 0;
+      this.stock = stock;
    }
 }
