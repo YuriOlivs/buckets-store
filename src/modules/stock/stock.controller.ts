@@ -4,8 +4,9 @@ import { AuthGuard } from '../auth/auth.guard';
 import StockMapper from './dto/stock.mapper';
 import { STRINGS } from 'src/common/strings/global.strings';
 import StockUpdateListDTO from './dto/stock-update-list.dto';
+import { SellerGuard } from 'src/common/guards/seller.guard';
 
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, SellerGuard)
 @Controller('stock')
 export class StockController {
   constructor(private readonly stockService: StockService) { }

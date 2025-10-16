@@ -3,8 +3,9 @@ import { Body, Controller, Delete, Get, Param, Post, UseGuards, UseInterceptors 
 import { AuthGuard } from '../auth/auth.guard';
 import { OrderStatusCreateDTO } from './dto/order-status-create.dto';
 import { OrderStatusService } from './order-status.service';
+import { AdminGuard } from 'src/common/guards/admin.guard';
 
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, AdminGuard)
 @Controller('order-status')
 export class OrderStatusController {
   constructor(private readonly orderStatusService: OrderStatusService) { }

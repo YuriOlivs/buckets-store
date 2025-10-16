@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { STRINGS } from 'src/common/strings/global.strings';
 import { AddressService } from '../address/address.service';
 import { CartService } from '../cart/cart.service';
@@ -17,6 +17,7 @@ import CartEntity from '../cart/entities/cart.entity';
 import { StockEntity } from '../stock/stock.entity';
 import StockUpdateListDTO from '../stock/dto/stock-update-list.dto';
 import { StockUpdateDTO } from '../stock/dto/stock-update-dto';
+import UserPayload from '../auth/dto/user-payload.dto';
 
 @Injectable()
 export default class OrderService {
@@ -92,12 +93,18 @@ export default class OrderService {
     return this.repo.save(order);
   }
 
-  async updateAddress(id: string, addressId: string) {
+  async updateAddress(id: string, addressId: string, user: UserPayload) {
     const order = await this.repo.findById(id);
     if (!order) throw new NotFoundException(STRINGS.notFound('Order'));
 
     const address = await this.addressService.findById(addressId);
     if (!address) throw new NotFoundException(STRINGS.notFound('Address'));
+
+    if(user.role !== 'ADMIN') {
+      if (order.user.id !== user.sub) {
+        throw new ForbiddenException('You do not have permission to update this order.');
+      }
+    }
 
     order.address = address;
     return this.repo.save(order);
@@ -117,9 +124,15 @@ export default class OrderService {
     return order;
   }
 
-  async cancel(id: string, userId: string) {
+  async cancel(id: string, user: UserPayload) {
     const orderFound = await this.repo.findById(id);
     if (!orderFound) throw new NotFoundException(STRINGS.notFound('Order'));
+
+    if(user.role !== 'ADMIN') {
+      if (orderFound.user.id !== user.sub) {
+        throw new ForbiddenException('You do not have permission to cancel this order.');
+      }
+    }
 
     const canceledStatus = orderFound.orderStatus;
     canceledStatus.statusCode = OrderStatusCodeEnum.CANCELED;

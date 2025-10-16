@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UseGuards } from '@nestjs/common';
 import { HashPasswordPipe } from 'src/common/pipe/hash-password.pipe';
 import { STRINGS } from 'src/common/strings/global.strings';
 import { AuthGuard } from '../auth/auth.guard';
@@ -6,6 +6,8 @@ import UserCreateDTO from './dto/user-create.dto';
 import UserMapper from './dto/user.mapper';
 import UserEntity from './user.entity';
 import UserService from './user.service';
+import { AdminGuard } from 'src/common/guards/admin.guard';
+import UserUpdateDTO from './dto/user-update.dto';
 
 @Controller('/users')
 export default class UserController {
@@ -27,15 +29,32 @@ export default class UserController {
       };
    }
 
+   @UseGuards(AuthGuard, AdminGuard)
    @Get()
    async getUsers() {
       const userEntities = await this.service.findAll();
       return userEntities.map(UserMapper.toDTO);
    }
 
+   @UseGuards(AuthGuard, AdminGuard)
+   @Patch('/update-role/:user_id')
+   async updateRole(
+      @Param('user_id') userId: string, 
+      @Body('role') role: string
+   ) {
+      const userUpdated = await this.service.updateRole(userId, role);
+      return {
+         message: STRINGS.entityUpdated('User'),
+         payload: UserMapper.toDTO(userUpdated)
+      };
+   }
+
    @Put('/:id')
    @UseGuards(AuthGuard)
-   async updateUser(@Param('id') id: string, @Body() body: Partial<UserEntity>) {
+   async updateUser(
+      @Param('id') id: string, 
+      @Body() body: UserUpdateDTO
+   ) {
       const updatedUser = await this.service.update(id, body);
       return {
          message: STRINGS.entityUpdated('User'),

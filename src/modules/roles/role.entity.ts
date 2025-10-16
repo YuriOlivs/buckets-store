@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import UserEntity from "../user/user.entity";
 
 @Entity({ name: "roles" })
@@ -12,7 +12,7 @@ export class RoleEntity {
    @Column({ name: "description", length: 255, nullable: true })
    description?: string;
 
-   @ManyToOne(() => UserEntity, (user) => user.role, { onDelete: "CASCADE" })
+   @OneToMany(() => UserEntity, (user) => user.role, { onDelete: "CASCADE" })
    users: UserEntity[];
 
    constructor(name: string, description?: string) {

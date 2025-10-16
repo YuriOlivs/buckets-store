@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { AddressEntity } from '../address/address.entity';
 import CartEntity from '../cart/entities/cart.entity';
 import { OrderEntity } from '../order/entities/order.entity';
@@ -27,7 +27,7 @@ export default class UserEntity {
   @Column({ name: 'birth_date', nullable: false })
   birthDate: Date;
 
-  @OneToMany(() => RoleEntity, role => role.users)
+  @ManyToOne(() => RoleEntity, role => role.users)
   @JoinColumn({ name: 'role_id' })
   role: RoleEntity;
 
