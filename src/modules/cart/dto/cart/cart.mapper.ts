@@ -7,8 +7,8 @@ export default class CartMapper {
    static toDTO(cart: CartEntity) {
       const items = cart.cartItems.map(item => CartMapper.itemToDTO(item));
       return new CartResponseDTO(
-         cart.id, 
-         cart.totalValue, 
+         cart.id,
+         cart.totalValue,
          cart.discountValue,
          cart.rawValue,
          cart.coupon?.code ?? null,

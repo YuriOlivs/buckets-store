@@ -1,5 +1,6 @@
 import { CacheInterceptor } from "@nestjs/cache-manager";
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, UseInterceptors } from "@nestjs/common";
+import { SellerGuard } from "src/common/guards/seller.guard";
 import { EmptyListToNoContentInterceptor } from "src/common/interceptor/empty-list-to-no-content.interceptor";
 import { STRINGS } from "src/common/strings/global.strings";
 import { AuthGuard } from "../auth/auth.guard";
@@ -8,7 +9,6 @@ import ProductFilterDTO from "./dto/product-filter.dto";
 import ProductUpdateDTO from "./dto/product-update.dto";
 import ProductMapper from "./dto/product.mapper";
 import ProductService from "./product.service";
-import { SellerGuard } from "src/common/guards/seller.guard";
 
 @Controller('/products')
 export default class ProductController {
