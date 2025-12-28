@@ -24,7 +24,10 @@ export default class UserRepository {
   }
 
   async findByEmail(email: string): Promise<UserEntity | null> {
-    return await this.repository.findOne({ where: { email } });;
+    return await this.repository.findOne({ 
+      where: { email },
+      relations: ['role']
+    });;
   }
 
   async save(user: UserEntity): Promise<UserEntity> {
