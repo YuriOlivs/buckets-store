@@ -82,6 +82,5 @@ npm run start:dev
 ```
 ## 🧑‍💻 Developer
 
-- Developed by [@YuriOlivs](https://www.github.com/YuriOlivs)
-Project created for study and portfolio purpouses.
+- Developed by [@YuriOlivs](https://www.github.com/YuriOlivs) - Project created for study and portfolio purpouses.
 
