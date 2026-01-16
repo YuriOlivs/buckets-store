@@ -1,7 +1,7 @@
 
 # 🏀 BUCKETS Store API
 
-This RESTful API was developed in NestJS following a modularized monolith architecture to simulate an NBA/basketball merchandise store. The project was created with a focus on **back-end** studies, best practices in architecture, and code organization.
+This RESTful API was developed in NestJS to simulate an NBA/basketball merchandise store. The project was created with a focus on **back-end** studies, best practices in architecture, and code organization.
 
 
 
