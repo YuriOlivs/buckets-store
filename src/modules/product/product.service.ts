@@ -41,7 +41,9 @@ export default class ProductService {
    }
 
    async findById(id: string): Promise<ProductEntity> {
-      const productFound = await this.findById(id);
+      const productFound = await this.repo.findById(id);
+
+      if (!productFound) throw new NotFoundException(STRINGS.notFound('Product'));
 
       const images = await this.imgService.findByProduct(productFound.id);
       if (images) productFound.images = images;
