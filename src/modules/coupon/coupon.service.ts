@@ -1,10 +1,12 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { STRINGS } from 'src/common/strings/global.strings';
+import CartEntity from '../cart/entities/cart.entity';
+import { CouponEntity } from './coupon.entity';
+import { CouponRepository } from './coupon.repository';
 import { CouponCreateDTO } from './dto/coupon-create.dto';
 import { CouponUpdateDTO } from './dto/coupon-update.dto';
-import { CouponRepository } from './coupon.repository';
-import { CouponEntity } from './coupon.entity';
-import { STRINGS } from 'src/common/strings/global.strings';
 import { CouponTargetEnum } from './enum/CouponTarget.enum';
+import couponValidator from './validations/coupon-validator';
 
 @Injectable()
 export class CouponService {
@@ -55,7 +57,7 @@ export class CouponService {
 
   async findActiveByCode(code: string): Promise<CouponEntity> {
     const coupon = await this.repo.findActiveByCode(code);
-    if (!coupon) throw new NotFoundException(STRINGS.notFound('Coupon'));
+    if (!coupon) throw new NotFoundException(STRINGS.invalidCoupon());
 
     return coupon
   }
@@ -73,6 +75,12 @@ export class CouponService {
     Object.assign(coupon, dto);
 
     return await this.repo.save(coupon);
+  }
+
+  async checkCouponValidity(coupon: CouponEntity, cart: CartEntity) {
+    const isValid = couponValidator[coupon.targetType](coupon, cart);
+    // if (!isValid) throw new BadRequestException(STRINGS.invalidCoupon());
+    return isValid;
   }
 
   async deactivate(id: string) {
