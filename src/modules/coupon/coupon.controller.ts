@@ -3,6 +3,7 @@ import { CouponService } from './coupon.service';
 import { CouponCreateDTO } from './dto/coupon-create.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { AdminGuard } from 'src/common/guards/admin.guard';
+import { CouponUpdateDTO } from './dto/coupon-update.dto';
 
 @UseGuards(AuthGuard, AdminGuard)
 @Controller('coupons')
@@ -24,10 +25,10 @@ export class CouponController {
     return this.couponService.findById(id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateCouponDto: CouponUpdateDTO) {
-  //   return this.couponService.update(+id, updateCouponDto);
-  // }
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateCouponDto: CouponUpdateDTO) {
+    return this.couponService.update(id, updateCouponDto);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
