@@ -21,12 +21,12 @@ export class CouponController {
     return this.couponService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.couponService.findById(id);
+  @Get('/:code')
+  findOne(@Param('code') code: string) {
+    return this.couponService.findByCode(code);
   }
 
-  @Patch(':id')
+  @Patch('/:id')
   update(@Param('id') id: string, @Body() updateCouponDto: CouponUpdateDTO) {
     return this.couponService.update(id, updateCouponDto);
   }

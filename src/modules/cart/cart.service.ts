@@ -83,6 +83,12 @@ export class CartService {
     return await this.repo.save(cart);
   }
 
+  async removeCoupon(userId: string) {
+    const cart = await this.findByUser(userId);
+    cart.coupon = null;
+    return await this.repo.save(cart);
+  }
+
   async findByUser(userId: string): Promise<CartEntity> {
     const cartFound = await this.repo.findByUser(userId);
     if (!cartFound) throw new BadRequestException(STRINGS.notFound('Cart'));

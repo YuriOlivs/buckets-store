@@ -15,9 +15,8 @@ import { StockService } from '../stock/stock.service';
 import { StockStatusEnum } from '../stock/enum/stock-status.enum';
 import CartEntity from '../cart/entities/cart.entity';
 import { StockEntity } from '../stock/stock.entity';
-import StockUpdateListDTO from '../stock/dto/stock-update-list.dto';
-import { StockUpdateDTO } from '../stock/dto/stock-update-dto';
 import UserPayload from '../auth/dto/user-payload.dto';
+import { CouponService } from '../coupon/coupon.service';
 
 @Injectable()
 export default class OrderService {
@@ -26,7 +25,8 @@ export default class OrderService {
     private userService: UserService,
     private addressService: AddressService,
     private cartService: CartService,
-    private stockService: StockService
+    private stockService: StockService,
+    private couponService: CouponService
   ) { }
 
   async create(userId: string, dto: OrderCreateDTO): Promise<OrderEntity> {
@@ -73,7 +73,12 @@ export default class OrderService {
     await this.validateStock(stockList);
     await this.updateStock(stockList, orderItems);
     const savedOrder = await this.repo.save(order);
+
     await this.cartService.clear(userId);
+
+    if (savedOrder.coupon) {
+      await this.couponService.updateUsage(savedOrder.coupon.id);
+    }
 
     return savedOrder;
   }

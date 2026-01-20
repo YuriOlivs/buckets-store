@@ -46,6 +46,16 @@ export class CartController {
     return CartMapper.toDTO(cartUpdated);  
   }
 
+  @Patch('/remove-coupon')
+  async removeCoupon(
+    @Req() req: RequestWithUser
+  ) {
+    const userId = req.user.sub;
+
+    const cartUpdated = await this.cartService.removeCoupon(userId);
+    return CartMapper.toDTO(cartUpdated);  
+  }
+
   @Get()
   async findByUser(@Req() req: RequestWithUser) {
     const userId = req.user.sub;

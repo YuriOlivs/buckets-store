@@ -77,6 +77,12 @@ export class CouponService {
     return isValid;
   }
 
+  async updateUsage(id: string): Promise<CouponEntity> {
+    const coupon = await this.findById(id);
+    coupon.currentUses += 1;
+    return await this.repo.save(coupon);
+  }
+
   async deactivate(id: string) {
     const coupon = await this.findById(id);
     return await this.repo.deactivate(coupon);

@@ -8,10 +8,13 @@ const couponValidator: Record<string, (coupon: CouponEntity, cart: CartEntity) =
 
    [CouponTargetEnum.GLOBAL]: (coupon, cart) => {
       if (coupon.currentUses >= coupon.maxUses) return false;
+      
       return true;
    },
 
    [CouponTargetEnum.CATEGORY]: (coupon, cart) => {
+      if (coupon.currentUses >= coupon.maxUses) return false;
+
       for (const item of cart.cartItems) {
          let category = item.product.category.toUpperCase();
          let subcategory = item.product.subcategory.toUpperCase();
@@ -22,6 +25,7 @@ const couponValidator: Record<string, (coupon: CouponEntity, cart: CartEntity) =
    },
 
    [CouponTargetEnum.USER]: (coupon, cart) => {
+      if (coupon.currentUses >= coupon.maxUses) return false;
       if (cart.user.id !== coupon.targetValue) return false;
       return true;
    },
