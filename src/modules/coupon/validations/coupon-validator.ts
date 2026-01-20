@@ -13,7 +13,10 @@ const couponValidator: Record<string, (coupon: CouponEntity, cart: CartEntity) =
 
    [CouponTargetEnum.CATEGORY]: (coupon, cart) => {
       for (const item of cart.cartItems) {
-         if (item.product.category !== coupon.targetValue) return false;
+         let category = item.product.category.toUpperCase();
+         let subcategory = item.product.subcategory.toUpperCase();
+         
+         if (category !== coupon.targetValue && subcategory !== coupon.targetValue) return false;
       }
       return true;
    },

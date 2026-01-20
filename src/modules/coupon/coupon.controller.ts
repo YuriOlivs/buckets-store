@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Patch, Post, UseGuards, UseInterceptors } from '@nestjs/common';
 import { CouponService } from './coupon.service';
 import { CouponCreateDTO } from './dto/coupon-create.dto';
 import { AuthGuard } from '../auth/auth.guard';
@@ -7,6 +7,7 @@ import { CouponUpdateDTO } from './dto/coupon-update.dto';
 
 @UseGuards(AuthGuard, AdminGuard)
 @Controller('coupons')
+@UseInterceptors(ClassSerializerInterceptor)
 export class CouponController {
   constructor(private readonly couponService: CouponService) { }
 

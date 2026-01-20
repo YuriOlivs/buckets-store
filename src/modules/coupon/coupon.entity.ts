@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToMa
 import { CouponTargetEnum } from "./enum/CouponTarget.enum";
 import CartEntity from "../cart/entities/cart.entity";
 import { OrderEntity } from "../order/entities/order.entity";
+import { Expose } from "class-transformer";
 
 @Entity({ name: "coupons" })
 export class CouponEntity {
@@ -50,8 +51,6 @@ export class CouponEntity {
    @OneToMany(() => OrderEntity, order => order.coupon)
    orders: OrderEntity[];
 
-   active: boolean;
-
    constructor(
       code: string,
       discount: number,
@@ -74,11 +73,12 @@ export class CouponEntity {
       this.maxUses = maxUses;
       this.currentUses = currentUses ?? 0;
       if(id) this.id = id;
-      this.active = this.isActive();
    }
 
-   private isActive(): boolean {
+   @Expose()
+   get active(): boolean {
       const now = new Date();
       return now >= this.startDate && now < this.endDate;
    }
+
 }

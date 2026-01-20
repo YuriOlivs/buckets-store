@@ -43,7 +43,7 @@ export class CouponService {
 
   async findByCode(code: string): Promise<CouponEntity> {
     const coupon = await this.repo.findByCode(code);
-    if (!coupon) throw new NotFoundException(STRINGS.notFound('Coupon'));
+    if (!coupon) throw new NotFoundException(STRINGS.invalidCoupon());
 
     return coupon;
   }
@@ -56,15 +56,8 @@ export class CouponService {
   }
 
   async findActiveByCode(code: string): Promise<CouponEntity> {
-    const coupon = await this.repo.findActiveByCode(code);
-    if (!coupon) throw new NotFoundException(STRINGS.invalidCoupon());
-
-    return coupon
-  }
-
-  async findByActive(): Promise<CouponEntity[]> {
-    const coupon = await this.repo.findByActive();
-    if (!coupon) throw new NotFoundException(STRINGS.notFound('Coupon'));
+    const coupon = await this.findByCode(code);
+    if (!coupon.active) throw new BadRequestException(STRINGS.invalidCoupon());
 
     return coupon
   }
@@ -78,8 +71,9 @@ export class CouponService {
   }
 
   async checkCouponValidity(coupon: CouponEntity, cart: CartEntity) {
+    if (coupon.active === false) return false;
+
     const isValid = couponValidator[coupon.targetType](coupon, cart);
-    // if (!isValid) throw new BadRequestException(STRINGS.invalidCoupon());
     return isValid;
   }
 
