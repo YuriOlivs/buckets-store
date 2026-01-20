@@ -61,15 +61,21 @@ Prerequisites
 Steps to run the project
 
 1) Clone the repository
-```git clone https://github.com/YuriOlivs/buckets-store.git```
+```
+git clone https://github.com/YuriOlivs/buckets-store.git
+```
 
-2) Access the project folder
-```cd buckets-store```
+3) Access the project folder
+```
+cd buckets-store
+```
 
-3) Start the containers
-```docker-compose up -d```
+5) Start the containers
+```
+docker-compose up -d
+```
 
-4) Project setup
+7) Project setup
 ```
 npm install
 ```
