@@ -75,12 +75,17 @@ export class CartService {
   async applyCoupon(userId: string, code: string) {
     const coupon = await this.couponService.findActiveByCode(code);
     const cart = await this.findByUser(userId);
+    const isValid = await this.couponService.checkCouponValidity(coupon, cart);
 
-    const validator = this.couponValidators[coupon.targetType];
-    if (!validator) throw new BadRequestException(STRINGS.invalidCoupon());
+    if (!isValid) throw new BadRequestException(STRINGS.invalidCoupon());
+    cart.coupon = coupon;
 
-    validator(cart, coupon);
+    return await this.repo.save(cart);
+  }
 
+  async removeCoupon(userId: string) {
+    const cart = await this.findByUser(userId);
+    cart.coupon = null;
     return await this.repo.save(cart);
   }
 
@@ -141,27 +146,4 @@ export class CartService {
 
     return this.repo.clearCart(cartFound);
   }
-
-  private readonly couponValidators: Record<string, (cart: CartEntity, coupon: CouponEntity) => void> = {
-    GLOBAL: (cart, coupon) => {
-      cart.coupon = coupon;
-    },
-
-    USER: (cart, coupon) => {
-      if (cart.user.id !== coupon.targetValue) throw new BadRequestException(STRINGS.invalidCoupon());
-      cart.coupon = coupon;
-    },
-
-    CATEGORY: (cart, coupon) => {
-      for (const item of cart.cartItems) {
-        const { category, subcategory } = item.product;
-
-        if (category !== coupon.targetValue!.toLowerCase() && subcategory !== coupon.targetValue!.toLowerCase()) {
-          throw new BadRequestException(STRINGS.invalidCartForCoupon());
-        }
-
-        cart.coupon = coupon;
-      }
-    },
-  };
 }

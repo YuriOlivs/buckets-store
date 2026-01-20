@@ -8,6 +8,7 @@ import OrderController from './order.controller';
 import OrderRepository from './order.repository';
 import OrderService from './order.service';
 import { StockModule } from '../stock/stock.module';
+import { CouponModule } from '../coupon/coupon.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { StockModule } from '../stock/stock.module';
     UserModule,
     AddressModule,
     CartModule,
-    StockModule
+    StockModule,
+    CouponModule
   ],
   exports: [OrderService],
   controllers: [OrderController],

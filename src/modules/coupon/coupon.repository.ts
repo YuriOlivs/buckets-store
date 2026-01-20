@@ -20,12 +20,9 @@ export class CouponRepository {
    }
 
    async findByCode(code: string): Promise<CouponEntity | null> {
-      const now = new Date();
       return await this.repository.findOne({
          where: { 
-            code: code,
-            startDate: MoreThanOrEqual(now),
-            endDate: LessThan(now)
+            code: code
          }
       })
    }
@@ -40,15 +37,6 @@ export class CouponRepository {
             targetType: type, 
             targetValue: value 
          } 
-      });
-   }
-
-   async findByActive(): Promise<CouponEntity[]> {
-      return await this.repository.find({
-         where: {
-            startDate: MoreThanOrEqual(new Date()),
-            endDate: LessThan(new Date())
-         }
       });
    }
 
