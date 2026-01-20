@@ -5,6 +5,10 @@ import { CartItemQuantityDTO } from './dto/cart-item/cart-item-quantity.dto';
 import CartMapper from './dto/cart/cart.mapper';
 import { AuthGuard } from '../auth/auth.guard';
 import RequestWithUser from '../auth/dto/req-with-user.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+
+@ApiTags('Carts')
+@ApiBearerAuth('access-token')
 @UseGuards(AuthGuard)
 @Controller('cart')
 export class CartController {

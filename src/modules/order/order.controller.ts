@@ -9,8 +9,10 @@ import { OrderCreateDTO } from './dto/order/order-create.dto';
 import OrderMapper from './dto/order/order.mapper';
 import OrderService from './order.service';
 import { AdminGuard } from 'src/common/guards/admin.guard';
-import UserPayload from '../auth/dto/user-payload.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Orders')
+@ApiBearerAuth('access-token')
 @UseGuards(AuthGuard)
 @Controller('orders')
 export default class OrderController {

@@ -4,7 +4,10 @@ import { CouponCreateDTO } from './dto/coupon-create.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { CouponUpdateDTO } from './dto/coupon-update.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Coupons')
+@ApiBearerAuth('access-token')
 @UseGuards(AuthGuard, AdminGuard)
 @Controller('coupons')
 @UseInterceptors(ClassSerializerInterceptor)
