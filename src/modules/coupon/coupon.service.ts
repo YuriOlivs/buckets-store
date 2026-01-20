@@ -13,8 +13,9 @@ export class CouponService {
   constructor(private readonly repo: CouponRepository) { }
 
   async create(dto: CouponCreateDTO): Promise<CouponEntity> {
-    const existsActiveWithCode = await this.repo.findActiveByCode(dto.code);
-    if (existsActiveWithCode) throw new BadRequestException(STRINGS.alreadyExists('Coupon'));
+    const couponExists = await this.repo.findByCode(dto.code);
+    const isActive = couponExists && couponExists.active;
+    if (isActive) throw new BadRequestException(STRINGS.alreadyExists('Coupon'));
 
     const coupon = new CouponEntity(
       dto.code,
@@ -36,7 +37,7 @@ export class CouponService {
 
   async findById(id: string): Promise<CouponEntity> {
     const coupon = await this.repo.findById(id);
-    if (!coupon) throw new NotFoundException(STRINGS.notFound('Coupon'));
+    if (!coupon) throw new NotFoundException(STRINGS.invalidCoupon());
 
     return coupon;
   }
