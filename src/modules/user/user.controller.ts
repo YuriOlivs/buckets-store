@@ -8,7 +8,10 @@ import UserEntity from './user.entity';
 import UserService from './user.service';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import UserUpdateDTO from './dto/user-update.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Users')
+@ApiBearerAuth('access-token')
 @Controller('/users')
 export default class UserController {
    constructor(private service: UserService) { }

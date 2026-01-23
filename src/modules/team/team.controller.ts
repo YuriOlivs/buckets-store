@@ -7,7 +7,10 @@ import TeamCreateDTO from "./dto/team-create.dto";
 import TeamUpdateDTO from "./dto/team-update.dto";
 import TeamMapper from "./dto/team.mapper";
 import TeamService from "./team.service";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
+@ApiTags('Teams')
+@ApiBearerAuth('access-token')
 @Controller("/teams")
 export default class TeamController {
    constructor(private service: TeamService) { }

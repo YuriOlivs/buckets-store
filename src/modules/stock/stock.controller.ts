@@ -5,7 +5,10 @@ import StockMapper from './dto/stock.mapper';
 import { STRINGS } from 'src/common/strings/global.strings';
 import StockUpdateListDTO from './dto/stock-update-list.dto';
 import { SellerGuard } from 'src/common/guards/seller.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Stock')
+@ApiBearerAuth('access-token')
 @UseGuards(AuthGuard, SellerGuard)
 @Controller('stock')
 export class StockController {

@@ -4,7 +4,10 @@ import { AuthGuard } from '../auth/auth.guard';
 import { OrderStatusCreateDTO } from './dto/order-status-create.dto';
 import { OrderStatusService } from './order-status.service';
 import { AdminGuard } from 'src/common/guards/admin.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Order Statuses')
+@ApiBearerAuth('access-token')
 @UseGuards(AuthGuard, AdminGuard)
 @Controller('order-status')
 export class OrderStatusController {

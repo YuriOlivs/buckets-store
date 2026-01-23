@@ -9,7 +9,9 @@ import ProductFilterDTO from "./dto/product-filter.dto";
 import ProductUpdateDTO from "./dto/product-update.dto";
 import ProductMapper from "./dto/product.mapper";
 import ProductService from "./product.service";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags('Products')
 @Controller('/products')
 export default class ProductController {
    constructor(private service: ProductService) { }
