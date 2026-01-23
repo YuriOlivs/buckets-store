@@ -56,4 +56,13 @@ export default class CartEntity {
    ) {
       this.user = user;
    }
+
+   public addItem(item: CartItemEntity) {
+      const exists = this.cartItems.find(cartItem => cartItem.product.id === item.product.id);
+      if (exists) {
+         exists.quantity += item.quantity;
+      } else {
+         this.cartItems.push(item);
+      }
+   }
 }

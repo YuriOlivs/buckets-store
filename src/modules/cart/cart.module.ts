@@ -1,18 +1,23 @@
 import { Module } from '@nestjs/common';
-import { CartService } from './cart.service';
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { CouponModule } from '../coupon/coupon.module';
+import { ProductModule } from '../product/product.module';
+import { StockModule } from '../stock/stock.module';
+import { UserModule } from '../user/user.module';
+import AddProductUseCase from './application/add-product.use-case';
 import { CartController } from './cart.controller';
 import CartRepository from './cart.repository';
-import { UserModule } from '../user/user.module';
-import { TypeOrmModule } from "@nestjs/typeorm";
-import CartEntity from './entities/cart.entity';
+import { CartService } from './cart.service';
 import { CartItemEntity } from './entities/cart-item.entity';
-import { ProductModule } from '../product/product.module';
-import { CouponModule } from '../coupon/coupon.module';
-import { StockModule } from '../stock/stock.module';
+import CartEntity from './entities/cart.entity';
 
 @Module({
   controllers: [CartController],
-  providers: [CartService, CartRepository],
+  providers: [
+    CartService,
+    CartRepository,
+    AddProductUseCase
+  ],
   imports: [
     TypeOrmModule.forFeature([CartEntity, CartItemEntity]),
     UserModule,

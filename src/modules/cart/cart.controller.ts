@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '../auth/auth.guard';
+import RequestWithUser from '../auth/dto/req-with-user.dto';
 import { CartService } from './cart.service';
 import { CartItemCreateDTO } from './dto/cart-item/cart-item-create.dto';
 import { CartItemQuantityDTO } from './dto/cart-item/cart-item-quantity.dto';
 import CartMapper from './dto/cart/cart.mapper';
-import { AuthGuard } from '../auth/auth.guard';
-import RequestWithUser from '../auth/dto/req-with-user.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Carts')
 @ApiBearerAuth('access-token')
@@ -21,7 +21,7 @@ export class CartController {
   ) {
     const userId = req.user.sub;
 
-    const cartUpdated = await this.cartService.addItem(userId, dto);
+    const cartUpdated = await this.cartService.addProduct(userId, dto);
     return {
       message: `Item added to cart successfully`,
       payload: CartMapper.toDTO(cartUpdated)
@@ -31,8 +31,8 @@ export class CartController {
   @Patch('/remove-item/:item_id')
   async removeItemFromCart(
     @Req() req: RequestWithUser,
-     @Param('item_id') itemId: string
-    ) {
+    @Param('item_id') itemId: string
+  ) {
     const userId = req.user.sub;
 
     const cartUpdated = await this.cartService.removeItem(userId, itemId);
@@ -47,7 +47,7 @@ export class CartController {
     const userId = req.user.sub;
 
     const cartUpdated = await this.cartService.applyCoupon(userId, dto.code);
-    return CartMapper.toDTO(cartUpdated);  
+    return CartMapper.toDTO(cartUpdated);
   }
 
   @Patch('/remove-coupon')
@@ -57,7 +57,7 @@ export class CartController {
     const userId = req.user.sub;
 
     const cartUpdated = await this.cartService.removeCoupon(userId);
-    return CartMapper.toDTO(cartUpdated);  
+    return CartMapper.toDTO(cartUpdated);
   }
 
   @Get()
