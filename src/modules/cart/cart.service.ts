@@ -3,7 +3,6 @@ import { STRINGS } from 'src/common/strings/global.strings';
 import { CouponService } from '../coupon/coupon.service';
 import ProductService from '../product/product.service';
 import { StockService } from '../stock/stock.service';
-import UserService from '../user/user.service';
 import CartRepository from './cart.repository';
 import { CartItemCreateDTO } from './dto/cart-item/cart-item-create.dto';
 import { CartUpdateDTO } from './dto/cart/cart-update.dto';
@@ -14,27 +13,13 @@ import CartEntity from './entities/cart.entity';
 export class CartService {
   constructor(
     private repo: CartRepository,
-    private userService: UserService,
     private productService: ProductService,
     private couponService: CouponService,
     private stockService: StockService
   ) { }
 
-  async findOrCreate(userId: string): Promise<CartEntity> {
-    const user = await this.userService.findById(userId);
-    if (!user) throw new BadRequestException(STRINGS.notFound('User'));
-
-    const cartFound = await this.repo.findByUser(user.id);
-    if (!cartFound) {
-      const cart = new CartEntity(user);
-      return await this.repo.save(cart);
-    }
-
-    return cartFound;
-  }
-
   async addProduct(userId: string, dto: CartItemCreateDTO): Promise<CartEntity> {
-    const cart = await this.findOrCreate(userId);
+    const cart = await this.findByUser(userId);
     const product = await this.productService.findById(dto.product);
 
     const stock = await this.stockService.findByProduct(dto.product);
