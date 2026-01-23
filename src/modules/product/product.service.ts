@@ -42,7 +42,6 @@ export default class ProductService {
 
    async findById(id: string): Promise<ProductEntity> {
       const productFound = await this.repo.findById(id);
-
       if (!productFound) throw new NotFoundException(STRINGS.notFound('Product'));
 
       const images = await this.imgService.findByProduct(productFound.id);
@@ -66,7 +65,8 @@ export default class ProductService {
    async create(dto: ProductCreateDTO): Promise<ProductEntity> {
       const images: ImageEntity[] = [];
       const productImages = dto.images.map(image => new ImageEntity(image.url, image.desc));
-      const teamFound = await this.teamService.findById(dto.team);;
+      const teamFound = await this.teamService.findById(dto.team);
+      
       const stock = new StockEntity(
          dto.quantityAvailable ?? 0
       );
@@ -98,7 +98,6 @@ export default class ProductService {
       }
 
       product.images = images;
-
       return await this.repo.save(product);
    }
 
@@ -113,8 +112,6 @@ export default class ProductService {
 
       if (team) {
          const teamFound = await this.teamService.findById(team);
-         if (!teamFound) throw new NotFoundException(STRINGS.notFound('Team'));
-
          productFound.team = teamFound;
       }
 
