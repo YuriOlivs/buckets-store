@@ -19,6 +19,7 @@ import { UserModule } from './modules/user/user.module';
 import { CouponModule } from './modules/coupon/coupon.module';
 import { StockModule } from './modules/stock/stock.module';
 import { RolesModule } from './modules/roles/roles.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { RolesModule } from './modules/roles/roles.module';
       useClass: PostgresConfigService,
       inject: [PostgresConfigService]
     }),
+    EventEmitterModule.forRoot(),
     AddressModule,
     AuthModule,
     CartModule,

@@ -18,8 +18,7 @@ export default class ProductMapper {
          product.subcategory,
          product.price,
          product.team,
-         images,
-         { status: product.stock.status }
+         images
       );
    }
 }

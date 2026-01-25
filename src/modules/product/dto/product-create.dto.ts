@@ -31,11 +31,6 @@ export default class ProductCreateDTO {
    price: number;
 
    @ApiProperty()
-   @IsNumber({ maxDecimalPlaces: 0, allowNaN: false, allowInfinity: false })
-   @IsPositive()
-   quantityAvailable?: number;
-
-   @ApiProperty()
    @IsString()
    @IsUUID()
    team: string;

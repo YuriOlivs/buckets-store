@@ -6,12 +6,15 @@ import UserRepository from "./user.repository";
 import { RolesService } from "../roles/roles.service";
 import { RoleEntity } from "../roles/role.entity";
 import UserUpdateDTO from "./dto/user-update.dto";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { UserCreatedEvent } from "./events/user-created.event";
 
 @Injectable()
 export default class UserService {
    constructor(
       private repo: UserRepository,
-      private rolesService: RolesService
+      private rolesService: RolesService,
+      private readonly eventEmitter: EventEmitter2
    ) { }
 
    async findAll(): Promise<UserEntity[]> {
@@ -48,7 +51,10 @@ export default class UserService {
       const emailExists = await this.repo.findByEmail(user.email);
       if (emailExists) throw new BadRequestException(STRINGS.alreadyExists('Email'));
 
-      return await this.repo.save(user);
+      const createdUser = await this.repo.save(user);
+
+      this.eventEmitter.emit('user.created', new UserCreatedEvent(createdUser))
+      return createdUser;
    }
 
    async update(id: string, userData: UserUpdateDTO): Promise<UserEntity> {

@@ -14,7 +14,6 @@ export class AddressService {
   ) { }
   async create(dto: AddressCreateDTO): Promise<AddressEntity> {
     const user = await this.userService.findById(dto.user);
-    if (!user) throw new NotFoundException(STRINGS.notFound('User'));
 
     const address = new AddressEntity(
       dto.street,
