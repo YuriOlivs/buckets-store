@@ -3,7 +3,6 @@ import PagedResponseDTO from "src/common/dto/paged-response.dto";
 import { STRINGS } from "src/common/strings/global.strings";
 import ImageEntity from "../image/image.entity";
 import ImageService from "../image/image.service";
-import { StockEntity } from "../stock/stock.entity";
 import TeamService from "../team/team.service";
 import ProductCreateDTO from "./dto/product-create.dto";
 import ProductFilterDTO from "./dto/product-filter.dto";
@@ -12,6 +11,7 @@ import ProductUpdateDTO from "./dto/product-update.dto";
 import ProductMapper from "./dto/product.mapper";
 import ProductEntity from "./product.entity";
 import ProductRepository from "./product.repository";
+import { StockEntity } from "../stock/stock.entity";
 
 @Injectable()
 export default class ProductService {
@@ -67,9 +67,7 @@ export default class ProductService {
       const productImages = dto.images.map(image => new ImageEntity(image.url, image.desc));
       const teamFound = await this.teamService.findById(dto.team);
       
-      const stock = new StockEntity(
-         dto.quantityAvailable ?? 0
-      );
+      const stock = new StockEntity();
 
       const product = new ProductEntity(
          dto.name,

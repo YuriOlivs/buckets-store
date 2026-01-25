@@ -56,7 +56,7 @@ export default class ProductController {
       };
    }
 
-   @Delete()
+   @Delete('/:id')
    @UseGuards(AuthGuard, SellerGuard)
    async deleteProduct(@Param('id') id: string) {
       await this.service.delete(id);

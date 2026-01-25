@@ -53,11 +53,7 @@ export default class UserService {
 
       const createdUser = await this.repo.save(user);
 
-      this.eventEmitter.emit(
-         'user.created',
-         new UserCreatedEvent(createdUser)
-      )
-
+      this.eventEmitter.emit('user.created', new UserCreatedEvent(createdUser))
       return createdUser;
    }
 

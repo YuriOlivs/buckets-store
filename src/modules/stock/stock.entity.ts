@@ -7,7 +7,7 @@ export class StockEntity {
    @PrimaryGeneratedColumn('uuid')
    id: string;
 
-   @OneToOne(() => ProductEntity, product => product.stock, {
+   @OneToOne(() => ProductEntity, {
       onDelete: 'CASCADE'
    })
    @JoinColumn({ name: 'product_id' })
@@ -30,11 +30,7 @@ export class StockEntity {
       return this.quantity > 0 ? true : false;
    }
 
-   constructor(
-      quantity: number,
-      product?: ProductEntity
-   ) {
-      if (product) this.product = product;
-      this.quantity = quantity;
+   constructor(quantity?: number) {
+      this.quantity = quantity ?? 0;
    }
 }

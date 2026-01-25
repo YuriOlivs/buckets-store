@@ -45,7 +45,7 @@ export default class ProductEntity {
       onDelete: "CASCADE",
       eager: true
    })
-   stock: StockEntity; 
+   stock: StockEntity;
 
    @CreateDateColumn({ name: 'created_at' })
    createdAt: string;
