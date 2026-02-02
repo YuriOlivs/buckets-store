@@ -1,14 +1,13 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AdminGuard } from 'src/common/guards/admin.guard';
 import { HashPasswordPipe } from 'src/common/pipe/hash-password.pipe';
 import { STRINGS } from 'src/common/strings/global.strings';
 import { AuthGuard } from '../auth/auth.guard';
 import UserCreateDTO from './dto/user-create.dto';
-import UserMapper from './dto/user.mapper';
-import UserEntity from './user.entity';
-import UserService from './user.service';
-import { AdminGuard } from 'src/common/guards/admin.guard';
 import UserUpdateDTO from './dto/user-update.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import UserMapper from './dto/user.mapper';
+import UserService from './user.service';
 
 @ApiTags('Users')
 @ApiBearerAuth('access-token')

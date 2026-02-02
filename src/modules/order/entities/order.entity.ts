@@ -1,9 +1,9 @@
+import { CouponEntity } from "src/modules/coupon/coupon.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { AddressEntity } from "../../address/address.entity";
 import { OrderStatusEntity } from "../../order-status/order-status.entity";
 import UserEntity from "../../user/user.entity";
 import { OrderItemEntity } from "./order-item.entity";
-import { CouponEntity } from "src/modules/coupon/coupon.entity";
 
 @Entity({ name: 'orders' })
 export class OrderEntity {
@@ -13,7 +13,7 @@ export class OrderEntity {
    @Column({ name: 'total_value', type: 'numeric', precision: 10, scale: 2, nullable: false })
    totalValue: number;
 
-   @Column({ name: 'raw_value', type: 'numeric', precision: 10, scale: 2, nullable: false, default: 0.00  })
+   @Column({ name: 'raw_value', type: 'numeric', precision: 10, scale: 2, nullable: false, default: 0.00 })
    rawValue: number;
 
    @Column({ name: 'discount_value', type: 'numeric', precision: 10, scale: 2, nullable: false, default: 0.00 })

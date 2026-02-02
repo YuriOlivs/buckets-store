@@ -1,7 +1,7 @@
-import UserEntity from "src/modules/user/user.entity";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { CartItemEntity } from "./cart-item.entity";
 import { CouponEntity } from "src/modules/coupon/coupon.entity";
+import UserEntity from "src/modules/user/user.entity";
+import { CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { CartItemEntity } from "./cart-item.entity";
 
 @Entity('carts')
 export default class CartEntity {

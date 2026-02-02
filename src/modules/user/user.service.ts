@@ -1,13 +1,13 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
-import { STRINGS } from "src/common/strings/global.strings";
-import UserCreateDTO from "./dto/user-create.dto";
-import UserEntity from "./user.entity";
-import UserRepository from "./user.repository";
-import { RolesService } from "../roles/roles.service";
-import { RoleEntity } from "../roles/role.entity";
-import UserUpdateDTO from "./dto/user-update.dto";
 import { EventEmitter2 } from "@nestjs/event-emitter";
+import { STRINGS } from "src/common/strings/global.strings";
+import { RoleEntity } from "../roles/role.entity";
+import { RolesService } from "../roles/roles.service";
+import UserCreateDTO from "./dto/user-create.dto";
+import UserUpdateDTO from "./dto/user-update.dto";
+import UserEntity from "./user.entity";
 import { UserCreatedEvent } from "./events/user-created.event";
+import UserRepository from "./user.repository";
 
 @Injectable()
 export default class UserService {

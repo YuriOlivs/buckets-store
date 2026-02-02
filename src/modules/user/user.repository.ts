@@ -27,7 +27,7 @@ export default class UserRepository {
     return await this.repository.findOne({ 
       where: { email },
       relations: ['role']
-    });;
+    });
   }
 
   async save(user: UserEntity): Promise<UserEntity> {
